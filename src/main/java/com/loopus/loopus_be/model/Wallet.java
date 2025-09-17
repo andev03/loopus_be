@@ -1,0 +1,32 @@
+package com.loopus.loopus_be.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@Entity
+@Table(name = "wallets")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Wallet {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "wallet_id", columnDefinition = "UUID")
+    private UUID walletId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private Users user;
+
+    @Column(nullable = false)
+    private Double balance = 0.0;
+
+    @Column(name = "created_at", updatable = false)
+    private Instant createdAt = Instant.now();
+}

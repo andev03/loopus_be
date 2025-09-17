@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: loopus_be
+  main:
+    banner-mode: "off"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loopus_db
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: trace
+        orm:
+          jdbc:
+            bind: trace
+    root: warn
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /api
