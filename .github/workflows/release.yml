@@ -1,0 +1,53 @@
+name: Deploy Microservices with Docker Compose
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Generate UUID as version tag
+        id: uuid
+        run: echo "TAG=ver-$(uuidgen)" >> $GITHUB_ENV
+
+      - name: Build and push BE image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
+
+      - name: Stop, Clean, Pull, and Run Backend Container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            echo "🛑 Stopping old container"
+            docker stop loopus-be || true
+            docker rm loopus-be || true
+
+            echo "🧹 Removing old frontend images (excluding current)"
+            docker images "${{ secrets.DOCKER_USERNAME }}/loopus-be" --format "{{.Repository}}:{{.Tag}}" | grep -v "${{ env.TAG }}" | xargs -r docker rmi || true
+
+            echo "📥 Pulling new image"
+            docker pull ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
+
+            echo "🚀 Running container"
+            docker run -d \
+              --rm \
+              --name loopus-be \
+              -p 8080:8080 \
+              ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
