@@ -45,8 +45,13 @@ jobs:
             echo "📥 Pulling new image"
             docker pull ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
 
+            echo "🌐 Ensuring network exists"
+            docker network create loopus-net || true
+
             echo "🚀 Running container"
             docker run -d \
               --name loopus-be \
+#              --rm
+              --network loopus-net \
               -p 8080:8080 \
               ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
