@@ -39,15 +39,14 @@ jobs:
             docker stop loopus-be || true
             docker rm loopus-be || true
 
-            echo "🧹 Removing old frontend images (excluding current)"
-            docker images "${{ secrets.DOCKER_USERNAME }}/loopus-be" --format "{{.Repository}}:{{.Tag}}" | grep -v "${{ env.TAG }}" | xargs -r docker rmi || true
+            echo "🧹 Removing old backend images (excluding current)"
+            docker images '${{ secrets.DOCKER_USERNAME }}/loopus-be' --format '{{.Repository}}:{{.Tag}}' | grep -v "${{ env.TAG }}" | xargs -r docker rmi || true
 
             echo "📥 Pulling new image"
             docker pull ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
 
             echo "🚀 Running container"
             docker run -d \
-#              --rm \
               --name loopus-be \
               -p 8080:8080 \
               ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
