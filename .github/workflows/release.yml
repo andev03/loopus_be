@@ -26,7 +26,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
+          tags: "${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}"
 
       - name: Stop, Clean, Pull, and Run Backend Container
         uses: appleboy/ssh-action@v1.0.3
