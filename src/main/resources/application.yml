@@ -11,15 +11,15 @@ spring:
   sql:
     init:
       mode: always
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: trace
-        orm:
-          jdbc:
-            bind: trace
-    root: warn
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: trace
+#        orm:
+#          jdbc:
+#            bind: trace
+#    root: warn
 
 springdoc:
   swagger-ui:
