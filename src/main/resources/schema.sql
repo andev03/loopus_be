@@ -1,5 +1,12 @@
 -- Enable uuid extension (if not enabled yet)
+DROP DATABASE IF EXISTS loopus_db;
+
+CREATE DATABASE loopus_db;
+-- Kết nối vào database mới tạo
+\c loopus_db;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 create table users (
     user_id uuid primary key default gen_random_uuid(),
