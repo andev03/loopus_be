@@ -51,7 +51,6 @@ jobs:
             echo "🚀 Running container"
             docker run -d \
               --name loopus-be \
-#              --rm
               --network loopus-net \
               -p 8080:8080 \
               ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
