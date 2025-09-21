@@ -34,13 +34,18 @@ public class UserService implements IUserService {
 
     @Override
     public UsersDto register(RegisterRequest request) {
-        Users user = userRepository.save(Users.builder()
+        Users userCheck = userRepository.findByUsername(request.getEmail());
+        if(userCheck != null) {
+            throw new LoginException("Email đã tồn tại!");
+        }
+
+        Users userSave = userRepository.save(Users.builder()
                         .username(request.getEmail())
                         .passwordHash(request.getPassword())
                         .createdAt(LocalDateTime.now())
                         .fullName(request.getFirstName() + " " + request.getLastName())
                         .dateOfBirth((request.getDob()))
                 .build());
-        return userMapper.toDto(user);
+        return userMapper.toDto(userSave);
     }
 }
