@@ -4,6 +4,7 @@ import com.loopus.loopus_be.enums.RoleEnum;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,6 +22,8 @@ public class UsersDto {
     private String bio;
 
     private RoleEnum role = RoleEnum.USER;
+
+    private LocalDate dateOfBirth;
 
     private LocalDateTime createdAt;
 }

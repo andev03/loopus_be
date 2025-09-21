@@ -31,6 +31,7 @@ create table users (
     full_name varchar(100),
     avatar_url text,
     bio text,
+    date_of_birth date,
     role varchar(20) check (role in ('USER','STAFF','ADMIN')) default 'USER',
     created_at timestamp default now()
 );
