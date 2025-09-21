@@ -1,6 +1,7 @@
 package com.loopus.loopus_be.controller;
 
 import com.loopus.loopus_be.dto.request.LoginRequest;
+import com.loopus.loopus_be.dto.request.RegisterRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
 import com.loopus.loopus_be.service.UserService;
 import jakarta.validation.Valid;
@@ -23,9 +24,18 @@ public class UsersController {
     @PostMapping("/login")
     public ResponseDto<Object> login(@Valid @RequestBody LoginRequest request) {
         return ResponseDto.builder()
-                .data(HttpStatus.OK.value())
+                .status(HttpStatus.OK.value())
                 .message("Đăng nhập thành công!")
                 .data(userService.login(request.getUsername(), request.getPassword()))
+                .build();
+    }
+
+    @PostMapping("/register")
+    public ResponseDto<Object> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .message("Đăng ký thành công!")
+                .data(userService.register(request))
                 .build();
     }
 }
