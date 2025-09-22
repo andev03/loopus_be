@@ -11,6 +11,19 @@ spring:
   sql:
     init:
       mode: always
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: Loopusapp2025@gmail.com
+    password: rvkq emhf ijqi jnuz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
 logging:
   level:
     org:

@@ -1,6 +1,7 @@
 package com.loopus.loopus_be.dto;
 
 import com.loopus.loopus_be.enums.RoleEnum;
+import com.loopus.loopus_be.enums.UserStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,9 @@ public class UsersDto {
 
     private String bio;
 
-    private RoleEnum role = RoleEnum.USER;
+    private RoleEnum role;
+
+    private UserStatusEnum status;
 
     private LocalDate dateOfBirth;
 

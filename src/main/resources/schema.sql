@@ -33,6 +33,7 @@ create table users (
     bio text,
     date_of_birth date,
     role varchar(20) check (role in ('USER','STAFF','ADMIN')) default 'USER',
+    status varchar(20) check (status in ('ACTIVE','INACTIVE','BANNED','PENDING')) default 'PENDING',
     created_at timestamp default now()
 );
 -- =====================

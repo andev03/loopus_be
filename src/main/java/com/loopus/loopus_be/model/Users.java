@@ -1,6 +1,7 @@
 package com.loopus.loopus_be.model;
 
 import com.loopus.loopus_be.enums.RoleEnum;
+import com.loopus.loopus_be.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,11 @@ public class Users {
     @Column(name = "role", length = 20, nullable = false)
     @Builder.Default
     private RoleEnum role = RoleEnum.USER;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, nullable = false)
+    @Builder.Default
+    private UserStatusEnum status = UserStatusEnum.PENDING;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

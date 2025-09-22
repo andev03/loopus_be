@@ -7,4 +7,6 @@ public interface IUserService {
     UsersDto login(String username, String password);
 
     UsersDto register(RegisterRequest request);
+
+    void otpForgotPassword(String email);
 }
