@@ -22,7 +22,6 @@ public class OtpController {
 
     @PostMapping("/verify-register")
     public ResponseDto<Object> verifyOtpRegister(@RequestParam String email, @RequestParam String otp) {
-
         boolean flag = otpService.verifyOtp(email, otp);
 
         if (flag) {
@@ -39,27 +38,34 @@ public class OtpController {
     }
 
     @PostMapping("/verify-forgot-password")
-    public ResponseDto<Object> verifyOtpForgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
+    public ResponseDto<Object> verifyOtpForgotPassword(@RequestParam String email, @RequestParam String otp) {
+        boolean flag = otpService.verifyOtp(email, otp);
 
-        if(!request.getPassword().equals(request.getConfirmPassword())){
+        if (flag) {
+            return ResponseDto.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("OTP có hiệu lực.").build();
+        }
+
+        return ResponseDto.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message("OTP không có hiệu lực.").build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseDto<Object> resetPassword(@RequestBody @Valid ForgotPasswordRequest request) {
+
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
             return ResponseDto.builder()
                     .status(HttpStatus.OK.value())
                     .message("Hai password không giống nhau!").build();
         }
 
-        boolean flag = otpService.verifyOtp(request.getEmail(), request.getOtp());
-
-        if (flag) {
-            Users user = userRepository.findByUsername(request.getEmail());
-            user.setPasswordHash(request.getPassword());
-            userRepository.save(user);
-            return ResponseDto.builder()
-                    .status(HttpStatus.OK.value())
-                    .message("OTP có hiệu lực. Thay đổi mật khẩu thành công.").build();
-        }
-
+        Users user = userRepository.findByUsername(request.getEmail());
+        user.setPasswordHash(request.getPassword());
+        userRepository.save(user);
         return ResponseDto.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .message("OTP không có hiệu lực. Thay đổi mật khẩu thất bại.").build();
+                .status(HttpStatus.OK.value())
+                .message("Thay đổi mật khẩu thành công.").build();
     }
 }

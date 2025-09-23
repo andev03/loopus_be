@@ -16,7 +16,4 @@ public class ForgotPasswordRequest {
 
     @NotBlank(message = "Vui lòng nhập confirm password!")
     private String confirmPassword;
-
-    @NotBlank(message = "Vui lòng nhập OTP!")
-    private String otp;
 }
