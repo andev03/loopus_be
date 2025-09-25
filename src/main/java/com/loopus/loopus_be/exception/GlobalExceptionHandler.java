@@ -26,4 +26,12 @@ public class GlobalExceptionHandler {
                 .message(Objects.requireNonNull(exception.getFieldError()).getDefaultMessage())
                 .build();
     }
+
+    @ExceptionHandler(GroupException.class)
+    public ErrorResponseDto groupException(GroupException exception) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(exception.getMessage())
+                .build();
+    }
 }
