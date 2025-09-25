@@ -13,5 +13,7 @@ public interface GroupChatMapper {
     List<GroupChatDto> toDtoList(List<GroupChat> models);
 
     @Mapping(target = "senderId", source = "sender.userId")
+    @Mapping(target = "avatarUrl", source = "sender.avatarUrl")
+    @Mapping(target = "senderName", source = "sender.fullName")
     GroupChatDto toDto(GroupChat model);
 }

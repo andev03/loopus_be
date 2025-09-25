@@ -21,4 +21,8 @@ public class GroupChatDto {
     private OffsetDateTime createdAt;
 
     private String imageUrl;
+
+    private String avatarUrl;
+
+    private String senderName;
 }

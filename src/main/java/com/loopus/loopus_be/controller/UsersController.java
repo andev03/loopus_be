@@ -45,7 +45,7 @@ public class UsersController {
                 .build();
     }
 
-    @GetMapping("/otp-forgot-password")
+    @GetMapping("/find-by-email")
     public ResponseDto<Object> findUserByEmail(@RequestParam String email) {
         return ResponseDto.builder()
                 .data(userService.findUserByEmail(email))
