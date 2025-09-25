@@ -26,6 +26,14 @@ public class GroupController {
                 .build();
     }
 
+    @GetMapping("/groups/view-member")
+    public ResponseDto<Object> viewMembersInGroup(@RequestParam UUID groupId) {
+        return ResponseDto.builder()
+                .data(iGroupService.viewMembersInGroup(groupId))
+                .message("Lấy thành công danh sách nhóm")
+                .build();
+    }
+
     @PostMapping("/groups")
     public ResponseDto<Object> getGroups(@RequestBody CreateGroupRequest createGroupRequest) {
         return ResponseDto.builder()

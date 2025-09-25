@@ -44,4 +44,13 @@ public class UsersController {
                 .message("Gửi yêu cầu thành công")
                 .build();
     }
+
+    @GetMapping("/otp-forgot-password")
+    public ResponseDto<Object> findUserByEmail(@RequestParam String email) {
+        return ResponseDto.builder()
+                .data(userService.findUserByEmail(email))
+                .status(HttpStatus.OK.value())
+                .message("Gửi yêu cầu thành công")
+                .build();
+    }
 }

@@ -40,6 +40,9 @@ public class GroupChat {
     @Builder.Default
     private MessageTypeEnum type = MessageTypeEnum.TEXT;
 
+    @Column(name = "image_url", columnDefinition = "text")
+    private String imageUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private OffsetDateTime createdAt;

@@ -65,12 +65,13 @@ CREATE TABLE group_members (
 -- GroupChats Table
 -- =====================
 CREATE TABLE group_chats (
-    chat_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id   UUID NOT NULL,
-    sender_id  UUID NOT NULL,
-    message    TEXT NOT NULL,
-    type       VARCHAR(50) CHECK (type IN ('TEXT', 'IMAGE', 'FILE')) DEFAULT 'TEXT',
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    chat_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    group_id    UUID NOT NULL,
+    sender_id   UUID NOT NULL,
+    message     TEXT NOT NULL,
+    type        VARCHAR(50) CHECK (type IN ('TEXT', 'IMAGE', 'FILE')) DEFAULT 'TEXT',
+    image_url   TEXT, -- 👈 thêm cột này để lưu link ảnh
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
     FOREIGN KEY (sender_id) REFERENCES users(user_id)
 );

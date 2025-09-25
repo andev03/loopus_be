@@ -1,11 +1,13 @@
 package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.GroupDto;
+import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
 import com.loopus.loopus_be.dto.request.CreateGroupRequest;
 import com.loopus.loopus_be.enums.RoleEnum;
 import com.loopus.loopus_be.exception.GroupException;
 import com.loopus.loopus_be.mapper.GroupMapper;
+import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Group;
 import com.loopus.loopus_be.model.GroupMember;
 import com.loopus.loopus_be.model.GroupMemberId;
@@ -17,6 +19,7 @@ import com.loopus.loopus_be.service.IService.IGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +31,7 @@ public class GroupService implements IGroupService {
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public List<GroupDto> getAllgroupsByUserId(UUID userId) {
@@ -120,5 +124,16 @@ public class GroupService implements IGroupService {
         );
 
         return groupMapper.toDto(groupRepository.getReferenceById(handleToGroupRequest.getGroupId()));
+    }
+
+    @Override
+    public List<UsersDto> viewMembersInGroup(UUID groupId) {
+        List<GroupMember> members = groupMemberRepository.findAllById_GroupId(groupId);
+
+        List<Users> result = new ArrayList<>();
+
+        members.stream().map(GroupMember::getUser).forEach(result::add);
+
+        return userMapper.toDtoList(result);
     }
 }

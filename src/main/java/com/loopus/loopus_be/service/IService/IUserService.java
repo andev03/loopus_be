@@ -9,4 +9,6 @@ public interface IUserService {
     UsersDto register(RegisterRequest request);
 
     void otpForgotPassword(String email);
+
+    UsersDto findUserByEmail(String email);
 }

@@ -30,7 +30,7 @@ public class UserService implements IUserService {
 
         if (user == null) {
             throw new LoginException("Invalid username or password");
-        } else if(user.getStatus().equals(UserStatusEnum.PENDING)) {
+        } else if (user.getStatus().equals(UserStatusEnum.PENDING)) {
             throw new LoginException("Tài khoản chưa được xác thực!");
         }
 
@@ -41,18 +41,18 @@ public class UserService implements IUserService {
     public UsersDto register(RegisterRequest request) {
         Users userCheck = userRepository.findByUsername(request.getEmail());
 
-        if(userCheck != null) {
+        if (userCheck != null) {
             throw new LoginException("Email đã tồn tại!");
         }
 
         emailService.sendOtpEmail(request.getEmail(), otpService.generateOtp(request.getEmail()));
 
         Users userSave = userRepository.save(Users.builder()
-                        .username(request.getEmail())
-                        .passwordHash(request.getPassword())
-                        .createdAt(LocalDateTime.now())
-                        .fullName(request.getFirstName() + " " + request.getLastName())
-                        .dateOfBirth((request.getDob()))
+                .username(request.getEmail())
+                .passwordHash(request.getPassword())
+                .createdAt(LocalDateTime.now())
+                .fullName(request.getFirstName() + " " + request.getLastName())
+                .dateOfBirth((request.getDob()))
                 .build());
         return userMapper.toDto(userSave);
     }
@@ -61,10 +61,15 @@ public class UserService implements IUserService {
     public void otpForgotPassword(String email) {
         Users userCheck = userRepository.findByUsername(email);
 
-        if(userCheck == null) {
+        if (userCheck == null) {
             throw new LoginException("Email không tồn tại");
         }
 
         emailService.sendOtpEmail(email, otpService.generateOtp(email));
+    }
+
+    @Override
+    public UsersDto findUserByEmail(String email) {
+        return userMapper.toDto(userRepository.findByUsername(email));
     }
 }
