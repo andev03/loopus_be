@@ -34,7 +34,7 @@ public class GroupController {
                 .build();
     }
 
-    @PostMapping("/groups/add-members")
+    @PutMapping("/groups/add-members")
     public ResponseDto<Object> addMember(@RequestBody HandleToGroupRequest handleToGroupRequest) {
         return ResponseDto.builder()
                 .data(iGroupService.addMemberToGroup(handleToGroupRequest))
@@ -42,7 +42,7 @@ public class GroupController {
                 .build();
     }
 
-    @PostMapping("/groups/leave-group")
+    @DeleteMapping("/groups/leave-group")
     public ResponseDto<Object> leaveGroup(@RequestBody HandleToGroupRequest handleToGroupRequest) {
         return ResponseDto.builder()
                 .data(iGroupService.leaveGroup(handleToGroupRequest))
