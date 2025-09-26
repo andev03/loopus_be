@@ -57,4 +57,12 @@ public class GroupController {
                 .message("Thoát nhóm thành công")
                 .build();
     }
+
+    @GetMapping("/group")
+    public ResponseDto<Object> findGroupByName(@RequestParam String groupName, @RequestParam UUID userId) {
+        return ResponseDto.builder()
+                .data(iGroupService.findUserByName(groupName, userId))
+                .message("Tìm nhóm thành công")
+                .build();
+    }
 }

@@ -19,4 +19,6 @@ public interface IGroupService {
     GroupDto leaveGroup(HandleToGroupRequest handleToGroupRequest);
 
     List<UsersDto> viewMembersInGroup(UUID groupId);
+
+    List<GroupDto> findUserByName(String groupName, UUID userId);
 }

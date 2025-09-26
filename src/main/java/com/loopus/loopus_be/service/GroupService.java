@@ -136,4 +136,18 @@ public class GroupService implements IGroupService {
 
         return userMapper.toDtoList(result);
     }
+
+    @Override
+    public List<GroupDto> findUserByName(String groupName, UUID userId) {
+        List<GroupMember> groupMember = groupMemberRepository.findAllById_UserId(userId);
+
+        List<Group> groups = new ArrayList<>();
+        for (GroupMember gm : groupMember) {
+            if (gm.getGroup().getName().contains(groupName)) {
+                groups.add(gm.getGroup());
+            }
+        }
+
+        return groupMapper.toDtoList(groups);
+    }
 }
