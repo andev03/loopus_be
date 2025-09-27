@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: loopus_be
+  main:
+    banner-mode: "off"
+  datasource:
+    url: jdbc:postgresql://loopus-postgres:5432/loopus_db
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: Loopusapp2025@gmail.com
+    password: rvkq emhf ijqi jnuz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: trace
+        orm:
+          jdbc:
+            bind: trace
+    root: warn
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /api
+
+file:
+  upload-dir: "/var/www/uploads/"
+  url-prefix: "https://loopus.nguyenhoangan.site/uploads/"
