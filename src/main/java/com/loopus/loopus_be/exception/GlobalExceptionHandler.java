@@ -34,4 +34,13 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .build();
     }
+
+
+    @ExceptionHandler(FileException.class)
+    public ErrorResponseDto fileException(FileException exception) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(exception.getMessage())
+                .build();
+    }
 }

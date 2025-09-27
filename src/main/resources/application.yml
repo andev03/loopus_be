@@ -42,3 +42,4 @@ springdoc:
 
 file:
   upload-dir: "S:/uploads/"
+  url-prefix: "file:///S:/uploads/"

@@ -41,3 +41,4 @@ springdoc:
 
 file:
   upload-dir: "/var/www/uploads/"
+  url-prefix: "https://loopus.nguyenhoangan.site/uploads/"

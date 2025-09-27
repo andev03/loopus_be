@@ -3,6 +3,7 @@ package com.loopus.loopus_be.controller;
 import com.loopus.loopus_be.dto.request.LoginRequest;
 import com.loopus.loopus_be.dto.request.RegisterRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
+import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -34,8 +35,8 @@ import java.util.UUID;
 public class UsersController {
 
     private final IUserService userService;
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+
+    private final IFileService fileService;
 
     @PostMapping("/login")
     public ResponseDto<Object> login(@Valid @RequestBody LoginRequest request) {
@@ -73,25 +74,17 @@ public class UsersController {
                 .build();
     }
 
-    @Operation(summary = "Upload file")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "File uploaded successfully") })
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, String>> uploadFile(
-            @Parameter(description = "File to upload")
-            @RequestPart("file") MultipartFile file) throws IOException {
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path path = Paths.get(uploadDir, filename);
-
-        // Tạo folder nếu chưa có
-        Files.createDirectories(path.getParent());
-
-        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-        String fileUrl = "https://nguyenhoangan03.site/uploads/" + filename;
-        Map<String, String> response = new HashMap<>();
-        response.put("url", fileUrl);
-
-        return ResponseEntity.ok(response);
-    }
-
+//    @Operation(summary = "Upload file")
+//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "File uploaded successfully")})
+//    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseDto<Object> uploadFile(
+//            @Parameter(description = "File to upload")
+//            @RequestPart("file") MultipartFile file) throws IOException {
+//
+//        return ResponseDto.builder()
+//                .data(fileService.uploadFileUrl(file))
+//                .status(HttpStatus.OK.value())
+//                .message("Upload file thành công")
+//                .build();
+//    }
 }
