@@ -1,4 +1,4 @@
-name: Deploy Microservices with Docker Compose
+name: Deploy loopus with Docker
 
 on:
   push:
@@ -50,7 +50,8 @@ jobs:
 
             echo "🚀 Running container"
             docker run -d \
-              --name loopus-be \
-              --network loopus-net \
-              -p 8080:8080 \
-              ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
+            --name loopus-be \
+            --network loopus-net \
+            -p 8080:8080 \
+            -v /var/www/uploads:/var/www/uploads \
+            ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}
