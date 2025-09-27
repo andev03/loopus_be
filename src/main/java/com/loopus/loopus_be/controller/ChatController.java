@@ -1,7 +1,6 @@
 package com.loopus.loopus_be.controller;
 
 import com.loopus.loopus_be.dto.request.ChatTextRequest;
-import com.loopus.loopus_be.dto.request.CreateGroupRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
 import com.loopus.loopus_be.service.IService.IChatService;
 import lombok.RequiredArgsConstructor;

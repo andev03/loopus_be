@@ -2,30 +2,18 @@ package com.loopus.loopus_be.controller;
 
 import com.loopus.loopus_be.dto.request.LoginRequest;
 import com.loopus.loopus_be.dto.request.RegisterRequest;
+import com.loopus.loopus_be.dto.request.UpdateUserRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
-import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IUserService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -35,8 +23,6 @@ import java.util.UUID;
 public class UsersController {
 
     private final IUserService userService;
-
-    private final IFileService fileService;
 
     @PostMapping("/login")
     public ResponseDto<Object> login(@Valid @RequestBody LoginRequest request) {
@@ -74,17 +60,25 @@ public class UsersController {
                 .build();
     }
 
-//    @Operation(summary = "Upload file")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "File uploaded successfully")})
-//    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseDto<Object> uploadFile(
-//            @Parameter(description = "File to upload")
-//            @RequestPart("file") MultipartFile file) throws IOException {
-//
-//        return ResponseDto.builder()
-//                .data(fileService.uploadFileUrl(file))
-//                .status(HttpStatus.OK.value())
-//                .message("Upload file thành công")
-//                .build();
-//    }
+    @PutMapping(value = "/update-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseDto<Object> updateAvatar(
+            @Parameter(description = "File to update", required = true)
+            @RequestPart("file") MultipartFile file, @RequestParam UUID userId) {
+
+        return ResponseDto.builder()
+                .data(userService.updateAvatar(userId, file))
+                .status(HttpStatus.OK.value())
+                .message("Cập nhật avatar thành công")
+                .build();
+    }
+
+    @PutMapping(value = "/update-information")
+    public ResponseDto<Object> updateInformation(@RequestBody UpdateUserRequest request) {
+
+        return ResponseDto.builder()
+                .data(userService.updateInformation(request))
+                .status(HttpStatus.OK.value())
+                .message("Cập nhật thông tin thành công")
+                .build();
+    }
 }

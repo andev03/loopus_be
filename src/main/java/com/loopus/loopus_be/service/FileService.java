@@ -23,7 +23,7 @@ public class FileService implements IFileService {
 
     @Override
     public String uploadFileUrl(MultipartFile file) {
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String filename = UUID.randomUUID() + ".png";
         Path path = Paths.get(uploadDir, filename);
 
         try {

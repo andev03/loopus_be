@@ -2,18 +2,22 @@ package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.RegisterRequest;
+import com.loopus.loopus_be.dto.request.UpdateUserRequest;
 import com.loopus.loopus_be.enums.UserStatusEnum;
 import com.loopus.loopus_be.exception.LoginException;
 import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.IEmailService;
+import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IOtpService;
 import com.loopus.loopus_be.service.IService.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +27,7 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
     private final IEmailService emailService;
     private final IOtpService otpService;
+    private final IFileService fileService;
 
     @Override
     public UsersDto login(String username, String password) {
@@ -71,5 +76,26 @@ public class UserService implements IUserService {
     @Override
     public UsersDto findUserByEmail(String email) {
         return userMapper.toDto(userRepository.findByUsername(email));
+    }
+
+    @Override
+    public UsersDto updateAvatar(UUID userId, MultipartFile file) {
+        String imageUrl = fileService.uploadFileUrl(file);
+
+        Users user = userRepository.getReferenceById(userId);
+
+        user.setAvatarUrl(imageUrl);
+
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public UsersDto updateInformation(UpdateUserRequest request) {
+        Users user = userRepository.getReferenceById(request.getUserId());
+        user.setFullName(request.getFirstName() + " " + request.getLastName());
+        user.setDateOfBirth(request.getDob());
+        user.setBio(request.getBio());
+
+        return userMapper.toDto(userRepository.save(user));
     }
 }

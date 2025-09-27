@@ -2,8 +2,9 @@ package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.GroupDto;
 import com.loopus.loopus_be.dto.UsersDto;
-import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
 import com.loopus.loopus_be.dto.request.CreateGroupRequest;
+import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
+import com.loopus.loopus_be.dto.request.UpdateGroupRequest;
 import com.loopus.loopus_be.enums.RoleEnum;
 import com.loopus.loopus_be.exception.GroupException;
 import com.loopus.loopus_be.mapper.GroupMapper;
@@ -15,9 +16,11 @@ import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.GroupMemberRepository;
 import com.loopus.loopus_be.repository.GroupRepository;
 import com.loopus.loopus_be.repository.UserRepository;
+import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,7 @@ public class GroupService implements IGroupService {
     private final GroupMapper groupMapper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final IFileService fileService;
 
     @Override
     public List<GroupDto> getAllgroupsByUserId(UUID userId) {
@@ -149,5 +153,26 @@ public class GroupService implements IGroupService {
         }
 
         return groupMapper.toDtoList(groups);
+    }
+
+    @Override
+    public GroupDto updateInformation(UpdateGroupRequest request) {
+
+        Group group = groupRepository.getReferenceById(request.getGroupId());
+        group.setName(request.getGroupName());
+        group.setDescription(request.getDescription());
+
+        return groupMapper.toDto(groupRepository.save(group));
+    }
+
+    @Override
+    public GroupDto updateAvatar(UUID groupId, MultipartFile file) {
+        String imageUrl = fileService.uploadFileUrl(file);
+
+        Group group = groupRepository.getReferenceById(groupId);
+
+        group.setAvatarUrl(imageUrl);
+
+        return groupMapper.toDto(groupRepository.save(group));
     }
 }
