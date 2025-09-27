@@ -87,7 +87,7 @@ public class UsersController {
 
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-        String fileUrl = "http://nguyenhoangan03.site/uploads/" + filename;
+        String fileUrl = "https://nguyenhoangan03.site/uploads/" + filename;
         Map<String, String> response = new HashMap<>();
         response.put("url", fileUrl);
 
