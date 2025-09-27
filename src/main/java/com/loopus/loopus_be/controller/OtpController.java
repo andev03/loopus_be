@@ -52,7 +52,7 @@ public class OtpController {
                 .message("OTP không có hiệu lực.").build();
     }
 
-    @PostMapping("/reset-password")
+    @PutMapping("/reset-password")
     public ResponseDto<Object> resetPassword(@RequestBody @Valid ForgotPasswordRequest request) {
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
