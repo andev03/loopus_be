@@ -24,6 +24,6 @@ public class CreateGroupRequest {
     @NotBlank(message = "Vui lòng nhập avatarUrl")
     private String avatarUrl;
 
-    @NotBlank(message = "Vui lòng nhập userMemberIds")
+    @NotNull(message = "Vui lòng nhập userMemberIds")
     private List<UUID> userMemberIds;
 }
