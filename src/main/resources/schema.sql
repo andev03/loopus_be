@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS group_members CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS group_chats CASCADE;
 DROP TABLE IF EXISTS group_events CASCADE;
+DROP TABLE IF EXISTS event_participants CASCADE;
 DROP TABLE IF EXISTS reminders CASCADE;
 DROP TABLE IF EXISTS polls CASCADE;
 DROP TABLE IF EXISTS poll_options CASCADE;
@@ -44,6 +45,7 @@ CREATE TABLE groups (
     name         VARCHAR(255) NOT NULL,
     description  TEXT,
     avatar_url   TEXT,
+--    qrcode_url   TEXT,
     created_by   UUID NOT NULL,
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -77,43 +79,39 @@ CREATE TABLE group_chats (
 );
 
 -- =====================
--- GroupEvents Table
+-- Event Table
 -- =====================
+-- Bảng sự kiện nhóm
 CREATE TABLE group_events (
-    event_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id     UUID NOT NULL,
-    title        VARCHAR(255) NOT NULL,
-    description  TEXT,
-    start_time   TIMESTAMPTZ NOT NULL,
-    end_time     TIMESTAMPTZ NOT NULL,
-    created_by   UUID NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES users(user_id)
+    event_id    UUID PRIMARY KEY,
+    creator_id  UUID NOT NULL REFERENCES users(user_id),
+    group_id    UUID NOT NULL REFERENCES groups(group_id) ON DELETE CASCADE,
+    title       VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date  DATE NOT NULL,
+    event_time  TIME NOT NULL,
+    status      VARCHAR(20) DEFAULT 'PENDING'
+                  CHECK (status IN ('PENDING', 'DELETED')),
+    repeat_type VARCHAR(20) DEFAULT 'NONE'
+                  CHECK (repeat_type IN ('NONE', 'DAILY', 'WEEKLY', 'MONTHLY')),
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- =====================
--- Reminders Table
--- =====================
-CREATE TABLE reminders (
-    reminder_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    event_id     UUID,
-    group_id     UUID,
-    user_id      UUID, -- nếu là nhắc hẹn cá nhân
-    remind_time  TIMESTAMPTZ NOT NULL,
-    message      TEXT NOT NULL,
-    FOREIGN KEY (event_id) REFERENCES group_events(event_id) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+-- Bảng thành viên tham gia sự kiện
+CREATE TABLE event_participants (
+    event_id UUID REFERENCES group_events(event_id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    status VARCHAR(20)
+             CHECK (status IN ('ACCEPTED', 'DECLINED')),
+    responded_at TIMESTAMP,
+    PRIMARY KEY (event_id, user_id)
 );
-
 -- =====================
 -- Polls Table
 -- =====================
 CREATE TABLE polls (
     poll_id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     group_id         UUID NOT NULL,
-    question         TEXT NOT NULL,
-    multiple_choice  BOOLEAN DEFAULT FALSE,
     created_by       UUID NOT NULL,
     created_at       TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     expires_at       TIMESTAMPTZ,

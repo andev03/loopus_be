@@ -73,7 +73,7 @@ public class UsersController {
     }
 
     @PutMapping(value = "/update-information")
-    public ResponseDto<Object> updateInformation(@RequestBody UpdateUserRequest request) {
+    public ResponseDto<Object> updateInformation(@RequestBody @Valid UpdateUserRequest request) {
 
         return ResponseDto.builder()
                 .data(userService.updateInformation(request))

@@ -1,7 +1,7 @@
 package com.loopus.loopus_be.repository;
 
 import com.loopus.loopus_be.model.GroupMember;
-import com.loopus.loopus_be.model.GroupMemberId;
+import com.loopus.loopus_be.model.embedded_key.GroupMemberId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

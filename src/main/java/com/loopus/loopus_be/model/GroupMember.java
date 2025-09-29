@@ -1,18 +1,17 @@
 package com.loopus.loopus_be.model;
 
 import com.loopus.loopus_be.enums.RoleEnum;
+import com.loopus.loopus_be.model.embedded_key.GroupMemberId;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "group_members")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

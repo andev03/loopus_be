@@ -1,7 +1,9 @@
 package com.loopus.loopus_be.exception;
 
 import com.loopus.loopus_be.dto.response.ErrorResponseDto;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,6 +17,31 @@ public class GlobalExceptionHandler {
     public ErrorResponseDto handleLoginException(LoginException ex) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
+                .message(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ErrorResponseDto entityNotFoundException(EntityNotFoundException ex) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Không tìm thấy thông tin cần tìm!")
+                .build();
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ErrorResponseDto httpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .build();
+    }
+
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResponseDto illegalArgumentException(IllegalArgumentException ex) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
                 .build();
     }
