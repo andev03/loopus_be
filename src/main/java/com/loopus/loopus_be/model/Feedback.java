@@ -1,5 +1,6 @@
 package com.loopus.loopus_be.model;
 
+import com.loopus.loopus_be.enums.FeedbackType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,10 @@ public class Feedback {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
+    private FeedbackType type = FeedbackType.OTHER;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;

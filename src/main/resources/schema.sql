@@ -238,6 +238,7 @@ CREATE TABLE support_messages (
 CREATE TABLE feedbacks (
     feedback_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id      UUID NOT NULL,
+    type         VARCHAR(20) NOT NULL CHECK (type IN ('BUG', 'SUGGESTION', 'OTHER')),
     content      TEXT NOT NULL,
     image_url    TEXT,
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -286,7 +287,6 @@ CREATE TABLE wallets (
     wallet_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id     UUID UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     balance     NUMERIC(12,2) DEFAULT 0 CHECK (balance >= 0),
-    currency    VARCHAR(10) DEFAULT 'VND',
     updated_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -297,7 +297,6 @@ CREATE TABLE wallet_transactions (
     transaction_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     wallet_id       UUID NOT NULL REFERENCES wallets(wallet_id) ON DELETE CASCADE,
     amount          NUMERIC(12,2) NOT NULL,
-    type            VARCHAR(20) NOT NULL CHECK (type IN ('deposit', 'withdraw', 'payment', 'refund')),
     description     TEXT,
     created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

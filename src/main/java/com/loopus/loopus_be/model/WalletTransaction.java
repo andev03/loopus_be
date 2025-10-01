@@ -27,9 +27,6 @@ public class WalletTransaction {
     @Column(nullable = false)
     private Double amount;
 
-    @Column(nullable = false, length = 20)
-    private String type; // deposit, withdraw, transfer
-
     @Column(columnDefinition = "TEXT")
     private String description;
 

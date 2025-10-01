@@ -92,3 +92,56 @@ INSERT INTO poll_votes (vote_id, poll_id, option_id, user_id, voted_at)
 VALUES
     ('44444444-4444-4444-4444-444444444441', '11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333332', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP),
     ('44444444-4444-4444-4444-444444444442', '11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333331', '44444444-4444-4444-4444-444444444444', CURRENT_TIMESTAMP);
+
+-- =====================
+-- EXPENSES
+-- =====================
+
+INSERT INTO expenses (group_id, description, amount, paid_by)
+VALUES
+  ('11111111-1111-1111-1111-111111111111', 'Dinner at BBQ', 600.00, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+  ('11111111-1111-1111-1111-111111111111', 'Movie tickets', 300.00, 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+  ('11111111-1111-1111-1111-111111111111', 'Grab ride', 120.00, 'cccccccc-cccc-cccc-cccc-cccccccccccc');
+
+-- =====================
+-- EXPENSE PARTICIPANTS
+-- =====================
+-- BBQ Dinner (expense_id cần lấy từ trên, giả sử là e1)
+INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
+VALUES
+  ('e1-uuid-bbq', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 200.00, TRUE),
+  ('e1-uuid-bbq', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 200.00, FALSE),
+  ('e1-uuid-bbq', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 200.00, FALSE);
+
+-- Movie tickets 300k, chia cho 2 người
+INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
+VALUES
+  ('e2-uuid-movie', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 150.00, FALSE),
+  ('e2-uuid-movie', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 150.00, TRUE);
+
+-- Grab ride 120k, chia cho 3 người
+INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
+VALUES
+  ('e3-uuid-grab', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 40.00, FALSE),
+  ('e3-uuid-grab', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 40.00, FALSE),
+  ('e3-uuid-grab', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 40.00, TRUE);
+
+-- =====================
+-- DEBTS
+-- =====================
+-- BBQ Dinner: aaaaa trả hộ 600k, bbb và ccc mỗi người nợ 200k
+INSERT INTO debts (group_id, from_user, to_user, amount, status, due_date)
+VALUES
+  ('11111111-1111-1111-1111-111111111111', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 200.00, 'PENDING', NOW() + interval '7 days'),
+  ('11111111-1111-1111-1111-111111111111', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 200.00, 'PENDING', NOW() + interval '7 days');
+
+-- Movie: bbb trả 300k, aaa nợ 150k
+INSERT INTO debts (group_id, from_user, to_user, amount, status, due_date)
+VALUES
+  ('11111111-1111-1111-1111-111111111111', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 150.00, 'PENDING', NOW() + interval '7 days');
+
+-- Grab: ccc trả 120k, aaa và bbb mỗi người nợ 40k
+INSERT INTO debts (group_id, from_user, to_user, amount, status, due_date)
+VALUES
+  ('11111111-1111-1111-1111-111111111111', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 40.00, 'PENDING', NOW() + interval '7 days'),
+  ('11111111-1111-1111-1111-111111111111', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 40.00, 'PENDING', NOW() + interval '7 days');
