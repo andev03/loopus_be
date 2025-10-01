@@ -114,7 +114,6 @@ CREATE TABLE polls (
     group_id         UUID NOT NULL,
     created_by       UUID NOT NULL,
     created_at       TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    expires_at       TIMESTAMPTZ,
     FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES users(user_id)
 );

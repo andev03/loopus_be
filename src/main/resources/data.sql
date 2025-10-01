@@ -5,7 +5,9 @@ VALUES
     ('55555555-5555-5555-5555-555555555555', 'emily_w', 'hashed_password_5', 'Emily White', 'https://example.com/avatars/emily.jpg', NULL, 'USER', '1998-09-14', 'INACTIVE'),
     ('22222222-2222-2222-2222-222222222222', 'bob_the_staff', 'hashed_password_2', 'Bob Smith', 'https://example.com/avatars/bob.jpg', 'Moderator of tech topics.', 'STAFF', '1990-07-25', 'ACTIVE'),
     ('33333333-3333-3333-3333-333333333333', 'charlie_admin', 'hashed_password_3', 'Charlie Nguyen', 'https://example.com/avatars/charlie.jpg', 'Site administrator and backend dev.', 'ADMIN', '1988-11-05', 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d13', 'vothanhlong235@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE');
+    ('633d1f00-4675-4337-b2cb-70deed2f3d13', 'vothanhlong235@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d14', 'vothanhlong231@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong233@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE');
 
 INSERT INTO groups (group_id, name, description, avatar_url, created_by) VALUES
     ('aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Enthusiasts', 'Group for sharing tech news and projects', 'https://example.com/avatars/tech.png', '11111111-1111-1111-1111-111111111111'),
@@ -63,3 +65,30 @@ INSERT INTO event_participants (event_id, user_id, status, responded_at) VALUES
     -- Project Demo Night
     ('eeeeeee2-eeee-eeee-eeee-eeeeeeeeeee2', '44444444-4444-4444-4444-444444444444', 'ACCEPTED', '2025-09-28 14:00:00'),
     ('eeeeeee2-eeee-eeee-eeee-eeeeeeeeeee2', '55555555-5555-5555-5555-555555555555', 'DECLINED', '2025-09-29 16:20:00');
+
+-- =====================
+-- Polls
+-- =====================
+INSERT INTO polls (poll_id, group_id, created_by, created_at)
+VALUES
+    ('11111111-1111-1111-1111-111111111111',  -- poll_id
+     'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1',  -- group_id
+     '22222222-2222-2222-2222-222222222222',  -- created_by
+     CURRENT_TIMESTAMP);
+
+-- =====================
+-- Poll Options
+-- =====================
+INSERT INTO poll_options (option_id, poll_id, option_text)
+VALUES
+    ('33333333-3333-3333-3333-333333333331', '11111111-1111-1111-1111-111111111111', 'AI will replace many jobs'),
+    ('33333333-3333-3333-3333-333333333332', '11111111-1111-1111-1111-111111111111', 'AI will create more jobs'),
+    ('33333333-3333-3333-3333-333333333333', '11111111-1111-1111-1111-111111111111', 'AI impact will be balanced');
+
+-- =====================
+-- Poll Votes
+-- =====================
+INSERT INTO poll_votes (vote_id, poll_id, option_id, user_id, voted_at)
+VALUES
+    ('44444444-4444-4444-4444-444444444441', '11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333332', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP),
+    ('44444444-4444-4444-4444-444444444442', '11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333331', '44444444-4444-4444-4444-444444444444', CURRENT_TIMESTAMP);
