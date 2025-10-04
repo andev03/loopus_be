@@ -112,7 +112,6 @@ public class ExpenseService implements IExpenseService {
     public void deleteExpense(UUID expenseId) {
         Expense expense = expenseRepository.getReferenceById(expenseId);
 
-        expenseParticipantRepository.deleteAll(expense.getParticipants());
         expenseRepository.delete(expense);
     }
 

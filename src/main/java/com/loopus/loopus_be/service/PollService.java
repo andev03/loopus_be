@@ -56,6 +56,7 @@ public class PollService implements IPollService {
         Poll poll = pollRepository.save(Poll.builder()
                 .group(groupRepository.getReferenceById(pollRequest.getGroupId()))
                 .createdBy(userRepository.getReferenceById(pollRequest.getUserId()))
+                .name(pollRequest.getName())
                 .build()
         );
 

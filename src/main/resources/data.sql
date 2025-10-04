@@ -69,11 +69,12 @@ INSERT INTO event_participants (event_id, user_id, status, responded_at) VALUES
 -- =====================
 -- Polls
 -- =====================
-INSERT INTO polls (poll_id, group_id, created_by, created_at)
+INSERT INTO polls (poll_id, group_id, created_by, poll_name, created_at)
 VALUES
-    ('11111111-1111-1111-1111-111111111111',  -- poll_id
-     'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1',  -- group_id
-     '22222222-2222-2222-2222-222222222222',  -- created_by
+    ('11111111-1111-1111-1111-111111111111',
+     'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1',
+     '22222222-2222-2222-2222-222222222222',
+     'Best Programming Language 2025',
      CURRENT_TIMESTAMP);
 
 -- =====================

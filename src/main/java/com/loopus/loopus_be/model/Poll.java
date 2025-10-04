@@ -34,6 +34,9 @@ public class Poll {
     @Column(name = "created_at", updatable = false)
     private OffsetDateTime createdAt;
 
+    @Column(name = "poll_name", length = 255, nullable = false)
+    private String name;
+
     // Quan hệ với PollOption
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PollOption> options;

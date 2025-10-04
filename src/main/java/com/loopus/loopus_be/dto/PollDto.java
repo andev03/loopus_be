@@ -17,6 +17,8 @@ public class PollDto {
 
     private UsersDto createdBy;
 
+    private String name;
+
     private OffsetDateTime createdAt;
 
     private List<PollOptionDto> options;

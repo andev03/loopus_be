@@ -110,10 +110,11 @@ CREATE TABLE event_participants (
 -- Polls Table
 -- =====================
 CREATE TABLE polls (
-    poll_id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id         UUID NOT NULL,
-    created_by       UUID NOT NULL,
-    created_at       TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    poll_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    group_id    UUID NOT NULL,
+    created_by  UUID NOT NULL,
+    poll_name   VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES users(user_id)
 );
