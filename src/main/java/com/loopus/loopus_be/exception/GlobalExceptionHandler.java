@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
@@ -22,6 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto entityNotFoundException(EntityNotFoundException ex) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -30,6 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto httpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -39,6 +42,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto illegalArgumentException(IllegalArgumentException ex) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -47,6 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto methodArgumentNotValidException(MethodArgumentNotValidException exception) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -55,6 +60,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GroupException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto groupException(GroupException exception) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -64,7 +70,17 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(FileException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto fileException(FileException exception) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(exception.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(ExpenseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto expenseException(ExpenseException exception) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(exception.getMessage())

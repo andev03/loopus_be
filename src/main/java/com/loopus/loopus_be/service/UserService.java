@@ -34,9 +34,13 @@ public class UserService implements IUserService {
         Users user = userRepository.findByUsernameAndPasswordHash(username, password);
 
         if (user == null) {
-            throw new LoginException("Invalid username or password");
+            throw new LoginException("Sai tên đăng nhập hoặc mật khẩu!");
         } else if (user.getStatus().equals(UserStatusEnum.PENDING)) {
             throw new LoginException("Tài khoản chưa được xác thực!");
+        } else if (user.getStatus().equals(UserStatusEnum.INACTIVE)) {
+            throw new LoginException("Tài khoản không hoạt động!");
+        } else if (user.getStatus().equals(UserStatusEnum.BANNED)) {
+            throw new LoginException("Tài khoản đã bị khoá!");
         }
 
         return userMapper.toDto(user);

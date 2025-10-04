@@ -93,4 +93,12 @@ public class GroupController {
                 .message("Cập nhật avatar thành công")
                 .build();
     }
+
+    @DeleteMapping("/group")
+    public ResponseDto<Object> deleteGroup(@RequestParam UUID groupId) {
+        iGroupService.deleteGroupById(groupId);
+        return ResponseDto.builder()
+                .message("Xoá nhóm thành công!")
+                .build();
+    }
 }

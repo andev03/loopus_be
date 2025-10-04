@@ -175,4 +175,9 @@ public class GroupService implements IGroupService {
 
         return groupMapper.toDto(groupRepository.save(group));
     }
+
+    @Override
+    public void deleteGroupById(UUID groupId) {
+        groupRepository.deleteById(groupId);
+    }
 }

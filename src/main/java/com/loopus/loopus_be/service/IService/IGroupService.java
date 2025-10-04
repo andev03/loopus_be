@@ -27,4 +27,6 @@ public interface IGroupService {
     GroupDto updateInformation(UpdateGroupRequest request);
 
     GroupDto updateAvatar(UUID groupId, MultipartFile file);
+
+    void deleteGroupById(UUID groupId);
 }
