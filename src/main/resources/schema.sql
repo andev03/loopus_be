@@ -261,12 +261,19 @@ CREATE TABLE stories (
 -- Notifications Table
 -- =====================
 CREATE TABLE notifications (
-    notification_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id          UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    type             VARCHAR(50) NOT NULL CHECK (type IN ('follow', 'like', 'comment', 'payment', 'system')),
-    message          TEXT NOT NULL,
-    is_read          BOOLEAN DEFAULT FALSE,
-    created_at       TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    notification_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id           UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,  -- người nhận thông báo
+    sender_id         UUID REFERENCES users(user_id) ON DELETE SET NULL,          -- người gửi / người liên quan
+    group_id          UUID REFERENCES groups(group_id) ON DELETE SET NULL,        -- nhóm liên quan (nếu có)
+    type              VARCHAR(50) NOT NULL CHECK (
+                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE')
+                      ),
+    title             VARCHAR(255),        -- tiêu đề ngắn (VD: "Lê Anh đã trả bạn 100.000đ")
+    message           TEXT NOT NULL,       -- nội dung chi tiết
+    amount            NUMERIC(15,2),       -- số tiền liên quan (nếu có)
+    is_read           BOOLEAN DEFAULT FALSE,
+    created_at        TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at        TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =====================

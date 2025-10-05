@@ -3,6 +3,7 @@ package com.loopus.loopus_be.service;
 import com.loopus.loopus_be.dto.GroupDto;
 import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.CreateGroupRequest;
+import com.loopus.loopus_be.dto.request.CreateNotificationRequest;
 import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
 import com.loopus.loopus_be.dto.request.UpdateGroupRequest;
 import com.loopus.loopus_be.enums.RoleEnum;
@@ -18,6 +19,7 @@ import com.loopus.loopus_be.repository.GroupRepository;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IGroupService;
+import com.loopus.loopus_be.service.IService.INotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +38,7 @@ public class GroupService implements IGroupService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final IFileService fileService;
+    private final INotificationService iNotificationService;
 
     @Override
     public List<GroupDto> getAllgroupsByUserId(UUID userId) {
@@ -109,6 +112,21 @@ public class GroupService implements IGroupService {
                         .role(RoleEnum.MEMBER)
                         .build()
         );
+
+        Users sender = userRepository.getReferenceById(handleToGroupRequest.getSenderId());
+
+        iNotificationService.createNotification(
+                CreateNotificationRequest.builder()
+                        .senderId(handleToGroupRequest.getSenderId())
+                        .receiverId(handleToGroupRequest.getUserId())
+                        .groupId(handleToGroupRequest.getGroupId())
+                        .type("INVITE")
+                        .title(sender.getFullName() + " mời bạn tham gia nhóm.")
+                        .message("Bạn đã được " + sender.getFullName() + " mời vào nhóm " + groupMember.getGroup().getName())
+                        .amount(null)
+                        .build()
+        );
+
         return groupMapper.toDto(groupMember.getGroup());
     }
 

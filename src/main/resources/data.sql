@@ -206,3 +206,74 @@ VALUES
 ('55555555-5555-5555-5555-555555555555', 'OTHER',
  'Overall I really like the app. Keep up the great work!',
  NULL);
+
+-- =====================
+-- NOTIFICATIONS
+-- =====================
+INSERT INTO notifications (
+    notification_id, user_id, sender_id, group_id, type, title, message, amount, is_read, created_at, updated_at
+) VALUES
+    -- 1. PAYMENT_RECEIVED: Alice nhận được tiền từ Bob
+    ('aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+     '11111111-1111-1111-1111-111111111111',   -- Alice nhận
+     '22222222-2222-2222-2222-222222222222',   -- Bob gửi
+     'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1',   -- Nhóm Tech Enthusiasts
+     'PAYMENT_RECEIVED',
+     'Bob Smith has sent you 100,000₫',
+     'You have received a payment of 100,000₫ from Bob Smith in the group Tech Enthusiasts.',
+     100000.00,
+     FALSE,
+     CURRENT_TIMESTAMP,
+     CURRENT_TIMESTAMP),
+
+    -- 2. PAYMENT_REMINDER: Charlie nhắc David thanh toán
+    ('aaaa2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+     '44444444-4444-4444-4444-444444444444',   -- David nhận nhắc nhở
+     '33333333-3333-3333-3333-333333333333',   -- Charlie (Admin)
+     'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1',
+     'PAYMENT_REMINDER',
+     'Payment reminder for group expenses',
+     'Please complete your pending payment of 150,000₫ in Tech Enthusiasts group.',
+     150000.00,
+     FALSE,
+     CURRENT_TIMESTAMP,
+     CURRENT_TIMESTAMP),
+
+    -- 3. COMMENT: Emily bình luận vào bài viết của Alice
+    ('aaaa3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+     '11111111-1111-1111-1111-111111111111',   -- Alice nhận thông báo
+     '55555555-5555-5555-5555-555555555555',   -- Emily bình luận
+     NULL,
+     'COMMENT',
+     'Emily White commented on your post',
+     'Emily White: "That’s a great project idea, Alice!"',
+     NULL,
+     TRUE,  -- đã đọc rồi
+     CURRENT_TIMESTAMP - INTERVAL '2 days',
+     CURRENT_TIMESTAMP - INTERVAL '2 days'),
+
+    -- 4. INVITE: Bob mời Emily vào nhóm Book Lovers
+    ('aaaa4444-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+     '55555555-5555-5555-5555-555555555555',   -- Emily nhận
+     '22222222-2222-2222-2222-222222222222',   -- Bob mời
+     'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2',
+     'INVITE',
+     'Invitation to join Book Lovers',
+     'Bob Smith has invited you to join the group "Book Lovers".',
+     NULL,
+     FALSE,
+     CURRENT_TIMESTAMP,
+     CURRENT_TIMESTAMP),
+
+    -- 5. PAYMENT_RECEIVED: Long (user_id cuối) nhận tiền từ Alice
+    ('aaaa5555-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+     '633d1f00-4675-4337-b2cb-70deed2f3d13',
+     '11111111-1111-1111-1111-111111111111',
+     NULL,
+     'PAYMENT_RECEIVED',
+     'Alice Johnson sent you 50,000₫',
+     'You have received 50,000₫ from Alice Johnson.',
+     50000.00,
+     FALSE,
+     CURRENT_TIMESTAMP,
+     CURRENT_TIMESTAMP);
