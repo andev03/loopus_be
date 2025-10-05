@@ -196,15 +196,6 @@ CREATE TABLE settings (
 );
 
 -- =====================
--- FAQs Table
--- =====================
-CREATE TABLE faqs (
-    faq_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    question  TEXT NOT NULL,
-    answer    TEXT NOT NULL
-);
-
--- =====================
 -- Support Chats Table
 -- =====================
 CREATE TABLE support_chats (
