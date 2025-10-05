@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
 
     List<Expense> findAllByGroup_GroupId(UUID groupId);
+
+    List<Expense> findAllByPaidBy_UserId(UUID userId);
 }

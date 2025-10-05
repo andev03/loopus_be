@@ -1,8 +1,8 @@
 package com.loopus.loopus_be.service.IService;
 
 import com.loopus.loopus_be.dto.ExpenseDto;
+import com.loopus.loopus_be.dto.ExpenseParticipantDto;
 import com.loopus.loopus_be.dto.request.CreateExpenseRequest;
-import com.loopus.loopus_be.dto.request.UpdateExpenseParticipantRequest;
 import com.loopus.loopus_be.dto.request.UpdateExpenseRequest;
 import jakarta.validation.Valid;
 
@@ -18,4 +18,8 @@ public interface IExpenseService {
     ExpenseDto updateExpense(@Valid UpdateExpenseRequest request);
 
     void deleteExpense(@Valid UUID expenseId);
+
+    List<ExpenseParticipantDto> getExpenseToDebtReminder(UUID expenseId);
+
+    List<ExpenseParticipantDto> getExpenseToDebtReminderIndividual(UUID userId, UUID payerId);
 }

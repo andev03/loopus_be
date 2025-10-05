@@ -1,7 +1,6 @@
 package com.loopus.loopus_be.controller;
 
 import com.loopus.loopus_be.dto.request.CreateExpenseRequest;
-import com.loopus.loopus_be.dto.request.UpdateExpenseParticipantRequest;
 import com.loopus.loopus_be.dto.request.UpdateExpenseRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
 import com.loopus.loopus_be.service.IService.IExpenseService;
@@ -58,6 +57,27 @@ public class ExpenseController {
         return ResponseDto.builder()
                 .status(HttpStatus.OK.value())
                 .message("Xoá chi tiêu thành công")
+                .build();
+    }
+
+    @GetMapping("/expense/debt-reminder-group")
+    public ResponseDto<Object> getExpensesByExpenseId(@RequestParam UUID expenseId) {
+        return ResponseDto.builder()
+                .data(iExpenseService.getExpenseToDebtReminder(expenseId))
+                .status(HttpStatus.OK.value())
+                .message("Lấy danh sách chi tiêu thành công")
+                .build();
+    }
+
+    @GetMapping("/expense/debt-reminder-individual")
+    @Operation(summary = "Lấy danh sách chi tiêu cá nhân trong nhóm", description = "userId là người đang đăng nhập, payerId là người cần trả những khoản nợ")
+    public ResponseDto<Object> getExpensesByExpenseIdAndGroupId(
+            @RequestParam UUID userId, @RequestParam UUID payerId
+    ) {
+        return ResponseDto.builder()
+                .data(iExpenseService.getExpenseToDebtReminderIndividual(userId, payerId))
+                .status(HttpStatus.OK.value())
+                .message("Lấy danh sách chi tiêu thành công")
                 .build();
     }
 }

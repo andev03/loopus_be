@@ -8,10 +8,7 @@ import com.loopus.loopus_be.exception.LoginException;
 import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.UserRepository;
-import com.loopus.loopus_be.service.IService.IEmailService;
-import com.loopus.loopus_be.service.IService.IFileService;
-import com.loopus.loopus_be.service.IService.IOtpService;
-import com.loopus.loopus_be.service.IService.IUserService;
+import com.loopus.loopus_be.service.IService.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +25,7 @@ public class UserService implements IUserService {
     private final IEmailService emailService;
     private final IOtpService otpService;
     private final IFileService fileService;
+    private final ISettingService settingService;
 
     @Override
     public UsersDto login(String username, String password) {
@@ -63,6 +61,9 @@ public class UserService implements IUserService {
                 .fullName(request.getFirstName() + " " + request.getLastName())
                 .dateOfBirth((request.getDob()))
                 .build());
+
+        settingService.initializeSettingsForNewUser(userSave.getUserId());
+
         return userMapper.toDto(userSave);
     }
 

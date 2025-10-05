@@ -24,14 +24,17 @@ public class OtpController {
     public ResponseDto<Object> verifyOtpRegister(@RequestParam String email, @RequestParam String otp) {
         boolean flag = otpService.verifyOtp(email, otp);
 
+        Users user = userRepository.findByUsername(email);
+
         if (flag) {
-            Users user = userRepository.findByUsername(email);
             user.setStatus(UserStatusEnum.ACTIVE);
             userRepository.save(user);
             return ResponseDto.builder()
                     .status(HttpStatus.OK.value())
                     .message("OTP có hiệu lực. Đăng ký thành công.").build();
         }
+        userRepository.delete(user);
+
         return ResponseDto.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .message("OTP không có hiệu lực. Đăng ký thất bại.").build();

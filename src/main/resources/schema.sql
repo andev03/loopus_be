@@ -172,30 +172,27 @@ CREATE TABLE expense_participants (
 );
 
 -- =====================
--- Debts Table
--- =====================
-CREATE TABLE debts (
-    debt_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id   UUID NOT NULL,
-    from_user  UUID NOT NULL,  -- người nợ
-    to_user    UUID NOT NULL,  -- người được trả
-    amount     DECIMAL(12,2) NOT NULL CHECK (amount > 0),
-    status     VARCHAR(20) CHECK (status IN ('PENDING', 'SETTLED')) DEFAULT 'PENDING',
-    due_date   TIMESTAMPTZ,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
-    FOREIGN KEY (from_user) REFERENCES users(user_id),
-    FOREIGN KEY (to_user) REFERENCES users(user_id)
-);
-
--- =====================
 -- Settings Table
 -- =====================
 CREATE TABLE settings (
     id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id  UUID NOT NULL,
-    type     VARCHAR(50) NOT NULL CHECK (type IN ('CHAT', 'REMINDER', 'POLL', 'DEBT')),
-    enabled  BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    user_id  UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    type     VARCHAR(50) NOT NULL CHECK (
+        type IN (
+            'SOUND',
+            'DEVICE_NOTIFICATION',
+            'GROUP_TRANSACTION',
+            'REMINDER',
+            'SECURITY_ALERT',
+            'SERVICE_PROMO',
+            'VOUCHER',
+            'ADVERTISING',
+            'FRIENDS_AND_GROUPS',
+            'GROUP_CHANGE',
+            'SURVEY_FEEDBACK'
+        )
+    ),
+    enabled BOOLEAN DEFAULT TRUE
 );
 
 -- =====================
@@ -213,7 +210,7 @@ CREATE TABLE faqs (
 CREATE TABLE support_chats (
     chat_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id     UUID NOT NULL,
-    admin_id    UUID,  -- có thể null nếu chưa có admin nhận
+    admin_id    UUID,
     created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     status      VARCHAR(20) CHECK (status IN ('OPEN', 'CLOSED')) DEFAULT 'OPEN',
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,

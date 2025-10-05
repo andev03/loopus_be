@@ -1,3 +1,7 @@
+-- =====================
+-- USERS
+-- =====================
+
 INSERT INTO users (user_id, username, password_hash, full_name, avatar_url, bio, role, date_of_birth, status)
 VALUES
     ('11111111-1111-1111-1111-111111111111', 'alice123', 'hashed_password_1', 'Alice Johnson', 'https://example.com/avatars/alice.jpg', 'Loves reading and coding.', 'USER', '1995-03-12', 'ACTIVE'),
@@ -9,10 +13,16 @@ VALUES
     ('633d1f00-4675-4337-b2cb-70deed2f3d14', 'vothanhlong231@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
     ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong233@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE');
 
+-- =====================
+-- GROUPS
+-- =====================
 INSERT INTO groups (group_id, name, description, avatar_url, created_by) VALUES
     ('aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Enthusiasts', 'Group for sharing tech news and projects', 'https://example.com/avatars/tech.png', '11111111-1111-1111-1111-111111111111'),
     ('aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', 'Book Lovers', 'Discuss and share your favorite books', 'https://example.com/avatars/book.png', '22222222-2222-2222-2222-222222222222');
 
+-- =====================
+-- GROUP MEMBERS
+-- =====================
 -- Tech Enthusiasts group
 INSERT INTO group_members (group_id, user_id, role) VALUES
     ('aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', '11111111-1111-1111-1111-111111111111', 'ADMIN'),
@@ -23,6 +33,9 @@ INSERT INTO group_members (group_id, user_id, role) VALUES
     ('aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', '44444444-4444-4444-4444-444444444444', 'ADMIN'),
     ('aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', '55555555-5555-5555-5555-555555555555', 'MEMBER');
 
+-- =====================
+-- GROUP CHATS
+-- =====================
 -- Tech Enthusiasts chat
 INSERT INTO group_chats (chat_id, group_id, sender_id, message, type, image_url) VALUES
     ('ccccccc1-cccc-cccc-cccc-ccccccccccc1', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', '11111111-1111-1111-1111-111111111111', 'Welcome to the Tech Enthusiasts group!', 'TEXT', NULL),
@@ -34,6 +47,10 @@ INSERT INTO group_chats (chat_id, group_id, sender_id, message, type, image_url)
     ('ccccccc4-cccc-cccc-cccc-ccccccccccc4', 'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', '44444444-4444-4444-4444-444444444444', 'Welcome to Book Lovers 📚', 'TEXT', NULL),
     ('ccccccc5-cccc-cccc-cccc-ccccccccccc5', 'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', '44444444-4444-4444-4444-444444444444', 'Currently reading "Atomic Habits". Anyone else?', 'TEXT', NULL),
     ('ccccccc6-cccc-cccc-cccc-ccccccccccc6', 'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', '55555555-5555-5555-5555-555555555555', 'Found a great book cover design!', 'IMAGE', 'https://example.com/images/book_cover.jpg');
+
+-- =====================
+-- GROUP EVENTS
+-- =====================
 
 INSERT INTO group_events (
     event_id, group_id, creator_id, title, description,
@@ -55,6 +72,9 @@ INSERT INTO group_events (
      '2025-10-12', '20:00', CURRENT_TIMESTAMP,
      'DELETED', 'NONE');
 
+-- =====================
+-- EXPENSE PARTICIPANTS
+-- =====================
 
 -- Tham gia sự kiện
 INSERT INTO event_participants (event_id, user_id, status, responded_at) VALUES
@@ -69,6 +89,7 @@ INSERT INTO event_participants (event_id, user_id, status, responded_at) VALUES
 -- =====================
 -- Polls
 -- =====================
+
 INSERT INTO polls (poll_id, group_id, created_by, poll_name, created_at)
 VALUES
     ('11111111-1111-1111-1111-111111111111',
@@ -80,6 +101,7 @@ VALUES
 -- =====================
 -- Poll Options
 -- =====================
+
 INSERT INTO poll_options (option_id, poll_id, option_text)
 VALUES
     ('33333333-3333-3333-3333-333333333331', '11111111-1111-1111-1111-111111111111', 'AI will replace many jobs'),
@@ -89,6 +111,7 @@ VALUES
 -- =====================
 -- Poll Votes
 -- =====================
+
 INSERT INTO poll_votes (vote_id, poll_id, option_id, user_id, voted_at)
 VALUES
     ('44444444-4444-4444-4444-444444444441', '11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333332', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP),
@@ -97,15 +120,17 @@ VALUES
 -- =====================
 -- EXPENSES
 -- =====================
+
 INSERT INTO expenses (expense_id, group_id, description, amount, paid_by)
 VALUES
   ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Dinner at BBQ', 600.00, '11111111-1111-1111-1111-111111111111'), -- Alice trả
-  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Movie tickets', 300.00, '44444444-4444-4444-4444-444444444444'), -- David trả
+  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Movie tickets', 300.00, '11111111-1111-1111-1111-111111111111'), -- David trả
   ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Grab ride', 120.00, '55555555-5555-5555-5555-555555555555'); -- Emily trả
 
 -- =====================
 -- EXPENSE PARTICIPANTS
 -- =====================
+
 -- BBQ Dinner 600k chia 3 người
 INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
 VALUES
@@ -125,3 +150,27 @@ VALUES
   ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 40.00, FALSE),
   ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 40.00, FALSE),
   ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '55555555-5555-5555-5555-555555555555', 40.00, TRUE);
+
+-- =====================
+-- SETTINGS
+-- =====================
+
+INSERT INTO settings (user_id, type, enabled) VALUES
+-- Cài đặt chung
+('11111111-1111-1111-1111-111111111111', 'SOUND', TRUE),
+('11111111-1111-1111-1111-111111111111', 'DEVICE_NOTIFICATION', TRUE),
+
+-- Thông báo quan trọng
+('11111111-1111-1111-1111-111111111111', 'GROUP_TRANSACTION', TRUE),
+('11111111-1111-1111-1111-111111111111', 'REMINDER', TRUE),
+('11111111-1111-1111-1111-111111111111', 'SECURITY_ALERT', TRUE),
+
+-- Thông báo ưu đãi
+('11111111-1111-1111-1111-111111111111', 'SERVICE_PROMO', TRUE),
+('11111111-1111-1111-1111-111111111111', 'VOUCHER', TRUE),
+('11111111-1111-1111-1111-111111111111', 'ADVERTISING', TRUE),
+
+-- Thông báo tương tác
+('11111111-1111-1111-1111-111111111111', 'FRIENDS_AND_GROUPS', TRUE),
+('11111111-1111-1111-1111-111111111111', 'GROUP_CHANGE', TRUE),
+('11111111-1111-1111-1111-111111111111', 'SURVEY_FEEDBACK', TRUE);

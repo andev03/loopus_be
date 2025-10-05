@@ -1,11 +1,13 @@
 package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.ExpenseDto;
+import com.loopus.loopus_be.dto.ExpenseParticipantDto;
 import com.loopus.loopus_be.dto.request.CreateExpenseParticipantRequest;
 import com.loopus.loopus_be.dto.request.CreateExpenseRequest;
 import com.loopus.loopus_be.dto.request.UpdateExpenseParticipantRequest;
 import com.loopus.loopus_be.dto.request.UpdateExpenseRequest;
 import com.loopus.loopus_be.mapper.ExpenseMapper;
+import com.loopus.loopus_be.mapper.ExpenseParticipantMapper;
 import com.loopus.loopus_be.model.Expense;
 import com.loopus.loopus_be.model.ExpenseParticipant;
 import com.loopus.loopus_be.repository.ExpenseParticipantRepository;
@@ -31,7 +33,7 @@ public class ExpenseService implements IExpenseService {
     private final ExpenseParticipantRepository expenseParticipantRepository;
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-
+    private final ExpenseParticipantMapper expenseParticipantMapper;
 
     @Override
     public List<ExpenseDto> getAllByGroupId(UUID groupId) {
@@ -113,6 +115,23 @@ public class ExpenseService implements IExpenseService {
         Expense expense = expenseRepository.getReferenceById(expenseId);
 
         expenseRepository.delete(expense);
+    }
+
+    @Override
+    public List<ExpenseParticipantDto> getExpenseToDebtReminder(UUID expenseId) {
+
+        Expense expense = expenseRepository.getReferenceById(expenseId);
+
+        return expenseParticipantMapper.toDtoList(expense.getParticipants());
+    }
+
+    @Override
+    public List<ExpenseParticipantDto> getExpenseToDebtReminderIndividual(UUID userId, UUID payerId) {
+        List<Expense> expenses = expenseRepository.findAllByPaidBy_UserId(userId);
+
+        List<ExpenseParticipant> expenseParticipants = expenseParticipantRepository.findAllByExpenseInAndUser_UserId(expenses, payerId);
+
+        return expenseParticipantMapper.toDtoList(expenseParticipants);
     }
 
     private List<ExpenseParticipant> updateExpenseParticipantsForEquals(
