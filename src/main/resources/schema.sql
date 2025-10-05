@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS group_members CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS group_chats CASCADE;
 DROP TABLE IF EXISTS group_events CASCADE;
+DROP TABLE IF EXISTS event_participants CASCADE;
 DROP TABLE IF EXISTS reminders CASCADE;
 DROP TABLE IF EXISTS polls CASCADE;
 DROP TABLE IF EXISTS poll_options CASCADE;
@@ -44,6 +45,7 @@ CREATE TABLE groups (
     name         VARCHAR(255) NOT NULL,
     description  TEXT,
     avatar_url   TEXT,
+--    qrcode_url   TEXT,
     created_by   UUID NOT NULL,
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -77,46 +79,42 @@ CREATE TABLE group_chats (
 );
 
 -- =====================
--- GroupEvents Table
+-- Event Table
 -- =====================
+-- Bảng sự kiện nhóm
 CREATE TABLE group_events (
-    event_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id     UUID NOT NULL,
-    title        VARCHAR(255) NOT NULL,
-    description  TEXT,
-    start_time   TIMESTAMPTZ NOT NULL,
-    end_time     TIMESTAMPTZ NOT NULL,
-    created_by   UUID NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES users(user_id)
+    event_id    UUID PRIMARY KEY,
+    creator_id  UUID NOT NULL REFERENCES users(user_id),
+    group_id    UUID NOT NULL REFERENCES groups(group_id) ON DELETE CASCADE,
+    title       VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date  DATE NOT NULL,
+    event_time  TIME NOT NULL,
+    status      VARCHAR(20) DEFAULT 'PENDING'
+                  CHECK (status IN ('PENDING', 'DELETED')),
+    repeat_type VARCHAR(20) DEFAULT 'NONE'
+                  CHECK (repeat_type IN ('NONE', 'DAILY', 'WEEKLY', 'MONTHLY')),
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- =====================
--- Reminders Table
--- =====================
-CREATE TABLE reminders (
-    reminder_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    event_id     UUID,
-    group_id     UUID,
-    user_id      UUID, -- nếu là nhắc hẹn cá nhân
-    remind_time  TIMESTAMPTZ NOT NULL,
-    message      TEXT NOT NULL,
-    FOREIGN KEY (event_id) REFERENCES group_events(event_id) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+-- Bảng thành viên tham gia sự kiện
+CREATE TABLE event_participants (
+    event_id UUID REFERENCES group_events(event_id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    status VARCHAR(20)
+             CHECK (status IN ('ACCEPTED', 'DECLINED')),
+    responded_at TIMESTAMP,
+    PRIMARY KEY (event_id, user_id)
 );
-
 -- =====================
 -- Polls Table
 -- =====================
 CREATE TABLE polls (
-    poll_id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id         UUID NOT NULL,
-    question         TEXT NOT NULL,
-    multiple_choice  BOOLEAN DEFAULT FALSE,
-    created_by       UUID NOT NULL,
-    created_at       TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    expires_at       TIMESTAMPTZ,
+    poll_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    group_id    UUID NOT NULL,
+    created_by  UUID NOT NULL,
+    poll_name   VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES users(user_id)
 );
@@ -174,30 +172,27 @@ CREATE TABLE expense_participants (
 );
 
 -- =====================
--- Debts Table
--- =====================
-CREATE TABLE debts (
-    debt_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    group_id   UUID NOT NULL,
-    from_user  UUID NOT NULL,  -- người nợ
-    to_user    UUID NOT NULL,  -- người được trả
-    amount     DECIMAL(12,2) NOT NULL CHECK (amount > 0),
-    status     VARCHAR(20) CHECK (status IN ('PENDING', 'SETTLED')) DEFAULT 'PENDING',
-    due_date   TIMESTAMPTZ,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
-    FOREIGN KEY (from_user) REFERENCES users(user_id),
-    FOREIGN KEY (to_user) REFERENCES users(user_id)
-);
-
--- =====================
 -- Settings Table
 -- =====================
 CREATE TABLE settings (
     id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id  UUID NOT NULL,
-    type     VARCHAR(50) NOT NULL CHECK (type IN ('CHAT', 'REMINDER', 'POLL', 'DEBT')),
-    enabled  BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    user_id  UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    type     VARCHAR(50) NOT NULL CHECK (
+        type IN (
+            'SOUND',
+            'DEVICE_NOTIFICATION',
+            'GROUP_TRANSACTION',
+            'REMINDER',
+            'SECURITY_ALERT',
+            'SERVICE_PROMO',
+            'VOUCHER',
+            'ADVERTISING',
+            'FRIENDS_AND_GROUPS',
+            'GROUP_CHANGE',
+            'SURVEY_FEEDBACK'
+        )
+    ),
+    enabled BOOLEAN DEFAULT TRUE
 );
 
 -- =====================
@@ -215,7 +210,7 @@ CREATE TABLE faqs (
 CREATE TABLE support_chats (
     chat_id     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id     UUID NOT NULL,
-    admin_id    UUID,  -- có thể null nếu chưa có admin nhận
+    admin_id    UUID,
     created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     status      VARCHAR(20) CHECK (status IN ('OPEN', 'CLOSED')) DEFAULT 'OPEN',
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
@@ -241,6 +236,7 @@ CREATE TABLE support_messages (
 CREATE TABLE feedbacks (
     feedback_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id      UUID NOT NULL,
+    type         VARCHAR(20) NOT NULL CHECK (type IN ('BUG', 'SUGGESTION', 'OTHER')),
     content      TEXT NOT NULL,
     image_url    TEXT,
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -289,7 +285,6 @@ CREATE TABLE wallets (
     wallet_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id     UUID UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     balance     NUMERIC(12,2) DEFAULT 0 CHECK (balance >= 0),
-    currency    VARCHAR(10) DEFAULT 'VND',
     updated_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -300,7 +295,6 @@ CREATE TABLE wallet_transactions (
     transaction_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     wallet_id       UUID NOT NULL REFERENCES wallets(wallet_id) ON DELETE CASCADE,
     amount          NUMERIC(12,2) NOT NULL,
-    type            VARCHAR(20) NOT NULL CHECK (type IN ('deposit', 'withdraw', 'payment', 'refund')),
     description     TEXT,
     created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

@@ -6,6 +6,7 @@ import com.loopus.loopus_be.dto.request.UpdateGroupRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
 import com.loopus.loopus_be.service.IService.IGroupService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,7 +41,7 @@ public class GroupController {
     }
 
     @PostMapping("/groups")
-    public ResponseDto<Object> getGroups(@RequestBody CreateGroupRequest createGroupRequest) {
+    public ResponseDto<Object> createGroup(@RequestBody @Valid CreateGroupRequest createGroupRequest) {
         return ResponseDto.builder()
                 .data(iGroupService.createGroup(createGroupRequest))
                 .message("Tạo nhóm thành công")
@@ -48,7 +49,7 @@ public class GroupController {
     }
 
     @PutMapping("/groups/add-members")
-    public ResponseDto<Object> addMember(@RequestBody HandleToGroupRequest handleToGroupRequest) {
+    public ResponseDto<Object> addMember(@RequestBody @Valid HandleToGroupRequest handleToGroupRequest) {
         return ResponseDto.builder()
                 .data(iGroupService.addMemberToGroup(handleToGroupRequest))
                 .message("Thêm thành viên vào nhóm thành công")
@@ -56,7 +57,7 @@ public class GroupController {
     }
 
     @DeleteMapping("/groups/leave-group")
-    public ResponseDto<Object> leaveGroup(@RequestBody HandleToGroupRequest handleToGroupRequest) {
+    public ResponseDto<Object> leaveGroup(@RequestBody @Valid HandleToGroupRequest handleToGroupRequest) {
         return ResponseDto.builder()
                 .data(iGroupService.leaveGroup(handleToGroupRequest))
                 .message("Thoát nhóm thành công")
@@ -84,12 +85,20 @@ public class GroupController {
     }
 
     @PutMapping(value = "/group/update-information")
-    public ResponseDto<Object> updateInformation(@RequestBody UpdateGroupRequest request) {
+    public ResponseDto<Object> updateInformation(@RequestBody @Valid UpdateGroupRequest request) {
 
         return ResponseDto.builder()
                 .data(iGroupService.updateInformation(request))
                 .status(HttpStatus.OK.value())
                 .message("Cập nhật avatar thành công")
+                .build();
+    }
+
+    @DeleteMapping("/group")
+    public ResponseDto<Object> deleteGroup(@RequestParam UUID groupId) {
+        iGroupService.deleteGroupById(groupId);
+        return ResponseDto.builder()
+                .message("Xoá nhóm thành công!")
                 .build();
     }
 }

@@ -1,9 +1,13 @@
 name: Deploy loopus with Docker
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - release
+  push:
+    branches:
+      - develop
 
 jobs:
   build-and-deploy:

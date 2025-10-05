@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UpdateUserRequest {
-    @NotBlank(message = "Vui lòng nhập userId!")
+    @NotNull(message = "Vui lòng nhập userId!")
     private UUID userId;
 
     @NotBlank(message = "Vui lòng nhập họ!")

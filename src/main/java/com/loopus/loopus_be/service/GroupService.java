@@ -11,8 +11,8 @@ import com.loopus.loopus_be.mapper.GroupMapper;
 import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Group;
 import com.loopus.loopus_be.model.GroupMember;
-import com.loopus.loopus_be.model.GroupMemberId;
 import com.loopus.loopus_be.model.Users;
+import com.loopus.loopus_be.model.embedded_key.GroupMemberId;
 import com.loopus.loopus_be.repository.GroupMemberRepository;
 import com.loopus.loopus_be.repository.GroupRepository;
 import com.loopus.loopus_be.repository.UserRepository;
@@ -55,8 +55,8 @@ public class GroupService implements IGroupService {
 
     @Override
     public GroupDto createGroup(CreateGroupRequest createGroupRequest) {
-        if (createGroupRequest.getUserMemberIds().size() < 2) {
-            throw new GroupException("Một group cân ít nhất 2 thành viên");
+        if (createGroupRequest.getUserMemberIds().isEmpty()) {
+            throw new GroupException("Một group cân ít nhất 1 thành viên");
         }
 
         Group createdGroup = groupRepository.save(
@@ -174,5 +174,10 @@ public class GroupService implements IGroupService {
         group.setAvatarUrl(imageUrl);
 
         return groupMapper.toDto(groupRepository.save(group));
+    }
+
+    @Override
+    public void deleteGroupById(UUID groupId) {
+        groupRepository.deleteById(groupId);
     }
 }

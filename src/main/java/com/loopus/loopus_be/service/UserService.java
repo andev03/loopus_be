@@ -8,10 +8,7 @@ import com.loopus.loopus_be.exception.LoginException;
 import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.UserRepository;
-import com.loopus.loopus_be.service.IService.IEmailService;
-import com.loopus.loopus_be.service.IService.IFileService;
-import com.loopus.loopus_be.service.IService.IOtpService;
-import com.loopus.loopus_be.service.IService.IUserService;
+import com.loopus.loopus_be.service.IService.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,15 +25,20 @@ public class UserService implements IUserService {
     private final IEmailService emailService;
     private final IOtpService otpService;
     private final IFileService fileService;
+    private final ISettingService settingService;
 
     @Override
     public UsersDto login(String username, String password) {
         Users user = userRepository.findByUsernameAndPasswordHash(username, password);
 
         if (user == null) {
-            throw new LoginException("Invalid username or password");
+            throw new LoginException("Sai tên đăng nhập hoặc mật khẩu!");
         } else if (user.getStatus().equals(UserStatusEnum.PENDING)) {
             throw new LoginException("Tài khoản chưa được xác thực!");
+        } else if (user.getStatus().equals(UserStatusEnum.INACTIVE)) {
+            throw new LoginException("Tài khoản không hoạt động!");
+        } else if (user.getStatus().equals(UserStatusEnum.BANNED)) {
+            throw new LoginException("Tài khoản đã bị khoá!");
         }
 
         return userMapper.toDto(user);
@@ -59,6 +61,9 @@ public class UserService implements IUserService {
                 .fullName(request.getFirstName() + " " + request.getLastName())
                 .dateOfBirth((request.getDob()))
                 .build());
+
+        settingService.initializeSettingsForNewUser(userSave.getUserId());
+
         return userMapper.toDto(userSave);
     }
 

@@ -18,6 +18,8 @@ public class GroupDto {
 
     private String avatarUrl;
 
+//    private String qrcodeUrl;
+
     private UUID createdBy;
 
     private OffsetDateTime createdAt;
