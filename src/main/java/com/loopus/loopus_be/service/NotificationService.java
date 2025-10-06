@@ -14,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class NotificationService implements INotificationService {
     private final GroupRepository groupRepository;
 
     @Override
-    public NotificationDto createNotification(CreateNotificationRequest request) {
+    public void createNotification(CreateNotificationRequest request) {
         Users receiver = userRepository.findById(request.getReceiverId())
                 .orElseThrow(() -> new EntityNotFoundException("Receiver not found"));
         Users sender = request.getSenderId() != null ? userRepository.findById(request.getSenderId()).orElse(null) : null;
@@ -48,7 +47,7 @@ public class NotificationService implements INotificationService {
                 .updatedAt(Instant.now())
                 .build();
 
-        return notificationMapper.toDto(notificationRepository.save(notification));
+        notificationMapper.toDto(notificationRepository.save(notification));
     }
 
     @Override

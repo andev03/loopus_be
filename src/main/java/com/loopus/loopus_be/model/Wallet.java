@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+// Wallet.java
 @Entity
 @Table(name = "wallets")
 @Getter
@@ -14,7 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class Wallet {
-
     @Id
     @GeneratedValue
     @Column(name = "wallet_id", columnDefinition = "UUID")
@@ -27,6 +29,9 @@ public class Wallet {
     @Column(nullable = false)
     private Double balance = 0.0;
 
-    @Column(name = "created_at", updatable = false)
-    private Instant createdAt = Instant.now();
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private Instant updatedAt;
+
+    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WalletTransaction> transactions = new ArrayList<>();
 }

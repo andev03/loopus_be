@@ -2,19 +2,19 @@ package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.ExpenseDto;
 import com.loopus.loopus_be.dto.ExpenseParticipantDto;
-import com.loopus.loopus_be.dto.request.CreateExpenseParticipantRequest;
-import com.loopus.loopus_be.dto.request.CreateExpenseRequest;
-import com.loopus.loopus_be.dto.request.UpdateExpenseParticipantRequest;
-import com.loopus.loopus_be.dto.request.UpdateExpenseRequest;
+import com.loopus.loopus_be.dto.request.*;
 import com.loopus.loopus_be.mapper.ExpenseMapper;
 import com.loopus.loopus_be.mapper.ExpenseParticipantMapper;
 import com.loopus.loopus_be.model.Expense;
 import com.loopus.loopus_be.model.ExpenseParticipant;
+import com.loopus.loopus_be.model.Group;
+import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.ExpenseParticipantRepository;
 import com.loopus.loopus_be.repository.ExpenseRepository;
 import com.loopus.loopus_be.repository.GroupRepository;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.IExpenseService;
+import com.loopus.loopus_be.service.IService.INotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +34,7 @@ public class ExpenseService implements IExpenseService {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
     private final ExpenseParticipantMapper expenseParticipantMapper;
+    private final INotificationService iNotificationService;
 
     @Override
     public List<ExpenseDto> getAllByGroupId(UUID groupId) {
@@ -130,6 +131,37 @@ public class ExpenseService implements IExpenseService {
         List<Expense> expenses = expenseRepository.findAllByPaidBy_UserId(userId);
 
         List<ExpenseParticipant> expenseParticipants = expenseParticipantRepository.findAllByExpenseInAndUser_UserId(expenses, payerId);
+
+        return expenseParticipantMapper.toDtoList(expenseParticipants);
+    }
+
+    @Override
+    public List<ExpenseParticipantDto> debtReminderGroup(UUID expenseId, UUID userId) {
+
+        Expense expense = expenseRepository.getReferenceById(expenseId);
+
+        for (ExpenseParticipant participant : expense.getParticipants()) {
+            if (!participant.getUser().getUserId().equals(userId)) {
+                notificationDebtReminder(userId, participant.getUser().getUserId(), expense.getGroup().getGroupId(), participant.getShareAmount());
+            }
+        }
+
+        return expenseParticipantMapper.toDtoList(expense.getParticipants());
+    }
+
+    @Override
+    public List<ExpenseParticipantDto> debtReminderIndividual(UUID userId, UUID payerId) {
+
+        List<Expense> expense = expenseRepository.findAllByPaidBy_UserId(userId);
+
+        List<ExpenseParticipant> expenseParticipants = expenseParticipantRepository.findAllByExpenseInAndUser_UserId(expense, payerId);
+
+        BigDecimal amount = BigDecimal.ZERO;
+        for (ExpenseParticipant expenseParticipant : expenseParticipants) {
+            amount = amount.add(expenseParticipant.getShareAmount());
+        }
+
+        notificationDebtReminderIndividual(userId, payerId, null, amount);
 
         return expenseParticipantMapper.toDtoList(expenseParticipants);
     }
@@ -242,5 +274,40 @@ public class ExpenseService implements IExpenseService {
     private BigDecimal calculateTotalShareAmountForEqualUpdate(UpdateExpenseRequest request) {
 
         return request.getAmount().divide(BigDecimal.valueOf(request.getExpenseParticipant().size()), 2, RoundingMode.HALF_UP);
+    }
+
+    private void notificationDebtReminder(UUID senderId, UUID receiveId, UUID groupId, BigDecimal amount) {
+
+        Users sender = userRepository.getReferenceById(senderId);
+        Group group = groupRepository.getReferenceById(groupId);
+
+        iNotificationService.createNotification(
+                CreateNotificationRequest.builder()
+                        .senderId(senderId)
+                        .receiverId(receiveId)
+                        .groupId(groupId)
+                        .type("PAYMENT_REMINDER")
+                        .title(sender.getFullName() + " đã nhắc bạn trả tiền nhóm!")
+                        .message(sender.getFullName() + " đã nhắc bạn trả " + amount + " trong nhóm  " + group.getName())
+                        .amount(amount)
+                        .build()
+        );
+    }
+
+    private void notificationDebtReminderIndividual(UUID senderId, UUID receiveId, UUID groupId, BigDecimal amount) {
+
+        Users sender = userRepository.getReferenceById(senderId);
+
+        iNotificationService.createNotification(
+                CreateNotificationRequest.builder()
+                        .senderId(senderId)
+                        .receiverId(receiveId)
+                        .groupId(null)
+                        .type("PAYMENT_REMINDER")
+                        .title(sender.getFullName() + " đã nhắc bạn trả tiền cá nhân!")
+                        .message(sender.getFullName() + " đã nhắc bạn trả tiền tổng là " + amount)
+                        .amount(amount)
+                        .build()
+        );
     }
 }

@@ -6,6 +6,7 @@ import com.loopus.loopus_be.enums.UserStatusEnum;
 import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.IOtpService;
+import com.loopus.loopus_be.service.IService.IWalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class OtpController {
     private final IOtpService otpService;
     private final UserRepository userRepository;
+    private final IWalletService iWalletService;
 
     @PostMapping("/verify-register")
     public ResponseDto<Object> verifyOtpRegister(@RequestParam String email, @RequestParam String otp) {
@@ -29,6 +31,8 @@ public class OtpController {
         if (flag) {
             user.setStatus(UserStatusEnum.ACTIVE);
             userRepository.save(user);
+            iWalletService.createWallet(user);
+
             return ResponseDto.builder()
                     .status(HttpStatus.OK.value())
                     .message("OTP có hiệu lực. Đăng ký thành công.").build();

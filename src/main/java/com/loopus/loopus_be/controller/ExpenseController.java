@@ -80,4 +80,24 @@ public class ExpenseController {
                 .message("Lấy danh sách chi tiêu thành công")
                 .build();
     }
+
+    @PostMapping("/expense/debt-reminder-group")
+    public ResponseDto<Object> debtReminderGroup(@RequestParam UUID expenseId, @RequestParam UUID userId) {
+        return ResponseDto.builder()
+                .data(iExpenseService.debtReminderGroup(expenseId, userId))
+                .status(HttpStatus.OK.value())
+                .message("Nhắc nợ nhóm thành công!")
+                .build();
+    }
+
+    @PostMapping("/expense/debt-reminder-individual")
+    public ResponseDto<Object> debtReminderIndividual(
+            @RequestParam UUID userId, @RequestParam UUID payerId
+    ) {
+        return ResponseDto.builder()
+                .data(iExpenseService.debtReminderIndividual(userId, payerId))
+                .status(HttpStatus.OK.value())
+                .message("Nhắc nợ cá nhân thành công!")
+                .build();
+    }
 }

@@ -124,9 +124,10 @@ VALUES
 
 INSERT INTO expenses (expense_id, group_id, description, amount, paid_by)
 VALUES
-  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Dinner at BBQ', 600.00, '11111111-1111-1111-1111-111111111111'), -- Alice trả
-  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Movie tickets', 300.00, '11111111-1111-1111-1111-111111111111'), -- David trả
-  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Grab ride', 120.00, '55555555-5555-5555-5555-555555555555'); -- Emily trả
+  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Dinner at BBQ', 600000.00, '11111111-1111-1111-1111-111111111111'), -- Alice trả
+  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Movie tickets', 300000.00, '11111111-1111-1111-1111-111111111111'), -- David trả
+  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Grab ride', 120000.00, '55555555-5555-5555-5555-555555555555'), -- Emily trả
+  ('44444444-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Dinner at LIQI', 600000.00, '11111111-1111-1111-1111-111111111111'); -- Alice trả
 
 -- =====================
 -- EXPENSE PARTICIPANTS
@@ -135,22 +136,28 @@ VALUES
 -- BBQ Dinner 600k chia 3 người
 INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
 VALUES
-  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 200.00, TRUE),
-  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 200.00, FALSE),
-  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '55555555-5555-5555-5555-555555555555', 200.00, FALSE);
+  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 200000.00, TRUE),
+  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 200000.00, FALSE),
+  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '55555555-5555-5555-5555-555555555555', 200000.00, FALSE);
+
+INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
+VALUES
+  ('44444444-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 200000.00, TRUE),
+  ('44444444-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 200000.00, FALSE),
+  ('44444444-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '55555555-5555-5555-5555-555555555555', 200000.00, FALSE);
 
 -- Movie tickets 300k chia 2 người
 INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
 VALUES
-  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 150.00, FALSE),
-  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 150.00, TRUE);
+  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 150000.00, FALSE),
+  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 150000.00, TRUE);
 
 -- Grab ride 120k chia 3 người
 INSERT INTO expense_participants (expense_id, user_id, share_amount, is_paid)
 VALUES
-  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 40.00, FALSE),
-  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 40.00, FALSE),
-  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '55555555-5555-5555-5555-555555555555', 40.00, TRUE);
+  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 40000.00, FALSE),
+  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '44444444-4444-4444-4444-444444444444', 40000.00, FALSE),
+  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '55555555-5555-5555-5555-555555555555', 40000.00, TRUE);
 
 -- =====================
 -- SETTINGS
@@ -277,3 +284,27 @@ INSERT INTO notifications (
      FALSE,
      CURRENT_TIMESTAMP,
      CURRENT_TIMESTAMP);
+
+-- =====================
+-- WALLET TRANSACTIONS
+-- =====================
+INSERT INTO wallets (wallet_id, user_id, balance)
+VALUES
+('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', 500000.00),
+('22222222-2222-2222-2222-222222222222', '44444444-4444-4444-4444-444444444444', 250000.00),
+('33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-333333333333', 100000.00);
+
+-- =====================
+-- WALLET TRANSACTIONS
+-- =====================
+
+INSERT INTO wallet_transactions (wallet_id, amount, type, related_user_id, description)
+VALUES
+-- Nạp tiền vào ví (DEPOSIT)
+('11111111-1111-1111-1111-111111111111', 500000.00, 'DEPOSIT', NULL, 'Deposit from bank'),
+
+-- Nhận tiền từ người khác (TRANSFER_IN)
+('11111111-1111-1111-1111-111111111111', 150000.00, 'TRANSFER_IN', '22222222-2222-2222-2222-222222222222', 'Received from user B'),
+
+-- Chuyển tiền cho người khác (TRANSFER_OUT)
+('11111111-1111-1111-1111-111111111111', 200000.00, 'TRANSFER_OUT', '33333333-3333-3333-3333-333333333333', 'Sent to user C');

@@ -15,6 +15,7 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(LoginException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponseDto handleLoginException(LoginException ex) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -81,6 +82,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ExpenseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto expenseException(ExpenseException exception) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(exception.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(WalletException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto walletException(WalletException exception) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(exception.getMessage())

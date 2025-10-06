@@ -1,8 +1,8 @@
 package com.loopus.loopus_be.model;
 
+import com.loopus.loopus_be.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.Instant;
 import java.util.UUID;
 
@@ -27,9 +27,17 @@ public class WalletTransaction {
     @Column(nullable = false)
     private Double amount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private TransactionType type;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "related_user_id")
+    private Users relatedUser;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "created_at", updatable = false)
-    private Instant createdAt = Instant.now();
+    @Column(name = "created_at", updatable = false, insertable = false)
+    private Instant createdAt;
 }

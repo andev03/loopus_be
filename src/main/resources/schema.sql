@@ -266,7 +266,7 @@ CREATE TABLE notifications (
     sender_id         UUID REFERENCES users(user_id) ON DELETE SET NULL,          -- người gửi / người liên quan
     group_id          UUID REFERENCES groups(group_id) ON DELETE SET NULL,        -- nhóm liên quan (nếu có)
     type              VARCHAR(50) NOT NULL CHECK (
-                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE')
+                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER')
                       ),
     title             VARCHAR(255),        -- tiêu đề ngắn (VD: "Lê Anh đã trả bạn 100.000đ")
     message           TEXT NOT NULL,       -- nội dung chi tiết
@@ -292,7 +292,9 @@ CREATE TABLE wallets (
 CREATE TABLE wallet_transactions (
     transaction_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     wallet_id       UUID NOT NULL REFERENCES wallets(wallet_id) ON DELETE CASCADE,
-    amount          NUMERIC(12,2) NOT NULL,
+    amount          NUMERIC(12,2) NOT NULL CHECK (amount > 0),
+    type            VARCHAR(30) NOT NULL CHECK (type IN ('DEPOSIT', 'TRANSFER_IN', 'TRANSFER_OUT')),
+    related_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,  -- người liên quan (người nhận hoặc người gửi)
     description     TEXT,
     created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
