@@ -98,6 +98,7 @@ public class GroupController {
     public ResponseDto<Object> deleteGroup(@RequestParam UUID groupId) {
         iGroupService.deleteGroupById(groupId);
         return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
                 .message("Xoá nhóm thành công!")
                 .build();
     }
