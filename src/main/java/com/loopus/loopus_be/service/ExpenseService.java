@@ -17,6 +17,7 @@ import com.loopus.loopus_be.service.IService.IExpenseService;
 import com.loopus.loopus_be.service.IService.INotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -42,6 +43,7 @@ public class ExpenseService implements IExpenseService {
     }
 
     @Override
+    @Transactional
     public ExpenseDto createExpense(CreateExpenseRequest request) {
 
         Expense expense = null;
@@ -80,6 +82,7 @@ public class ExpenseService implements IExpenseService {
     }
 
     @Override
+    @Transactional
     public ExpenseDto updateExpense(UpdateExpenseRequest request) {
         Expense expense = null;
 
@@ -161,11 +164,12 @@ public class ExpenseService implements IExpenseService {
             amount = amount.add(expenseParticipant.getShareAmount());
         }
 
-        notificationDebtReminderIndividual(userId, payerId, null, amount);
+        notificationDebtReminderIndividual(userId, payerId, amount);
 
         return expenseParticipantMapper.toDtoList(expenseParticipants);
     }
 
+    @Transactional
     private List<ExpenseParticipant> updateExpenseParticipantsForEquals(
             UpdateExpenseRequest request
     ) {
@@ -186,6 +190,7 @@ public class ExpenseService implements IExpenseService {
     }
 
 
+    @Transactional
     private List<ExpenseParticipant> updateExpenseParticipantsForOther(
             UpdateExpenseRequest request
     ) {
@@ -202,6 +207,7 @@ public class ExpenseService implements IExpenseService {
         return expenseParticipants;
     }
 
+    @Transactional
     private List<ExpenseParticipant> saveExpenseParticipantsForEquals(
             CreateExpenseRequest request, Expense expense
     ) {
@@ -224,6 +230,7 @@ public class ExpenseService implements IExpenseService {
         return expenseParticipants;
     }
 
+    @Transactional
     private List<ExpenseParticipant> saveExpenseParticipantsForOther(
             CreateExpenseRequest request, Expense expense
     ) {
@@ -294,7 +301,7 @@ public class ExpenseService implements IExpenseService {
         );
     }
 
-    private void notificationDebtReminderIndividual(UUID senderId, UUID receiveId, UUID groupId, BigDecimal amount) {
+    private void notificationDebtReminderIndividual(UUID senderId, UUID receiveId, BigDecimal amount) {
 
         Users sender = userRepository.getReferenceById(senderId);
 

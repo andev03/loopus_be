@@ -13,6 +13,7 @@ import com.loopus.loopus_be.service.IService.INotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -28,6 +29,7 @@ public class NotificationService implements INotificationService {
     private final GroupRepository groupRepository;
 
     @Override
+    @Transactional
     public void createNotification(CreateNotificationRequest request) {
         Users receiver = userRepository.findById(request.getReceiverId())
                 .orElseThrow(() -> new EntityNotFoundException("Receiver not found"));
@@ -56,6 +58,7 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
+    @Transactional
     public void markAsRead(UUID notificationId) {
         Notification n = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new EntityNotFoundException("Notification not found"));
@@ -65,6 +68,7 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
+    @Transactional
     public void markAllAsRead(UUID userId) {
         List<Notification> unread = notificationRepository.findUnreadByUserId(userId);
         unread.forEach(n -> {

@@ -18,6 +18,7 @@ import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.IGroupEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +40,7 @@ public class GroupEventService implements IGroupEventService {
     }
 
     @Override
+    @Transactional
     public GroupEventDto createEvent(CreateEventRequest request) {
         GroupEvent groupEvent = groupEventRepository.save(
                 GroupEvent.builder()
@@ -61,6 +63,7 @@ public class GroupEventService implements IGroupEventService {
     }
 
     @Override
+    @Transactional
     public EventParticipantDto processInvitation(ProcessInvitationRequest request) {
 
         boolean flag = eventParticipantRepository
@@ -86,6 +89,7 @@ public class GroupEventService implements IGroupEventService {
     }
 
     @Override
+    @Transactional
     public GroupEventDto updateEvent(UpdateEventRequest request) {
 
         GroupEvent groupEvent = groupEventRepository.getReferenceById(request.getEventId());
@@ -96,10 +100,11 @@ public class GroupEventService implements IGroupEventService {
         groupEvent.setEventTime(request.getEventTime());
         groupEvent.setRepeatType(request.getRepeatType());
 
-        return groupEventMapper.toDto(groupEvent);
+        return groupEventMapper.toDto(groupEventRepository.save(groupEvent));
     }
 
     @Override
+    @Transactional
     public GroupEventDto deleteEvent(UUID eventId) {
         GroupEvent groupEvent = groupEventRepository.getReferenceById(eventId);
 

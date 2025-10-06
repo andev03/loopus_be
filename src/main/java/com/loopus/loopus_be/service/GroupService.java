@@ -22,6 +22,7 @@ import com.loopus.loopus_be.service.IService.IGroupService;
 import com.loopus.loopus_be.service.IService.INotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class GroupService implements IGroupService {
     }
 
     @Override
+    @Transactional
     public GroupDto createGroup(CreateGroupRequest createGroupRequest) {
         if (createGroupRequest.getUserMemberIds().isEmpty()) {
             throw new GroupException("Một group cân ít nhất 1 thành viên");
@@ -99,6 +101,7 @@ public class GroupService implements IGroupService {
     }
 
     @Override
+    @Transactional
     public GroupDto addMemberToGroup(HandleToGroupRequest handleToGroupRequest) {
         if (groupMemberRepository.existsById(new GroupMemberId(handleToGroupRequest.getGroupId(), handleToGroupRequest.getUserId()))) {
             throw new GroupException("Thành viên đã có trong nhóm");
@@ -174,6 +177,7 @@ public class GroupService implements IGroupService {
     }
 
     @Override
+    @Transactional
     public GroupDto updateInformation(UpdateGroupRequest request) {
 
         Group group = groupRepository.getReferenceById(request.getGroupId());
@@ -184,6 +188,7 @@ public class GroupService implements IGroupService {
     }
 
     @Override
+    @Transactional
     public GroupDto updateAvatar(UUID groupId, MultipartFile file) {
         String imageUrl = fileService.uploadFileUrl(file);
 

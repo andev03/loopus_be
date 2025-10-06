@@ -1,9 +1,6 @@
 package com.loopus.loopus_be.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.loopus.loopus_be.model.Group;
-import com.loopus.loopus_be.model.Users;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

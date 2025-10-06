@@ -3,6 +3,7 @@ package com.loopus.loopus_be.model;
 import com.loopus.loopus_be.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.Instant;
 import java.util.UUID;
 

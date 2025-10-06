@@ -1,7 +1,6 @@
 package com.loopus.loopus_be.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.loopus.loopus_be.enums.SettingTypeEnum;
 import lombok.*;
 
 import java.util.UUID;

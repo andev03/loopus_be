@@ -2,6 +2,7 @@ package com.loopus.loopus_be.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;

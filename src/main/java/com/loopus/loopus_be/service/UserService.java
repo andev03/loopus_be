@@ -11,6 +11,7 @@ import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -45,6 +46,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UsersDto register(RegisterRequest request) {
         Users userCheck = userRepository.findByUsername(request.getEmail());
 
@@ -84,6 +86,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UsersDto updateAvatar(UUID userId, MultipartFile file) {
         String imageUrl = fileService.uploadFileUrl(file);
 
@@ -95,6 +98,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UsersDto updateInformation(UpdateUserRequest request) {
         Users user = userRepository.getReferenceById(request.getUserId());
         user.setFullName(request.getFirstName() + " " + request.getLastName());

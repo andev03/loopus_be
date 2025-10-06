@@ -17,6 +17,7 @@ import com.loopus.loopus_be.service.IService.INotificationService;
 import com.loopus.loopus_be.service.IService.IWalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,6 +43,7 @@ public class WalletService implements IWalletService {
     }
 
     @Override
+    @Transactional
     public void transfer(UUID senderId, UUID receiverId, Double amount, UUID groupId) {
         Wallet senderWallet = walletRepository.findByUserUserId(senderId)
                 .orElseThrow(() -> new WalletException("Wallet not found for user " + senderId));
@@ -95,6 +97,7 @@ public class WalletService implements IWalletService {
     }
 
     @Override
+    @Transactional
     public void createWallet(Users user) {
         walletMapper.toDto(walletRepository.save(Wallet.builder().user(user).build()));
     }

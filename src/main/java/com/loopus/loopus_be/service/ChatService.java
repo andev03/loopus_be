@@ -12,6 +12,7 @@ import com.loopus.loopus_be.service.IService.IChatService;
 import com.loopus.loopus_be.service.IService.IFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class ChatService implements IChatService {
     private final IFileService iFileService;
 
     @Override
+    @Transactional
     public GroupChatDto sendMessage(ChatTextRequest request) {
         if (request.getMessage() == null || request.getMessage().isEmpty()) {
             throw new IllegalArgumentException("Message không thể null hoặc rỗng");
@@ -69,6 +71,7 @@ public class ChatService implements IChatService {
     }
 
     @Override
+    @Transactional
     public GroupChatDto sendImage(ChatTextRequest request, MultipartFile file) {
         String imageUrl = iFileService.uploadFileUrl(file);
         GroupChat groupChat = groupChatRepository.save(

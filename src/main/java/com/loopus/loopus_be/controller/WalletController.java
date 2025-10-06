@@ -1,17 +1,12 @@
 package com.loopus.loopus_be.controller;
 
 import com.loopus.loopus_be.dto.response.ResponseDto;
-import com.loopus.loopus_be.model.Wallet;
-import com.loopus.loopus_be.model.WalletTransaction;
 import com.loopus.loopus_be.service.WalletService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

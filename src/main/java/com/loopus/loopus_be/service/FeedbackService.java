@@ -11,6 +11,7 @@ import com.loopus.loopus_be.service.IService.IFeedbackService;
 import com.loopus.loopus_be.service.IService.IFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class FeedbackService implements IFeedbackService {
     }
 
     @Override
+    @Transactional
     public FeedbackDto createFeedback(CreateFeedbackRequest request, MultipartFile file) {
 
         String imageUrl = iFileService.uploadFileUrl(file);

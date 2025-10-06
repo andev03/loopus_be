@@ -9,6 +9,7 @@ import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.ISettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,7 @@ public class SettingService implements ISettingService {
     }
 
     @Override
+    @Transactional
     public List<SettingDto> updateSettingsByUserId(List<UpdateSettingRequest> request) {
 
         List<SettingDto> result = new ArrayList<>();

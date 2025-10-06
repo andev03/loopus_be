@@ -16,6 +16,7 @@ import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.IPollService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class PollService implements IPollService {
     }
 
     @Override
+    @Transactional
     public PollDto createPoll(CreatePollRequest pollRequest) {
         List<PollOption> options = new ArrayList<>();
 
@@ -75,6 +77,7 @@ public class PollService implements IPollService {
     }
 
     @Override
+    @Transactional
     public PollOptionDto addOptionToPoll(AddOptionRequest pollRequest) {
         PollOption optionDto = pollOptionRepository.save(
                 PollOption.builder()
@@ -87,6 +90,7 @@ public class PollService implements IPollService {
     }
 
     @Override
+    @Transactional
     public PollVoteDto votePoll(VotePollRequest votePollRequest) {
         PollVote pollVote = pollVoteRepository.save(
                 PollVote.builder()
