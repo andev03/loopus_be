@@ -5,8 +5,10 @@ import com.loopus.loopus_be.dto.request.ProcessInvitationRequest;
 import com.loopus.loopus_be.dto.request.UpdateEventRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
 import com.loopus.loopus_be.service.IService.IGroupEventService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +67,18 @@ public class GroupEventController {
         return ResponseDto.builder()
                 .data(iGroupEventService.deleteEvent(eventId))
                 .message("Xử lí thành công!")
+                .build();
+    }
+
+    @GetMapping("/event/{eventId}")
+    @Operation(summary = "Lấy danh sách ai đã tham gia sự kiện theo trạng thái", description = "Trạng thái có thể là: accepted, declined, null")
+    public ResponseDto<Object> getEventParticipantByStatus(
+            @PathVariable UUID eventId,
+            @RequestParam(required = false) String status
+    ) {
+        return ResponseDto.builder()
+                .data(iGroupEventService.getEventParticipantByStatus(eventId, status))
+                .message("Lấy danh sách ai đã tham gia sự kiện!")
                 .build();
     }
 }

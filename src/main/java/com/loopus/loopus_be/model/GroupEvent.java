@@ -36,8 +36,6 @@ public class GroupEvent {
 
     private String title;
 
-    private String description;
-
     @Column(name = "event_date", nullable = false)
     private LocalDate eventDate;
 

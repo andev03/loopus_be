@@ -70,7 +70,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/expense/debt-reminder-individual")
-    @Operation(summary = "Lấy danh sách chi tiêu cá nhân trong nhóm", description = "userId là người đang đăng nhập, payerId là người cần trả những khoản nợ")
+    @Operation(summary = "Lấy danh sách chi tiêu cá nhân", description = "userId là người đang đăng nhập, payerId là người cần trả những khoản nợ")
     public ResponseDto<Object> getExpensesByExpenseIdAndGroupId(
             @RequestParam UUID userId, @RequestParam UUID payerId
     ) {

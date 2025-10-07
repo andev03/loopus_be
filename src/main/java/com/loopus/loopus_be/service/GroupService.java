@@ -1,7 +1,7 @@
 package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.GroupDto;
-import com.loopus.loopus_be.dto.UsersDto;
+import com.loopus.loopus_be.dto.GroupMemberDto;
 import com.loopus.loopus_be.dto.request.CreateGroupRequest;
 import com.loopus.loopus_be.dto.request.CreateNotificationRequest;
 import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
@@ -9,7 +9,7 @@ import com.loopus.loopus_be.dto.request.UpdateGroupRequest;
 import com.loopus.loopus_be.enums.RoleEnum;
 import com.loopus.loopus_be.exception.GroupException;
 import com.loopus.loopus_be.mapper.GroupMapper;
-import com.loopus.loopus_be.mapper.UserMapper;
+import com.loopus.loopus_be.mapper.GroupMemberMapper;
 import com.loopus.loopus_be.model.Group;
 import com.loopus.loopus_be.model.GroupMember;
 import com.loopus.loopus_be.model.Users;
@@ -37,9 +37,9 @@ public class GroupService implements IGroupService {
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final IFileService fileService;
     private final INotificationService iNotificationService;
+    private final GroupMemberMapper groupMemberMapper;
 
     @Override
     public List<GroupDto> getAllgroupsByUserId(UUID userId) {
@@ -152,14 +152,10 @@ public class GroupService implements IGroupService {
     }
 
     @Override
-    public List<UsersDto> viewMembersInGroup(UUID groupId) {
+    public List<GroupMemberDto> viewMembersInGroup(UUID groupId) {
         List<GroupMember> members = groupMemberRepository.findAllById_GroupId(groupId);
 
-        List<Users> result = new ArrayList<>();
-
-        members.stream().map(GroupMember::getUser).forEach(result::add);
-
-        return userMapper.toDtoList(result);
+        return groupMemberMapper.toDtoList(members);
     }
 
     @Override

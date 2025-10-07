@@ -1,6 +1,7 @@
 package com.loopus.loopus_be.service.IService;
 
 import com.loopus.loopus_be.dto.GroupDto;
+import com.loopus.loopus_be.dto.GroupMemberDto;
 import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.CreateGroupRequest;
 import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
@@ -20,7 +21,7 @@ public interface IGroupService {
 
     GroupDto leaveGroup(HandleToGroupRequest handleToGroupRequest);
 
-    List<UsersDto> viewMembersInGroup(UUID groupId);
+    List<GroupMemberDto> viewMembersInGroup(UUID groupId);
 
     List<GroupDto> findUserByName(String groupName, UUID userId);
 

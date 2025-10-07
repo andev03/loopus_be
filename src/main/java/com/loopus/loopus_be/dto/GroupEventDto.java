@@ -22,8 +22,6 @@ public class GroupEventDto {
 
     private String title;
 
-    private String description;
-
     private LocalDate eventDate;
 
     private LocalTime eventTime;

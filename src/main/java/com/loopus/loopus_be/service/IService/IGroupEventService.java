@@ -2,6 +2,7 @@ package com.loopus.loopus_be.service.IService;
 
 import com.loopus.loopus_be.dto.EventParticipantDto;
 import com.loopus.loopus_be.dto.GroupEventDto;
+import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.CreateEventRequest;
 import com.loopus.loopus_be.dto.request.ProcessInvitationRequest;
 import com.loopus.loopus_be.dto.request.UpdateEventRequest;
@@ -22,4 +23,6 @@ public interface IGroupEventService {
     GroupEventDto updateEvent(UpdateEventRequest request);
 
     GroupEventDto deleteEvent(UUID eventId);
+
+    List<UsersDto> getEventParticipantByStatus(UUID eventId, String status);
 }

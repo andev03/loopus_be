@@ -87,7 +87,6 @@ CREATE TABLE group_events (
     creator_id  UUID NOT NULL REFERENCES users(user_id),
     group_id    UUID NOT NULL REFERENCES groups(group_id) ON DELETE CASCADE,
     title       VARCHAR(255) NOT NULL,
-    description TEXT,
     event_date  DATE NOT NULL,
     event_time  TIME NOT NULL,
     status      VARCHAR(20) DEFAULT 'PENDING'

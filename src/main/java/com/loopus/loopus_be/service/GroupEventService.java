@@ -2,14 +2,16 @@ package com.loopus.loopus_be.service;
 
 import com.loopus.loopus_be.dto.EventParticipantDto;
 import com.loopus.loopus_be.dto.GroupEventDto;
+import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.CreateEventRequest;
 import com.loopus.loopus_be.dto.request.ProcessInvitationRequest;
 import com.loopus.loopus_be.dto.request.UpdateEventRequest;
 import com.loopus.loopus_be.enums.EventStatus;
+import com.loopus.loopus_be.enums.ParticipationStatus;
 import com.loopus.loopus_be.mapper.EventParticipantMapper;
 import com.loopus.loopus_be.mapper.GroupEventMapper;
-import com.loopus.loopus_be.model.EventParticipant;
-import com.loopus.loopus_be.model.GroupEvent;
+import com.loopus.loopus_be.mapper.UserMapper;
+import com.loopus.loopus_be.model.*;
 import com.loopus.loopus_be.model.embedded_key.EventParticipantId;
 import com.loopus.loopus_be.repository.EventParticipantRepository;
 import com.loopus.loopus_be.repository.GroupEventRepository;
@@ -20,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,6 +37,7 @@ public class GroupEventService implements IGroupEventService {
     private final UserRepository userRepository;
     private final EventParticipantMapper eventParticipantMapper;
     private final EventParticipantRepository eventParticipantRepository;
+    private final UserMapper userMapper;
 
     @Override
     public List<GroupEventDto> getAllByGroupId(UUID groupId) {
@@ -47,7 +52,6 @@ public class GroupEventService implements IGroupEventService {
                         .group(groupRepository.getReferenceById(request.getGroupId()))
                         .creator(userRepository.getReferenceById(request.getCreatorId()))
                         .title(request.getTitle())
-                        .description(request.getDescription())
                         .eventDate(request.getEventDate())
                         .eventTime(request.getEventTime())
                         .repeatType(request.getRepeatType())
@@ -95,7 +99,6 @@ public class GroupEventService implements IGroupEventService {
         GroupEvent groupEvent = groupEventRepository.getReferenceById(request.getEventId());
 
         groupEvent.setTitle(request.getTitle());
-        groupEvent.setDescription(request.getDescription());
         groupEvent.setEventDate(request.getEventDate());
         groupEvent.setEventTime(request.getEventTime());
         groupEvent.setRepeatType(request.getRepeatType());
@@ -111,5 +114,47 @@ public class GroupEventService implements IGroupEventService {
         groupEvent.setStatus(EventStatus.DELETED);
 
         return groupEventMapper.toDto(groupEventRepository.save(groupEvent));
+    }
+
+    @Override
+    public List<UsersDto> getEventParticipantByStatus(UUID eventId, String status) {
+        List<UsersDto> result = new ArrayList<>();
+
+        if (status != null) {
+
+            List<EventParticipantDto> participants = eventParticipantMapper.toDtoList(
+                    eventParticipantRepository.
+                            findAllByEvent_EventIdAndStatus(eventId, ParticipationStatus.valueOf(status.toUpperCase()))
+            );
+
+            for (EventParticipantDto participant : participants) {
+                result.add(participant.getUser());
+            }
+
+            return result;
+        }
+
+        Set<EventParticipant> eventParticipants = groupEventRepository.getReferenceById(eventId).getParticipants();
+
+        Set<GroupMember> groupMembers =
+                groupRepository.getReferenceById(
+                        groupEventRepository.getReferenceById(eventId).getGroup().getGroupId()
+                ).getGroupMembers();
+
+        if (eventParticipants.isEmpty()) {
+            for (GroupMember groupMember : groupMembers) {
+                result.add(userMapper.toDto(groupMember.getUser()));
+            }
+        }
+
+        for (GroupMember groupMember : groupMembers) {
+            for (EventParticipant eventParticipant : eventParticipants) {
+                if (!groupMember.getUser().getUserId().equals(eventParticipant.getUser().getUserId())) {
+                    result.add(userMapper.toDto(groupMember.getUser()));
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -53,4 +53,7 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Poll> polls = new HashSet<>();
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<GroupMember> groupMembers = new HashSet<>();
 }

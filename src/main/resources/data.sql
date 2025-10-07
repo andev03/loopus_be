@@ -54,14 +54,13 @@ INSERT INTO group_chats (chat_id, group_id, sender_id, message, type, image_url)
 -- =====================
 
 INSERT INTO group_events (
-    event_id, group_id, creator_id, title, description,
+    event_id, group_id, creator_id, title,
     event_date, event_time, created_at, status, repeat_type
 ) VALUES
     ('eeeeeee1-eeee-eeee-eeee-eeeeeeeeeee1',
      'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1',
      '11111111-1111-1111-1111-111111111111',
      'Weekly Tech Talk',
-     'Discussion about the latest in AI and software development.',
      '2025-10-05', '19:00', CURRENT_TIMESTAMP,
      'PENDING', 'WEEKLY'),
 
@@ -69,7 +68,6 @@ INSERT INTO group_events (
      'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2',
      '44444444-4444-4444-4444-444444444444',
      'Project Demo Night',
-     'Members showcase their personal or group projects.',
      '2025-10-12', '20:00', CURRENT_TIMESTAMP,
      'DELETED', 'NONE');
 
