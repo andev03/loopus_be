@@ -1,5 +1,6 @@
 package com.loopus.loopus_be.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class RegisterRequest {
     private LocalDate dob;
 
     @NotBlank(message = "Vui lòng nhập email!")
+    @Email(message = "Email không hợp lệ!")
     private String email;
 
     @NotBlank(message = "Vui lòng nhập password!")

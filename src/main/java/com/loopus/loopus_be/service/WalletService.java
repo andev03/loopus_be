@@ -38,7 +38,7 @@ public class WalletService implements IWalletService {
     public WalletDto getWalletByUserId(UUID userId) {
         return walletMapper.toDto(
                 walletRepository.findByUserUserId(userId)
-                        .orElseThrow(() -> new RuntimeException("Wallet not found for user " + userId))
+                        .orElseThrow(() -> new WalletException("Wallet not found for user " + userId))
         );
     }
 
@@ -99,7 +99,7 @@ public class WalletService implements IWalletService {
     @Override
     @Transactional
     public void createWallet(Users user) {
-        walletMapper.toDto(walletRepository.save(Wallet.builder().user(user).build()));
+        walletMapper.toDto(walletRepository.save(Wallet.builder().user(user).balance(500000.00).build()));
     }
 
     private void notificationForSender(UUID senderId, UUID receiverId, Double amount, UUID groupId) {
