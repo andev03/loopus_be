@@ -19,9 +19,6 @@ public class UpdateEventRequest {
     @NotBlank(message = "Vui lòng nhập title")
     private String title;
 
-    @NotBlank(message = "Vui lòng nhập description")
-    private String description;
-
     @NotNull(message = "Vui lòng nhập eventDate")
     private LocalDate eventDate;
 

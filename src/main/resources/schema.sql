@@ -4,20 +4,19 @@ DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS group_chats CASCADE;
 DROP TABLE IF EXISTS group_events CASCADE;
 DROP TABLE IF EXISTS event_participants CASCADE;
-DROP TABLE IF EXISTS reminders CASCADE;
 DROP TABLE IF EXISTS polls CASCADE;
 DROP TABLE IF EXISTS poll_options CASCADE;
 DROP TABLE IF EXISTS poll_votes CASCADE;
 DROP TABLE IF EXISTS expenses CASCADE;
 DROP TABLE IF EXISTS expense_participants CASCADE;
-DROP TABLE IF EXISTS debts CASCADE;
 DROP TABLE IF EXISTS settings CASCADE;
-DROP TABLE IF EXISTS faqs CASCADE;
 DROP TABLE IF EXISTS support_chats CASCADE;
 DROP TABLE IF EXISTS support_messages CASCADE;
 DROP TABLE IF EXISTS feedbacks CASCADE;
 DROP TABLE IF EXISTS follows CASCADE;
 DROP TABLE IF EXISTS stories CASCADE;
+DROP TABLE IF EXISTS story_comments CASCADE;
+DROP TABLE IF EXISTS group_albums CASCADE;
 DROP TABLE IF EXISTS notifications CASCADE;
 DROP TABLE IF EXISTS wallets CASCADE;
 DROP TABLE IF EXISTS wallet_transactions CASCADE;
@@ -245,16 +244,54 @@ CREATE TABLE follows (
 );
 
 -- =====================
+-- Group Albums Table
+-- =====================
+
+CREATE TABLE group_albums (
+    album_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    group_id    UUID NOT NULL REFERENCES groups(group_id) ON DELETE CASCADE,
+    name        TEXT NOT NULL,
+    created_by  UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =====================
 -- Stories Table
 -- =====================
 CREATE TABLE stories (
-    story_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id     UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    image_url   TEXT NOT NULL,
-    caption     TEXT,
-    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    expires_at  TIMESTAMPTZ NOT NULL  -- ví dụ: 24h sau khi tạo
+    story_id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id         UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    image_url       TEXT NOT NULL,
+    caption         TEXT,
+    visibility_type VARCHAR(20) NOT NULL CHECK (visibility_type IN ('FOLLOWERS', 'GROUP')),
+    album_id        UUID REFERENCES group_albums(album_id) ON DELETE CASCADE,
+    created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    expires_at      TIMESTAMPTZ NOT NULL
 );
+
+-- =====================
+-- Story comments Table
+-- =====================
+CREATE TABLE story_comments (
+    comment_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    story_id     UUID NOT NULL REFERENCES stories(story_id) ON DELETE CASCADE,
+    user_id      UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    content      TEXT NOT NULL,
+    created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =====================
+-- Story reactions Table
+-- =====================
+
+--CREATE TABLE story_reactions (
+--    reaction_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--    story_id      UUID NOT NULL REFERENCES stories(story_id) ON DELETE CASCADE,
+--    user_id       UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+--    emoji         VARCHAR(20) NOT NULL,  -- ví dụ: '❤️', '😂', '🔥', '👍'
+--    created_at    TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+--    UNIQUE (story_id, user_id)  -- mỗi user chỉ 1 reaction/story
+--);
 
 -- =====================
 -- Notifications Table

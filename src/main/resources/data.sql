@@ -306,3 +306,64 @@ VALUES
 
 -- Chuyển tiền cho người khác (TRANSFER_OUT)
 ('11111111-1111-1111-1111-111111111111', 200000.00, 'TRANSFER_OUT', '33333333-3333-3333-3333-333333333333', 'Sent to user C');
+
+-- =====================
+-- GROUP ALBUMS
+-- =====================
+-- Mỗi album thuộc về một group cụ thể và do 1 user tạo ra.
+INSERT INTO group_albums (album_id, group_id, name, created_by)
+VALUES
+  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'AI Projects Showcase', '11111111-1111-1111-1111-111111111111'),
+  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Memes Collection', '33333333-3333-3333-3333-333333333333'),
+  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', 'Book Review Highlights', '22222222-2222-2222-2222-222222222222');
+
+
+-- =====================
+-- STORIES
+-- =====================
+-- Story là ảnh hoặc bài đăng ngắn, có thể thuộc album group hoặc chỉ hiển thị cho followers.
+INSERT INTO stories (story_id, user_id, image_url, caption, visibility_type, album_id, expires_at)
+VALUES
+  ('aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+   'https://cdn.fu-exchange.com/stories/ai1.jpg', 'Our first AI prototype demo 🤖',
+   'GROUP', '11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NOW() + INTERVAL '24 HOURS'),
+
+  ('bbbb2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '33333333-3333-3333-3333-333333333333',
+   'https://cdn.fu-exchange.com/stories/meme1.jpg', 'When your code runs on first try 😂',
+   'GROUP', '22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NOW() + INTERVAL '24 HOURS'),
+
+  ('cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222',
+   'https://cdn.fu-exchange.com/stories/book1.jpg', 'Just finished “Clean Code” 📘',
+   'GROUP', '33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NOW() + INTERVAL '24 HOURS');
+
+
+-- =====================
+-- STORY COMMENTS
+-- =====================
+-- Bình luận của người dùng trên từng story.
+INSERT INTO story_comments (comment_id, story_id, user_id, content)
+VALUES
+  ('dddd1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+   '22222222-2222-2222-2222-222222222222', 'Amazing project Alice! 🔥'),
+
+  ('dddd2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'bbbb2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+   '11111111-1111-1111-1111-111111111111', 'Haha relatable 😅'),
+
+  ('dddd3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+   '33333333-3333-3333-3333-333333333333', 'I love that book too 📖');
+
+
+---- =====================
+---- STORY REACTIONS
+---- =====================
+---- Reaction thể hiện cảm xúc của user trên story, mỗi user chỉ được 1 reaction/story.
+--INSERT INTO story_reactions (reaction_id, story_id, user_id, emoji)
+--VALUES
+--  ('eeee1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+--   '33333333-3333-3333-3333-333333333333', '❤️'),
+--
+--  ('eeee2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'bbbb2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+--   '11111111-1111-1111-1111-111111111111', '😂'),
+--
+--  ('eeee3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+--   '22222222-2222-2222-2222-222222222222', '👍');
