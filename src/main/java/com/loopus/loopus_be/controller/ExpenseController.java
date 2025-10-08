@@ -30,6 +30,15 @@ public class ExpenseController {
                 .build();
     }
 
+    @GetMapping("/expense")
+    public ResponseDto<Object> getExpenseByExpenseId(@RequestParam UUID expenseId) {
+        return ResponseDto.builder()
+                .data(iExpenseService.getExpenseByExpenseId(expenseId))
+                .status(HttpStatus.OK.value())
+                .message("Lấy danh sách chi tiêu thành công")
+                .build();
+    }
+
     @PostMapping("/expense")
     @Operation(summary = "Tạo chi tiêu", description = "Type là 'equal' cho chia đều hoặc 'exact' cho chia tiền theo số tiền đã nhập")
     public ResponseDto<Object> createExpensesByGroupId(@RequestBody @Valid CreateExpenseRequest request) {

@@ -26,4 +26,6 @@ public interface IExpenseService {
     List<ExpenseParticipantDto> debtReminderGroup(UUID expenseId, UUID userId);
 
     List<ExpenseParticipantDto> debtReminderIndividual(UUID userId, UUID payerId);
+
+    ExpenseDto getExpenseByExpenseId(UUID expenseId);
 }

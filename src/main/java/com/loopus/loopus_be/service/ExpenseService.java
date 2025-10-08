@@ -169,6 +169,11 @@ public class ExpenseService implements IExpenseService {
         return expenseParticipantMapper.toDtoList(expenseParticipants);
     }
 
+    @Override
+    public ExpenseDto getExpenseByExpenseId(UUID getExpenseByExpenseId) {
+        return expenseMapper.toDto(expenseRepository.getReferenceById(getExpenseByExpenseId));
+    }
+
     @Transactional
     private List<ExpenseParticipant> updateExpenseParticipantsForEquals(
             UpdateExpenseRequest request
