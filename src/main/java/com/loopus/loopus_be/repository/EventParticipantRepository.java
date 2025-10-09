@@ -1,6 +1,5 @@
 package com.loopus.loopus_be.repository;
 
-import com.loopus.loopus_be.enums.EventStatus;
 import com.loopus.loopus_be.enums.ParticipationStatus;
 import com.loopus.loopus_be.model.EventParticipant;
 import com.loopus.loopus_be.model.embedded_key.EventParticipantId;

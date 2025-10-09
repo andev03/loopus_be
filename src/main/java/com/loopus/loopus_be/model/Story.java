@@ -1,9 +1,10 @@
 package com.loopus.loopus_be.model;
 
+import com.loopus.loopus_be.enums.VisibilityType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,18 +25,23 @@ public class Story {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @Column(name = "media_url", nullable = false, columnDefinition = "TEXT")
-    private String mediaUrl;
-
-    @Column(length = 20)
-    private String type; // image, video
+    @Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
+    private String imageUrl;
 
     @Column(columnDefinition = "TEXT")
     private String caption;
 
-    @Column(name = "created_at", updatable = false)
-    private Instant createdAt = Instant.now();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "visibility_type", length = 20, nullable = false)
+    private VisibilityType visibilityType;
 
-    @Column(name = "expires_at")
-    private Instant expiresAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "album_id")
+    private GroupAlbum album;
+
+    @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP", updatable = false)
+    private OffsetDateTime createdAt = OffsetDateTime.now();
+
+    @Column(name = "expires_at", nullable = false)
+    private OffsetDateTime expiresAt;
 }

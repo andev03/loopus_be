@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS group_albums CASCADE;
 DROP TABLE IF EXISTS notifications CASCADE;
 DROP TABLE IF EXISTS wallets CASCADE;
 DROP TABLE IF EXISTS wallet_transactions CASCADE;
+DROP TABLE IF EXISTS story_reactions CASCADE;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
@@ -32,7 +33,7 @@ create table users (
     avatar_url text,
     bio text,
     date_of_birth date,
-    role varchar(20) check (role in ('USER','STAFF','ADMIN')) default 'USER',
+    role varchar(20) check (role in ('USER','STAFF','ADMIN', 'MEMBER')) default 'USER',
     status varchar(20) check (status in ('ACTIVE','INACTIVE','BANNED','PENDING')) default 'PENDING',
     created_at timestamp default now()
 );
@@ -284,14 +285,14 @@ CREATE TABLE story_comments (
 -- Story reactions Table
 -- =====================
 
---CREATE TABLE story_reactions (
---    reaction_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---    story_id      UUID NOT NULL REFERENCES stories(story_id) ON DELETE CASCADE,
---    user_id       UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
---    emoji         VARCHAR(20) NOT NULL,  -- ví dụ: '❤️', '😂', '🔥', '👍'
---    created_at    TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
---    UNIQUE (story_id, user_id)  -- mỗi user chỉ 1 reaction/story
---);
+CREATE TABLE story_reactions (
+    reaction_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    story_id      UUID NOT NULL REFERENCES stories(story_id) ON DELETE CASCADE,
+    user_id       UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    emoji         VARCHAR(20) NOT NULL,  -- ví dụ: '❤️', '😂', '🔥', '👍'
+    created_at    TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (story_id, user_id)  -- mỗi user chỉ 1 reaction/story
+);
 
 -- =====================
 -- Notifications Table

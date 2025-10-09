@@ -2,7 +2,6 @@ package com.loopus.loopus_be.service.IService;
 
 import com.loopus.loopus_be.dto.GroupDto;
 import com.loopus.loopus_be.dto.GroupMemberDto;
-import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.dto.request.CreateGroupRequest;
 import com.loopus.loopus_be.dto.request.HandleToGroupRequest;
 import com.loopus.loopus_be.dto.request.UpdateGroupRequest;

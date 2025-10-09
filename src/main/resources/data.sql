@@ -11,7 +11,8 @@ VALUES
     ('33333333-3333-3333-3333-333333333333', 'charlie_admin', 'hashed_password_3', 'Charlie Nguyen', NULL, 'Site administrator and backend dev.', 'ADMIN', '1988-11-05', 'ACTIVE'),
     ('633d1f00-4675-4337-b2cb-70deed2f3d13', 'vothanhlong235@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
     ('633d1f00-4675-4337-b2cb-70deed2f3d14', 'vothanhlong231@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong233@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE');
+    ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong0987@gmail.com', '123123', 'Vo Thanh Long', NULL, NULL, 'MEMBER', '1989-12-31', 'ACTIVE'),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d16', 'vothanhlong233@gmail.com', '123123', 'adsdsa dsadas', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE');
 
 -- =====================
 -- GROUPS
@@ -355,18 +356,28 @@ VALUES
   ('dddd3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
    '33333333-3333-3333-3333-333333333333', 'I love that book too 📖');
 
+-- =====================
+-- FOLLOWS
+-- =====================
+INSERT INTO follows (follower_id, following_id)
+VALUES
+('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'),
+('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333'),
+('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111'),
+('22222222-2222-2222-2222-222222222222', '44444444-4444-4444-4444-444444444444'),
+('33333333-3333-3333-3333-333333333333', '22222222-2222-2222-2222-222222222222');
 
----- =====================
----- STORY REACTIONS
----- =====================
----- Reaction thể hiện cảm xúc của user trên story, mỗi user chỉ được 1 reaction/story.
---INSERT INTO story_reactions (reaction_id, story_id, user_id, emoji)
---VALUES
---  ('eeee1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
---   '33333333-3333-3333-3333-333333333333', '❤️'),
---
---  ('eeee2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'bbbb2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
---   '11111111-1111-1111-1111-111111111111', '😂'),
---
---  ('eeee3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
---   '22222222-2222-2222-2222-222222222222', '👍');
+-- =====================
+-- STORY REACTIONS
+-- =====================
+-- Reaction thể hiện cảm xúc của user trên story, mỗi user chỉ được 1 reaction/story.
+INSERT INTO story_reactions (reaction_id, story_id, user_id, emoji)
+VALUES
+  ('eeee1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+   '33333333-3333-3333-3333-333333333333', '❤️'),
+
+  ('eeee2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'bbbb2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+   '11111111-1111-1111-1111-111111111111', '😂'),
+
+  ('eeee3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+   '22222222-2222-2222-2222-222222222222', '👍');
