@@ -1,9 +1,10 @@
 package com.loopus.loopus_be.service.IService;
 
+import com.loopus.loopus_be.dto.StoryCommentDto;
 import com.loopus.loopus_be.dto.StoryDto;
 import com.loopus.loopus_be.dto.request.CreateStoryRequest;
-import com.loopus.loopus_be.model.Story;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,4 +20,12 @@ public interface IStoryService {
     List<StoryDto> getUserStories(UUID userId);
 
     void deleteStory(UUID storyId);
+
+    List<StoryCommentDto> getCommentsByStoryId(UUID storyId);
+
+    void deleteCommentOrStory(UUID storyId, UUID commentId);
+
+    StoryCommentDto addComment(UUID storyId, UUID userId, String content);
+
+    StoryCommentDto updateComment(UUID commentId, String content);
 }

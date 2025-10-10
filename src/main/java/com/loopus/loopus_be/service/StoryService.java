@@ -1,14 +1,13 @@
 package com.loopus.loopus_be.service;
 
+import com.loopus.loopus_be.dto.StoryCommentDto;
 import com.loopus.loopus_be.dto.StoryDto;
 import com.loopus.loopus_be.dto.request.CreateStoryRequest;
 import com.loopus.loopus_be.enums.VisibilityType;
 import com.loopus.loopus_be.exception.UsersException;
+import com.loopus.loopus_be.mapper.StoryCommentMapper;
 import com.loopus.loopus_be.mapper.StoryMapper;
-import com.loopus.loopus_be.model.Group;
-import com.loopus.loopus_be.model.GroupAlbum;
-import com.loopus.loopus_be.model.Story;
-import com.loopus.loopus_be.model.Users;
+import com.loopus.loopus_be.model.*;
 import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IStoryService;
@@ -31,6 +30,8 @@ public class StoryService implements IStoryService {
     private final StoryRepository storyRepository;
     private final FollowRepository followRepository;
     private final GroupRepository groupRepository;
+    private final StoryCommentRepository storyCommentRepository;
+    private final StoryCommentMapper storyCommentMapper;
 
     @Override
     @Transactional
@@ -97,5 +98,54 @@ public class StoryService implements IStoryService {
                 .orElseThrow(() -> new UsersException("Story không tồn tại!"));
 
         storyRepository.delete(story);
+    }
+
+    @Override
+    public List<StoryCommentDto> getCommentsByStoryId(UUID storyId) {
+
+        return storyCommentMapper.toDtoList(storyCommentRepository.findAllByStory_StoryId(storyId));
+    }
+
+    @Override
+    public void deleteCommentOrStory(UUID storyId, UUID commentId) {
+        if (commentId != null) {
+            StoryComment comment = storyCommentRepository.findById(commentId)
+                    .orElseThrow(() -> new UsersException("Comment không tồn tại!"));
+
+            storyCommentRepository.delete(comment);
+
+            return;
+        }
+
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new UsersException("Story không tồn tại!"));
+
+        storyRepository.delete(story);
+    }
+
+    @Override
+    @Transactional
+    public StoryCommentDto addComment(UUID storyId, UUID userId, String content) {
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new UsersException("Story không tồn tại!"));
+
+        StoryComment comment = StoryComment.builder()
+                .story(story)
+                .user(userRepository.getReferenceById(userId))
+                .content(content)
+                .build();
+
+        return storyCommentMapper.toDto(storyCommentRepository.save(comment));
+    }
+
+    @Override
+    public StoryCommentDto updateComment(UUID commentId, String content) {
+        
+        StoryComment comment = storyCommentRepository.findById(commentId)
+                .orElseThrow(() -> new UsersException("Comment không tồn tại!"));
+
+        comment.setContent(content);
+
+        return storyCommentMapper.toDto(storyCommentRepository.save(comment));
     }
 }
