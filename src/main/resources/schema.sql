@@ -266,8 +266,7 @@ CREATE TABLE stories (
     caption         TEXT,
     visibility_type VARCHAR(20) NOT NULL CHECK (visibility_type IN ('FOLLOWERS', 'GROUP')),
     album_id        UUID REFERENCES group_albums(album_id) ON DELETE CASCADE,
-    created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    expires_at      TIMESTAMPTZ NOT NULL
+    created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =====================

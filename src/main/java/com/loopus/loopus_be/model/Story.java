@@ -41,7 +41,4 @@ public class Story {
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP", updatable = false)
     private OffsetDateTime createdAt = OffsetDateTime.now();
-
-    @Column(name = "expires_at", nullable = false)
-    private OffsetDateTime expiresAt;
 }

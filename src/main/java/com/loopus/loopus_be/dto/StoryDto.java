@@ -21,6 +21,4 @@ public class StoryDto {
     private VisibilityType visibilityType;
 
     private OffsetDateTime createdAt;
-
-    private OffsetDateTime expiresAt;
 }

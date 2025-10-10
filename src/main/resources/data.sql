@@ -326,19 +326,19 @@ VALUES
 -- STORIES
 -- =====================
 -- Story là ảnh hoặc bài đăng ngắn, có thể thuộc album group hoặc chỉ hiển thị cho followers.
-INSERT INTO stories (story_id, user_id, image_url, caption, visibility_type, album_id, expires_at)
+INSERT INTO stories (story_id, user_id, image_url, caption, visibility_type, album_id)
 VALUES
   ('aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
    'https://cdn.fu-exchange.com/stories/ai1.jpg', 'Our first AI prototype demo 🤖',
-   'GROUP', '11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NOW() + INTERVAL '24 HOURS'),
+   'GROUP', '11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
 
   ('bbbb2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '33333333-3333-3333-3333-333333333333',
    'https://cdn.fu-exchange.com/stories/meme1.jpg', 'When your code runs on first try 😂',
-   'GROUP', '22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NOW() + INTERVAL '24 HOURS'),
+   'GROUP', '22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
 
   ('cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222',
    'https://cdn.fu-exchange.com/stories/book1.jpg', 'Just finished “Clean Code” 📘',
-   'GROUP', '33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', NOW() + INTERVAL '24 HOURS');
+   'GROUP', '33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
 
 
 -- =====================
