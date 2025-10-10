@@ -4,6 +4,7 @@ import com.loopus.loopus_be.dto.ExpenseDto;
 import com.loopus.loopus_be.dto.ExpenseParticipantDto;
 import com.loopus.loopus_be.dto.request.CreateExpenseRequest;
 import com.loopus.loopus_be.dto.request.UpdateExpenseRequest;
+import com.loopus.loopus_be.dto.response.ExpenseParticipantAllDto;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -28,4 +29,8 @@ public interface IExpenseService {
     List<ExpenseParticipantDto> debtReminderIndividual(UUID userId, UUID payerId);
 
     ExpenseDto getExpenseByExpenseId(UUID expenseId);
+
+    List<ExpenseParticipantAllDto> debtReminderAll(UUID userId);
+
+    List<ExpenseParticipantAllDto> getExpenseToDebtReminderAll(UUID userId);
 }

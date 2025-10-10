@@ -14,6 +14,9 @@ import java.util.UUID;
 @Setter
 public class CreateExpenseRequest {
 
+    @NotNull(message = "Vui lòng nhập userId")
+    private UUID userId;
+
     @NotNull(message = "Vui lòng nhập groupId")
     private UUID groupId;
 

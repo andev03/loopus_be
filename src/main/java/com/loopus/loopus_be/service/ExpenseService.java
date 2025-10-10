@@ -3,6 +3,7 @@ package com.loopus.loopus_be.service;
 import com.loopus.loopus_be.dto.ExpenseDto;
 import com.loopus.loopus_be.dto.ExpenseParticipantDto;
 import com.loopus.loopus_be.dto.request.*;
+import com.loopus.loopus_be.dto.response.ExpenseParticipantAllDto;
 import com.loopus.loopus_be.mapper.ExpenseMapper;
 import com.loopus.loopus_be.mapper.ExpenseParticipantMapper;
 import com.loopus.loopus_be.model.Expense;
@@ -21,9 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +46,6 @@ public class ExpenseService implements IExpenseService {
     public ExpenseDto createExpense(CreateExpenseRequest request) {
 
         Expense expense = null;
-
         if (request.getType().equalsIgnoreCase("equal")) {
 
             expense = expenseRepository.save(
@@ -59,7 +57,7 @@ public class ExpenseService implements IExpenseService {
                             .build()
             );
 
-            expense.setParticipants(saveExpenseParticipantsForEquals(request, expense));
+            expense.setParticipants(saveExpenseParticipantsForEquals(request, expense, request.getUserId()));
 
         } else {
 
@@ -74,7 +72,7 @@ public class ExpenseService implements IExpenseService {
                             .build()
             );
 
-            expense.setParticipants(saveExpenseParticipantsForOther(request, expense));
+            expense.setParticipants(saveExpenseParticipantsForOther(request, expense, request.getUserId()));
         }
 
 
@@ -145,7 +143,10 @@ public class ExpenseService implements IExpenseService {
 
         for (ExpenseParticipant participant : expense.getParticipants()) {
             if (!participant.getUser().getUserId().equals(userId)) {
-                notificationDebtReminder(userId, participant.getUser().getUserId(), expense.getGroup().getGroupId(), participant.getShareAmount());
+                notificationDebtReminder(
+                        userId, participant.getUser().getUserId(),
+                        expense.getGroup().getGroupId(), participant.getShareAmount()
+                );
             }
         }
 
@@ -172,6 +173,66 @@ public class ExpenseService implements IExpenseService {
     @Override
     public ExpenseDto getExpenseByExpenseId(UUID getExpenseByExpenseId) {
         return expenseMapper.toDto(expenseRepository.getReferenceById(getExpenseByExpenseId));
+    }
+
+    @Override
+    @Transactional
+    public List<ExpenseParticipantAllDto> debtReminderAll(UUID userId) {
+        List<Expense> expenses = expenseRepository.findAllByPaidBy_UserId(userId);
+
+        List<ExpenseParticipantAllDto> expenseParticipantAllDtos = expenseParticipantAllDto(expenses, userId);
+
+        for (ExpenseParticipantAllDto dto : expenseParticipantAllDtos) {
+            notificationDebtReminderIndividual(
+                    userId, dto.getDebtorId(), dto.getTotalOwedAmount()
+            );
+        }
+
+        return expenseParticipantAllDtos;
+    }
+
+    @Override
+    public List<ExpenseParticipantAllDto> getExpenseToDebtReminderAll(UUID userId) {
+        List<Expense> expenses = expenseRepository.findAllByPaidBy_UserId(userId);
+
+        return expenseParticipantAllDto(expenses, userId);
+    }
+
+    private List<ExpenseParticipantAllDto> expenseParticipantAllDto(
+            List<Expense> expenses, UUID userId
+
+    ) {
+        Map<UUID, BigDecimal> debtMap = new HashMap<>();
+        Map<UUID, String> nameMap = new HashMap<>();
+
+        for (Expense expense : expenses) {
+            for (ExpenseParticipant participant : expense.getParticipants()) {
+                if (participant.getUser().getUserId().equals(userId)) continue;
+
+                UUID debtorId = participant.getUser().getUserId();
+                BigDecimal owed = participant.getShareAmount();
+
+                debtMap.put(
+                        debtorId,
+                        debtMap.getOrDefault(debtorId, BigDecimal.ZERO).add(owed)
+                );
+
+                nameMap.put(debtorId, participant.getUser().getFullName());
+            }
+        }
+
+        List<ExpenseParticipantAllDto> result = new ArrayList<>();
+        for (UUID debtorId : debtMap.keySet()) {
+            ExpenseParticipantAllDto dto = new ExpenseParticipantAllDto();
+            dto.setDebtorId(debtorId);
+            dto.setDebtorName(nameMap.get(debtorId));
+            dto.setPaidToUserId(userId);
+            dto.setTotalOwedAmount(debtMap.get(debtorId));
+
+            result.add(dto);
+        }
+
+        return result;
     }
 
     @Transactional
@@ -214,19 +275,24 @@ public class ExpenseService implements IExpenseService {
 
     @Transactional
     private List<ExpenseParticipant> saveExpenseParticipantsForEquals(
-            CreateExpenseRequest request, Expense expense
+            CreateExpenseRequest request, Expense expense, UUID userId
     ) {
         List<ExpenseParticipant> expenseParticipants = new ArrayList<>();
 
         BigDecimal equalShareAmount = calculateTotalShareAmountForEqual(request);
 
+        boolean isPaid = false;
         for (CreateExpenseParticipantRequest createExpenseParticipantRequest : request.getExpenseParticipant()) {
+            if (expense.getPaidBy().getUserId().equals(userId)) {
+                isPaid = true;
+            }
             expenseParticipants.add(
                     expenseParticipantRepository.save(
                             ExpenseParticipant.builder()
                                     .expense(expense)
                                     .user(userRepository.getReferenceById(createExpenseParticipantRequest.getUserId()))
                                     .shareAmount(equalShareAmount)
+                                    .isPaid(isPaid)
                                     .build()
                     )
             );
@@ -237,17 +303,23 @@ public class ExpenseService implements IExpenseService {
 
     @Transactional
     private List<ExpenseParticipant> saveExpenseParticipantsForOther(
-            CreateExpenseRequest request, Expense expense
+            CreateExpenseRequest request, Expense expense, UUID userId
     ) {
         List<ExpenseParticipant> expenseParticipants = new ArrayList<>();
 
+        boolean isPaid = false;
+
         for (CreateExpenseParticipantRequest createExpenseParticipantRequest : request.getExpenseParticipant()) {
+            if (expense.getPaidBy().getUserId().equals(userId)) {
+                isPaid = true;
+            }
             expenseParticipants.add(
                     expenseParticipantRepository.save(
                             ExpenseParticipant.builder()
                                     .expense(expense)
                                     .user(userRepository.getReferenceById(createExpenseParticipantRequest.getUserId()))
                                     .shareAmount(createExpenseParticipantRequest.getShareAmount())
+                                    .isPaid(isPaid)
                                     .build()
                     )
             );

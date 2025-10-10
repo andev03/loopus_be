@@ -41,7 +41,9 @@ public class ExpenseController {
 
     @PostMapping("/expense")
     @Operation(summary = "Tạo chi tiêu", description = "Type là 'equal' cho chia đều hoặc 'exact' cho chia tiền theo số tiền đã nhập")
-    public ResponseDto<Object> createExpensesByGroupId(@RequestBody @Valid CreateExpenseRequest request) {
+    public ResponseDto<Object> createExpensesByGroupId(
+            @RequestBody @Valid CreateExpenseRequest request
+    ) {
         return ResponseDto.builder()
                 .data(iExpenseService.createExpense(request))
                 .status(HttpStatus.OK.value())
@@ -107,6 +109,24 @@ public class ExpenseController {
                 .data(iExpenseService.debtReminderIndividual(userId, payerId))
                 .status(HttpStatus.OK.value())
                 .message("Nhắc nợ cá nhân thành công!")
+                .build();
+    }
+
+    @GetMapping("/expense/debt-reminder-all")
+    public ResponseDto<Object> getExpensesByUserId(@RequestParam UUID userId) {
+        return ResponseDto.builder()
+                .data(iExpenseService.getExpenseToDebtReminderAll(userId))
+                .status(HttpStatus.OK.value())
+                .message("Lấy danh sách chi tiêu thành công")
+                .build();
+    }
+
+    @PostMapping("/expense/debt-reminder-all")
+    public ResponseDto<Object> debtReminderAll(@RequestParam UUID userId) {
+        return ResponseDto.builder()
+                .data(iExpenseService.debtReminderAll(userId))
+                .status(HttpStatus.OK.value())
+                .message("Nhắc nợ nhóm thành công!")
                 .build();
     }
 }
