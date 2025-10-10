@@ -4,7 +4,6 @@ import com.loopus.loopus_be.dto.StoryCommentDto;
 import com.loopus.loopus_be.dto.StoryDto;
 import com.loopus.loopus_be.dto.request.CreateStoryRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

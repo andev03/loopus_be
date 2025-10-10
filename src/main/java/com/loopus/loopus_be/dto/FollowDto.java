@@ -1,11 +1,6 @@
 package com.loopus.loopus_be.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.loopus.loopus_be.model.Users;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 

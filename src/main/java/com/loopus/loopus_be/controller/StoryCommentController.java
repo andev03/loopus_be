@@ -2,10 +2,7 @@ package com.loopus.loopus_be.controller;
 
 import com.loopus.loopus_be.dto.request.CreateCommentRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
-import com.loopus.loopus_be.mapper.StoryMapper;
-import com.loopus.loopus_be.repository.StoryRepository;
 import com.loopus.loopus_be.service.IService.IStoryService;
-import com.loopus.loopus_be.service.StoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -48,20 +45,28 @@ public class StoryCommentController {
     @Operation(summary = "Xóa comment hoặc story (nếu commentId null thì xóa story)")
     public ResponseDto<Object> deleteComment(
             @PathVariable UUID storyId,
-            @PathVariable(required = false) UUID commentId
+            @RequestParam(required = false) UUID commentId
     ) {
 
         iStoryService.deleteCommentOrStory(storyId, commentId);
 
         return ResponseDto.builder()
                 .status(HttpStatus.OK.value())
-                .message("Xoá comment thành công!")
+                .message("Xoá comment hoặc story thành công!")
                 .build();
     }
 
-    @PutMapping("/{commentId}")
+    @PutMapping("/comment/{commentId}")
     @Operation(summary = "Cập nhật comment")
-    public ResponseDto<Object> updateComment(@PathVariable UUID commentId, @RequestBody String content) {
+    public ResponseDto<Object> updateComment(
+            @PathVariable UUID commentId,
+            @RequestBody @Valid @NotNull(message = "Vui lòng nhập content!") String content
+    ) {
+
+        if (content != null && content.startsWith("\"") && content.endsWith("\"")) {
+            content = content.substring(1, content.length() - 1);
+        }
+
         return ResponseDto.builder()
                 .status(HttpStatus.OK.value())
                 .data(iStoryService.updateComment(commentId, content))

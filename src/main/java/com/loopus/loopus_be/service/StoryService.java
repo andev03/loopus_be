@@ -7,7 +7,10 @@ import com.loopus.loopus_be.enums.VisibilityType;
 import com.loopus.loopus_be.exception.UsersException;
 import com.loopus.loopus_be.mapper.StoryCommentMapper;
 import com.loopus.loopus_be.mapper.StoryMapper;
-import com.loopus.loopus_be.model.*;
+import com.loopus.loopus_be.model.Group;
+import com.loopus.loopus_be.model.GroupAlbum;
+import com.loopus.loopus_be.model.Story;
+import com.loopus.loopus_be.model.StoryComment;
 import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IStoryService;
@@ -103,10 +106,11 @@ public class StoryService implements IStoryService {
     @Override
     public List<StoryCommentDto> getCommentsByStoryId(UUID storyId) {
 
-        return storyCommentMapper.toDtoList(storyCommentRepository.findAllByStory_StoryId(storyId));
+        return storyCommentMapper.toDtoList(storyCommentRepository.findAllByStory_StoryIdOrderByCreatedAtDesc(storyId));
     }
 
     @Override
+    @Transactional
     public void deleteCommentOrStory(UUID storyId, UUID commentId) {
         if (commentId != null) {
             StoryComment comment = storyCommentRepository.findById(commentId)
@@ -139,8 +143,9 @@ public class StoryService implements IStoryService {
     }
 
     @Override
+    @Transactional
     public StoryCommentDto updateComment(UUID commentId, String content) {
-        
+
         StoryComment comment = storyCommentRepository.findById(commentId)
                 .orElseThrow(() -> new UsersException("Comment không tồn tại!"));
 

@@ -49,6 +49,11 @@ public class AlbumController {
             @PathVariable UUID albumId,
             @RequestBody @Valid @NotNull(message = "Vui lòng nhập name") String name
     ) {
+
+        if (name != null && name.startsWith("\"") && name.endsWith("\"")) {
+            name = name.substring(1, name.length() - 1);
+        }
+
         return ResponseDto.builder()
                 .status(HttpStatus.OK.value())
                 .data(iAlbumService.updateAlbum(albumId, name))

@@ -7,6 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StoryCommentRepository extends JpaRepository<StoryComment, UUID> {
-
-    List<StoryComment> findAllByStory_StoryId(UUID storyId);
+    List<StoryComment> findAllByStory_StoryIdOrderByCreatedAtDesc(UUID storyId);
 }

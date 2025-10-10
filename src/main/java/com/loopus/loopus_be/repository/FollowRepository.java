@@ -4,7 +4,6 @@ import com.loopus.loopus_be.model.Follow;
 import com.loopus.loopus_be.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
