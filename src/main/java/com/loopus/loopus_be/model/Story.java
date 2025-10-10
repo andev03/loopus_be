@@ -40,5 +40,6 @@ public class Story {
     private GroupAlbum album;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP", updatable = false)
+    @Builder.Default
     private OffsetDateTime createdAt = OffsetDateTime.now();
 }

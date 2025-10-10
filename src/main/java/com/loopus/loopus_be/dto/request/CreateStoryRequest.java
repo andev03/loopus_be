@@ -19,6 +19,5 @@ public class CreateStoryRequest {
     @NotNull(message = "Vui lòng nhập visibilityType")
     private String visibilityType;
 
-    @NotNull(message = "Vui lòng nhập albumId")
     private UUID albumId;
 }

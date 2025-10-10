@@ -32,5 +32,6 @@ public class GroupAlbum {
     private Users createdBy;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
+    @Builder.Default
     private OffsetDateTime createdAt = OffsetDateTime.now();
 }

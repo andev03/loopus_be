@@ -6,6 +6,7 @@ import com.loopus.loopus_be.enums.VisibilityType;
 import com.loopus.loopus_be.exception.UsersException;
 import com.loopus.loopus_be.mapper.StoryMapper;
 import com.loopus.loopus_be.model.Group;
+import com.loopus.loopus_be.model.GroupAlbum;
 import com.loopus.loopus_be.model.Story;
 import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.*;
@@ -37,15 +38,20 @@ public class StoryService implements IStoryService {
 
         String imgUrl = iFileService.uploadFileUrl(file);
 
+        GroupAlbum album = null;
+
+        if (request.getAlbumId() != null) {
+            album = groupAlbumRepository.getReferenceById(request.getAlbumId());
+        }
         Story story = Story.builder()
                 .user(userRepository.getReferenceById(request.getUserId()))
                 .imageUrl(imgUrl)
                 .caption(request.getCaption())
                 .visibilityType(VisibilityType.valueOf(request.getVisibilityType().toUpperCase()))
-                .album(groupAlbumRepository.getReferenceById(request.getAlbumId()))
+                .album(album)
                 .build();
 
-        return storyMapper.toDto(story);
+        return storyMapper.toDto(storyRepository.save(story));
     }
 
     @Override
@@ -85,6 +91,7 @@ public class StoryService implements IStoryService {
     }
 
     @Override
+    @Transactional
     public void deleteStory(UUID storyId) {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new UsersException("Story không tồn tại!"));
