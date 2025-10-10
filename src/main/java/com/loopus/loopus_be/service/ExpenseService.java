@@ -133,7 +133,23 @@ public class ExpenseService implements IExpenseService {
 
         List<ExpenseParticipant> expenseParticipants = expenseParticipantRepository.findAllByExpenseInAndUser_UserId(expenses, payerId);
 
-        return expenseParticipantMapper.toDtoList(expenseParticipants);
+        List<ExpenseParticipantDto> result = new ArrayList<>();
+
+        for (Expense expense : expenses) {
+            for (ExpenseParticipant expenseParticipant : expenseParticipants) {
+                if (expenseParticipant.getExpense().getExpenseId().equals(expense.getExpenseId())) {
+                    expense.setParticipants(null);
+
+                    ExpenseParticipantDto dto = expenseParticipantMapper.toDto(expenseParticipant);
+
+                    dto.setExpenseDto(expenseMapper.toDto(expense));
+
+                    result.add(dto);
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override

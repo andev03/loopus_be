@@ -14,6 +14,8 @@ public class ExpenseParticipantDto {
 
     private UsersDto user;
 
+    private ExpenseDto expenseDto;
+
     private BigDecimal shareAmount;
 
     private boolean isPaid = false;
