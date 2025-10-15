@@ -3,16 +3,13 @@ package com.loopus.loopus_be.service;
 import com.loopus.loopus_be.dto.WalletDto;
 import com.loopus.loopus_be.dto.WalletTransactionDto;
 import com.loopus.loopus_be.dto.request.CreateNotificationRequest;
+import com.loopus.loopus_be.dto.request.TransferRequest;
 import com.loopus.loopus_be.enums.TransactionType;
 import com.loopus.loopus_be.exception.WalletException;
 import com.loopus.loopus_be.mapper.WalletMapper;
 import com.loopus.loopus_be.mapper.WalletTransactionMapper;
-import com.loopus.loopus_be.model.Users;
-import com.loopus.loopus_be.model.Wallet;
-import com.loopus.loopus_be.model.WalletTransaction;
-import com.loopus.loopus_be.repository.UserRepository;
-import com.loopus.loopus_be.repository.WalletRepository;
-import com.loopus.loopus_be.repository.WalletTransactionRepository;
+import com.loopus.loopus_be.model.*;
+import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.INotificationService;
 import com.loopus.loopus_be.service.IService.IWalletService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,7 @@ public class WalletService implements IWalletService {
     private final INotificationService iNotificationService;
     private final WalletMapper walletMapper;
     private final WalletTransactionMapper walletTransactionMapper;
+    private final ExpenseRepository expenseRepository;
 
     @Override
     public WalletDto getWalletByUserId(UUID userId) {
@@ -44,22 +42,22 @@ public class WalletService implements IWalletService {
 
     @Override
     @Transactional
-    public void transfer(UUID senderId, UUID receiverId, Double amount, UUID groupId) {
-        Wallet senderWallet = walletRepository.findByUserUserId(senderId)
-                .orElseThrow(() -> new WalletException("Wallet not found for user " + senderId));
-        Wallet receiverWallet = walletRepository.findByUserUserId(receiverId)
-                .orElseThrow(() -> new WalletException("Không tìm thấy ví user " + receiverId));
+    public void transfer(TransferRequest request) {
+        Wallet senderWallet = walletRepository.findByUserUserId(request.getSenderId())
+                .orElseThrow(() -> new WalletException("Wallet not found for user " + request.getSenderId()));
+        Wallet receiverWallet = walletRepository.findByUserUserId(request.getReceiverId())
+                .orElseThrow(() -> new WalletException("Không tìm thấy ví user " + request.getReceiverId()));
 
-        if (senderWallet.getBalance() < amount) {
+        if (senderWallet.getBalance() < request.getAmount()) {
             throw new WalletException("Không đủ tiền để thanh toán. Vui lòng nạp thêm tiền vào ví!");
         }
 
-        senderWallet.setBalance(senderWallet.getBalance() - amount);
-        receiverWallet.setBalance(receiverWallet.getBalance() + amount);
+        senderWallet.setBalance(senderWallet.getBalance() - request.getAmount());
+        receiverWallet.setBalance(receiverWallet.getBalance() + request.getAmount());
 
         WalletTransaction txOut = WalletTransaction.builder()
                 .wallet(senderWallet)
-                .amount(amount)
+                .amount(request.getAmount())
                 .type(TransactionType.TRANSFER_OUT)
                 .relatedUser(receiverWallet.getUser())
                 .description("Chuyển tiền đến " + receiverWallet.getUser().getFullName())
@@ -68,14 +66,25 @@ public class WalletService implements IWalletService {
         // Ghi log giao dịch cho người nhận
         WalletTransaction txIn = WalletTransaction.builder()
                 .wallet(receiverWallet)
-                .amount(amount)
+                .amount(request.getAmount())
                 .type(TransactionType.TRANSFER_IN)
                 .relatedUser(senderWallet.getUser())
                 .description("Nhận tiền từ " + senderWallet.getUser().getFullName())
                 .build();
 
-        notificationForSender(senderId, receiverId, amount, groupId);
-        notificationForReceive(senderId, receiverId, amount, groupId);
+        notificationForSender(
+                request.getSenderId(), request.getReceiverId(),
+                request.getAmount(), request.getGroupId()
+        );
+
+        notificationForReceive(
+                request.getSenderId(), request.getReceiverId(),
+                request.getAmount(), request.getGroupId()
+        );
+
+        if(request.getTypeTransfer().equals("GROUP_EXPENSE")){
+            changeExpenseWhenTransferByGroupType(request.getSenderId(), request.getExpenseId());
+        }
 
         walletTransactionRepository.saveAll(List.of(txOut, txIn));
         walletRepository.saveAll(List.of(senderWallet, receiverWallet));
@@ -134,5 +143,17 @@ public class WalletService implements IWalletService {
                         .amount(BigDecimal.valueOf(amount))
                         .build()
         );
+    }
+
+    private void changeExpenseWhenTransferByGroupType(
+            UUID senderId, UUID expenseId
+    ) {
+        Expense expense = expenseRepository.getReferenceById(expenseId);
+
+        for (ExpenseParticipant participant : expense.getParticipants()) {
+            if (participant.getUser().getUserId().equals(senderId)) {
+                participant.setPaid(true);
+            }
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.loopus.loopus_be.controller;
 
+import com.loopus.loopus_be.dto.request.TransferRequest;
 import com.loopus.loopus_be.dto.response.ResponseDto;
 import com.loopus.loopus_be.service.WalletService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,11 +40,10 @@ public class WalletController {
 //    }
 
     @PostMapping("/transfer")
-    public ResponseDto<Object> transfer(
-            @RequestParam UUID senderId, @RequestParam UUID receiverId,
-            @RequestParam Double amount, @RequestParam UUID groupId
-    ) {
-        walletService.transfer(senderId, receiverId, amount, groupId);
+    @Operation(summary = "Chuyển tiền từ ví người này sang ví người khác",
+            description = "type: INDIVIDUAL_TRANSFER, GROUP_EXPENSE")
+    public ResponseDto<Object> transfer(@RequestBody @Valid TransferRequest request) {
+        walletService.transfer(request);
         return ResponseDto.builder()
                 .status(HttpStatus.OK.value())
                 .message("Chuyển tiền thành công")
