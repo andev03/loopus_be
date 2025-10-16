@@ -223,7 +223,7 @@ public class ExpenseService implements IExpenseService {
 
         for (Expense expense : expenses) {
             for (ExpenseParticipant participant : expense.getParticipants()) {
-                if (participant.getUser().getUserId().equals(userId)) continue;
+                if (participant.getUser().getUserId().equals(userId) || participant.isPaid()) continue;
 
                 UUID debtorId = participant.getUser().getUserId();
                 BigDecimal owed = participant.getShareAmount();

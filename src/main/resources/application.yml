@@ -59,3 +59,5 @@ springdoc:
 file:
   upload-dir: "S:/uploads/"
   url-prefix: "file:///S:/uploads/"
+
+#            -e VAULT_UI=${{ secrets.VAULT_UI }} \

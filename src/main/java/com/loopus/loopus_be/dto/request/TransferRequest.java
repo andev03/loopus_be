@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -17,7 +18,7 @@ public class TransferRequest {
     private UUID receiverId;
 
     @NotNull(message = "amount cannot be null")
-    private Double amount;
+    private BigDecimal amount;
 
     private UUID expenseId;
 
