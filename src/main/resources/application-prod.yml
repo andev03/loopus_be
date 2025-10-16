@@ -1,4 +1,17 @@
 spring:
+  #  config:
+  #    import: vault://
+  #
+  #  cloud:
+  #    vault:
+  #      uri: ${VAULT_UI}
+  #      token: ${VAULT_TOKEN}
+  #      kv:
+  #        enabled: true
+  #        backend: secret
+  #        application-name: loopus_be   # thêm dòng này nếu secret không cùng tên
+  #      fail-fast: true
+
   application:
     name: loopus_be
   main:

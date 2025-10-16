@@ -381,3 +381,30 @@ VALUES
 
   ('eeee3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'cccc3333-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
    '22222222-2222-2222-2222-222222222222', '👍');
+
+-- =====================
+-- TRANSACTIONS SAMPLE DATA: DEPOSIT & MEMBERSHIP_PAYMENT
+-- =====================
+
+INSERT INTO transactions (order_id, user_id, amount, transaction_type, status, description)
+VALUES
+-- Alice nạp tiền vào ví
+('ORDER_alice123', '11111111-1111-1111-1111-111111111111', 500000.00, 'DEPOSIT', 'SUCCESS', 'Deposit to wallet from bank'),
+
+-- David nạp tiền vào ví
+('ORD20002', '44444444-4444-4444-4444-444444444444', 300000.00, 'DEPOSIT', 'SUCCESS', 'Deposit to wallet from bank'),
+
+-- Emily nạp tiền vào ví
+('ORD20003', '55555555-5555-5555-5555-555555555555', 200000.00, 'DEPOSIT', 'SUCCESS', 'Deposit to wallet from bank'),
+
+-- Alice mua membership tháng
+('ORD20004', '11111111-1111-1111-1111-111111111111', 150000.00, 'MEMBERSHIP_PAYMENT', 'SUCCESS', 'Monthly membership purchase'),
+
+-- David mua membership tháng
+('ORD20005', '44444444-4444-4444-4444-444444444444', 150000.00, 'MEMBERSHIP_PAYMENT', 'SUCCESS', 'Monthly membership purchase'),
+
+-- Long nạp tiền vào ví
+('ORD20006', '633d1f00-4675-4337-b2cb-70deed2f3d13', 500000.00, 'DEPOSIT', 'SUCCESS', 'Deposit to wallet from bank'),
+
+-- Vo Thanh Long mua membership tháng
+('ORD20007', '633d1f00-4675-4337-b2cb-70deed2f3d15', 150000.00, 'MEMBERSHIP_PAYMENT', 'SUCCESS', 'Monthly membership purchase');

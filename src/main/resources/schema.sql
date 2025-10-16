@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS notifications CASCADE;
 DROP TABLE IF EXISTS wallets CASCADE;
 DROP TABLE IF EXISTS wallet_transactions CASCADE;
 DROP TABLE IF EXISTS story_reactions CASCADE;
+DROP TABLE IF EXISTS transactions CASCADE;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
@@ -333,4 +334,19 @@ CREATE TABLE wallet_transactions (
     related_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,  -- người liên quan (người nhận hoặc người gửi)
     description     TEXT,
     created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =====================
+-- Transactions Table (Basic)
+-- =====================
+CREATE TABLE transactions (
+    transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),  -- ID giao dịch
+    order_id       VARCHAR(50) NOT NULL UNIQUE,                -- Mã đơn hàng
+    user_id        UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,  -- Người thực hiện
+    amount         NUMERIC(12,2) NOT NULL CHECK (amount >= 0), -- Số tiền
+    transaction_type VARCHAR(30) NOT NULL,                     -- Kiểu giao dịch (payment, refund...)
+    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','SUCCESS','FAILED','CANCELED')),
+    description    TEXT,                                       -- Mô tả giao dịch
+    created_at     TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

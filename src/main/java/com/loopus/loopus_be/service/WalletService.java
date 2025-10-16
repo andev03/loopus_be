@@ -5,6 +5,7 @@ import com.loopus.loopus_be.dto.WalletTransactionDto;
 import com.loopus.loopus_be.dto.request.CreateNotificationRequest;
 import com.loopus.loopus_be.dto.request.TransferRequest;
 import com.loopus.loopus_be.enums.TransactionType;
+import com.loopus.loopus_be.exception.ExpenseException;
 import com.loopus.loopus_be.exception.WalletException;
 import com.loopus.loopus_be.mapper.WalletMapper;
 import com.loopus.loopus_be.mapper.WalletTransactionMapper;
@@ -13,6 +14,7 @@ import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.INotificationService;
 import com.loopus.loopus_be.service.IService.IWalletService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class WalletService implements IWalletService {
     private final WalletMapper walletMapper;
     private final WalletTransactionMapper walletTransactionMapper;
     private final ExpenseRepository expenseRepository;
+    private final ExpenseParticipantRepository expenseParticipantRepository;
 
     @Override
     public WalletDto getWalletByUserId(UUID userId) {
@@ -82,7 +85,7 @@ public class WalletService implements IWalletService {
                 request.getAmount(), request.getGroupId()
         );
 
-        if(request.getTypeTransfer().equals("GROUP_EXPENSE")){
+        if (request.getTypeTransfer().equals("GROUP_EXPENSE")) {
             changeExpenseWhenTransferByGroupType(request.getSenderId(), request.getExpenseId());
         }
 
@@ -109,6 +112,11 @@ public class WalletService implements IWalletService {
     @Transactional
     public void createWallet(Users user) {
         walletMapper.toDto(walletRepository.save(Wallet.builder().user(user).balance(500000.00).build()));
+    }
+
+    @Override
+    public WalletDto deposit(UUID userId, Double amount) {
+        return null;
     }
 
     private void notificationForSender(UUID senderId, UUID receiverId, Double amount, UUID groupId) {
@@ -148,12 +156,15 @@ public class WalletService implements IWalletService {
     private void changeExpenseWhenTransferByGroupType(
             UUID senderId, UUID expenseId
     ) {
-        Expense expense = expenseRepository.getReferenceById(expenseId);
+        Expense expense = expenseRepository.findById(expenseId).orElseThrow(
+                () -> new ExpenseException("Không tìm thấy chi tiêu!")
+        );
 
         for (ExpenseParticipant participant : expense.getParticipants()) {
             if (participant.getUser().getUserId().equals(senderId)) {
                 participant.setPaid(true);
             }
         }
+        expenseRepository.save(expense);
     }
 }

@@ -20,4 +20,6 @@ public interface IWalletService {
     WalletTransactionDto getTransactionDetail(UUID walletTransactionId);
 
     void createWallet(Users user);
+
+    WalletDto deposit(UUID userId, Double amount);
 }
