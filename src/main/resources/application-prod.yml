@@ -37,15 +37,15 @@ spring:
             enable: true
         transport:
           protocol: smtp
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: trace
-        orm:
-          jdbc:
-            bind: trace
-    root: warn
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: trace
+#        orm:
+#          jdbc:
+#            bind: trace
+#    root: warn
 
 springdoc:
   swagger-ui:
