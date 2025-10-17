@@ -1,15 +1,15 @@
 spring:
-  cloud:
-    vault:
-      uri: http://localhost:8201
-      token: myroot
-      kv:
-        enabled: true
-        backend: secret
-        application-name: loopus_be   # thêm dòng này nếu secret không cùng tên
-      fail-fast: true
-  config:
-    import: vault://
+#  cloud:
+#    vault:
+#      uri: http://localhost:8201
+#      token: myroot
+#      kv:
+#        enabled: true
+#        backend: secret
+#        application-name: loopus_be
+#      fail-fast: true
+#  config:
+#    import: vault://
 
   application:
     name: loopus_be
