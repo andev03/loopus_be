@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -21,4 +22,8 @@ public class StoryDto {
     private VisibilityType visibilityType;
 
     private OffsetDateTime createdAt;
+
+    private List<StoryCommentDto> commentDtos;
+
+    private List<StoryReactionDto> reactionDtos;
 }

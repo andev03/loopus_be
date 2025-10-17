@@ -7,10 +7,8 @@ import com.loopus.loopus_be.enums.VisibilityType;
 import com.loopus.loopus_be.exception.UsersException;
 import com.loopus.loopus_be.mapper.StoryCommentMapper;
 import com.loopus.loopus_be.mapper.StoryMapper;
-import com.loopus.loopus_be.model.Group;
-import com.loopus.loopus_be.model.GroupAlbum;
-import com.loopus.loopus_be.model.Story;
-import com.loopus.loopus_be.model.StoryComment;
+import com.loopus.loopus_be.mapper.StoryReactionMapper;
+import com.loopus.loopus_be.model.*;
 import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.IFileService;
 import com.loopus.loopus_be.service.IService.IStoryService;
@@ -35,6 +33,8 @@ public class StoryService implements IStoryService {
     private final GroupRepository groupRepository;
     private final StoryCommentRepository storyCommentRepository;
     private final StoryCommentMapper storyCommentMapper;
+    private final StoryReactionRepository storyReactionRepository;
+    private final StoryReactionMapper storyReactionMapper;
 
     @Override
     @Transactional
@@ -152,5 +152,24 @@ public class StoryService implements IStoryService {
         comment.setContent(content);
 
         return storyCommentMapper.toDto(storyCommentRepository.save(comment));
+    }
+
+    @Override
+    public StoryDto getStoryDetail(UUID storyId) {
+
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new UsersException("Story không tồn tại!"));
+
+
+        List<StoryComment> comment = storyCommentRepository.findAllByStory_StoryIdOrderByCreatedAtDesc(storyId);
+
+        List<StoryReaction> reactions = storyReactionRepository.findAllByStory_StoryIdOrderByCreatedAtDesc(storyId);
+
+        StoryDto storyDto = storyMapper.toDto(story);
+
+        storyDto.setCommentDtos(storyCommentMapper.toDtoList(comment));
+        storyDto.setReactionDtos(storyReactionMapper.toDtoList(reactions));
+
+        return storyDto;
     }
 }
