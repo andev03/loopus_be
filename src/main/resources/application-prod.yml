@@ -1,15 +1,13 @@
 spring:
-#  cloud:
-#    vault:
-#      uri: http://vault:8200
-#      token: ${VAULT_TOKEN}
-#      kv:
-#        enabled: true
-#        backend: secret
-#        application-name: loopus_be
-#      fail-fast: true
-#  config:
-#    import: vault://
+  cloud:
+    vault:
+      uri: http://vault:8200
+      token: ${VAULT_TOKEN}
+      kv:
+        enabled: true
+        backend: secret
+        application-name: loopus_be
+      fail-fast: true
 
   application:
     name: loopus_be
