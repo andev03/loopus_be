@@ -1,16 +1,16 @@
 spring:
-  #  config:
-  #    import: vault://
-  #
-  #  cloud:
-  #    vault:
-  #      uri: ${VAULT_UI}
-  #      token: ${VAULT_TOKEN}
-  #      kv:
-  #        enabled: true
-  #        backend: secret
-  #        application-name: loopus_be   # thêm dòng này nếu secret không cùng tên
-  #      fail-fast: true
+  config:
+    import: vault://
+
+  cloud:
+    vault:
+      uri: ${VAULT_UI}
+      token: ${VAULT_TOKEN}
+      kv:
+        enabled: true
+        backend: secret
+        application-name: loopus_be
+      fail-fast: true
 
   application:
     name: loopus_be
@@ -55,3 +55,5 @@ springdoc:
 file:
   upload-dir: "/var/www/uploads/"
   url-prefix: "https://loopus.nguyenhoangan.site/uploads/"
+
+base-url: ${BASE_URL}

@@ -23,6 +23,15 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponseDto handleALlException(Exception ex) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(ex.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto entityNotFoundException(EntityNotFoundException ex) {

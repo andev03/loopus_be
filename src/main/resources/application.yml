@@ -1,16 +1,16 @@
 spring:
-#  config:
-#    import: vault://
-#
-#  cloud:
-#    vault:
-#      uri: http://localhost:8200
-#      token: myroot
-#      kv:
-#        enabled: true
-#        backend: secret
-#        application-name: loopus_be   # thêm dòng này nếu secret không cùng tên
-#      fail-fast: true
+  config:
+    import: vault://
+
+  cloud:
+    vault:
+      uri: http://localhost:8200
+      token: myroot
+      kv:
+        enabled: true
+        backend: secret
+        application-name: loopus_be   # thêm dòng này nếu secret không cùng tên
+      fail-fast: true
 
   application:
     name: loopus_be
@@ -60,4 +60,4 @@ file:
   upload-dir: "S:/uploads/"
   url-prefix: "file:///S:/uploads/"
 
-#            -e VAULT_UI=${{ secrets.VAULT_UI }} \
+base-url: http://localhost:8080

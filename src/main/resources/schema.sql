@@ -34,7 +34,7 @@ create table users (
     avatar_url text,
     bio text,
     date_of_birth date,
-    role varchar(20) check (role in ('USER','STAFF','ADMIN', 'MEMBER')) default 'USER',
+    role varchar(20) check (role in ('USER','ADMIN', 'MEMBER')) default 'USER',
     status varchar(20) check (status in ('ACTIVE','INACTIVE','BANNED','PENDING')) default 'PENDING',
     created_at timestamp default now()
 );
@@ -303,7 +303,7 @@ CREATE TABLE notifications (
     sender_id         UUID REFERENCES users(user_id) ON DELETE SET NULL,          -- người gửi / người liên quan
     group_id          UUID REFERENCES groups(group_id) ON DELETE SET NULL,        -- nhóm liên quan (nếu có)
     type              VARCHAR(50) NOT NULL CHECK (
-                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER')
+                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER', "DEPOSIT", "REACTION")
                       ),
     title             VARCHAR(255),        -- tiêu đề ngắn (VD: "Lê Anh đã trả bạn 100.000đ")
     message           TEXT NOT NULL,       -- nội dung chi tiết
@@ -340,13 +340,12 @@ CREATE TABLE wallet_transactions (
 -- Transactions Table (Basic)
 -- =====================
 CREATE TABLE transactions (
-    transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),  -- ID giao dịch
-    order_id       VARCHAR(50) NOT NULL UNIQUE,                -- Mã đơn hàng
-    user_id        UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,  -- Người thực hiện
-    amount         NUMERIC(12,2) NOT NULL CHECK (amount >= 0), -- Số tiền
-    transaction_type VARCHAR(30) NOT NULL,                     -- Kiểu giao dịch (payment, refund...)
-    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','SUCCESS','FAILED','CANCELED')),
-    description    TEXT,                                       -- Mô tả giao dịch
-    created_at     TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_code      BIGINT NOT NULL UNIQUE,
+    user_id        UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    amount         NUMERIC(12,2) NOT NULL CHECK (amount >= 0),
+    transaction_type VARCHAR(30) NOT NULL CHECK (transaction_type IN ('DEPOSIT', 'MEMBERSHIP')),
+    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'PAID', 'CANCELLED')),
+    description    TEXT,
+    created_at     TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

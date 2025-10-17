@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán thành công</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        * {
+          box-sizing: border-box;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+
+        body {
+          background: linear-gradient(135deg, #f0fdf4 0%, #f6f8fb 100%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          padding: 20px;
+        }
+
+        .container {
+          max-width: 600px;
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+          padding: 50px 40px;
+          text-align: center;
+          animation: slideUp 0.6s ease-out;
+        }
+
+        .icon-success {
+          width: 100px;
+          height: 100px;
+          background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0 auto 30px;
+          animation: pulse 2s ease-in-out infinite;
+          box-shadow: 0 4px 20px rgba(22, 163, 74, 0.15);
+        }
+
+        .icon-success svg {
+          width: 50px;
+          height: 50px;
+          color: #16a34a;
+          stroke-width: 1.5;
+        }
+
+        h1 {
+          font-size: 28px;
+          font-weight: 700;
+          margin-bottom: 12px;
+          color: #111;
+          letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+          color: #666;
+          font-size: 16px;
+          margin-bottom: 35px;
+          line-height: 1.6;
+        }
+
+        .details-box {
+          text-align: left;
+          background: #fafbfc;
+          border: 1px solid #e5e7eb;
+          border-radius: 16px;
+          padding: 28px;
+          margin-bottom: 28px;
+        }
+
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #e5e7eb;
+          font-size: 15px;
+        }
+
+        .detail-row:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+
+        .detail-row strong {
+          color: #374151;
+          font-weight: 600;
+        }
+
+        .detail-row span {
+          color: #666;
+          text-align: right;
+        }
+
+        .amount {
+          font-size: 18px;
+          font-weight: 700;
+          color: #16a34a;
+        }
+
+        .status {
+          color: #16a34a;
+          font-weight: 700;
+          background: #f0fdf4;
+          padding: 4px 12px;
+          border-radius: 6px;
+          display: inline-block;
+        }
+
+        .total-row {
+          padding-top: 14px;
+          border-top: 2px solid #e5e7eb;
+          margin-top: 14px;
+          font-weight: 600;
+        }
+
+        .email-box {
+          background: linear-gradient(135deg, #f0fdf4 0%, #f9fafb 100%);
+          border: 1px solid #d1fae5;
+          border-radius: 14px;
+          padding: 20px;
+          text-align: left;
+          margin-bottom: 32px;
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+        }
+
+        .email-box-icon {
+          font-size: 24px;
+          flex-shrink: 0;
+        }
+
+        .email-box p {
+          font-size: 14px;
+          color: #555;
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        .actions {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          text-decoration: none;
+          padding: 14px 28px;
+          border-radius: 10px;
+          font-weight: 600;
+          font-size: 15px;
+          transition: all 0.3s ease;
+          border: none;
+          cursor: pointer;
+          display: inline-block;
+        }
+
+        .btn-dashboard {
+          background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+          color: white;
+          flex: 1;
+          min-width: 150px;
+        }
+
+        .btn-dashboard:hover {
+          background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-home {
+          background: white;
+          color: #16a34a;
+          border: 2px solid #16a34a;
+          flex: 1;
+          min-width: 150px;
+        }
+
+        .btn-home:hover {
+          background: #f0fdf4;
+          transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+          .container {
+            padding: 35px 25px;
+          }
+
+          h1 {
+            font-size: 24px;
+          }
+
+          .subtitle {
+            font-size: 15px;
+            margin-bottom: 25px;
+          }
+
+          .details-box {
+            padding: 20px;
+          }
+
+          .detail-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+          }
+
+          .detail-row span {
+            text-align: left;
+          }
+
+          .actions {
+            flex-direction: column;
+          }
+
+          .btn {
+            width: 100%;
+          }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="icon-success">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+    </div>
+
+    <h1>Thanh toán thành công!</h1>
+    <p class="subtitle">Cảm ơn bạn đã tin tưởng sử dụng dịch vụ của chúng tôi. Giao dịch của bạn đã được xử lý thành công.</p>
+
+    <div class="details-box">
+        <div class="detail-row">
+            <strong>Mã giao dịch:</strong>
+            <span th:text="${transactionId}"></span>
+        </div>
+        <div class="detail-row">
+            <strong>Số tiền:</strong>
+            <span class="amount" th:text="${amount}"> VND</span>
+        </div>
+        <div class="detail-row">
+            <strong>Thời gian:</strong>
+            <span th:text="${time}"></span>
+        </div>
+        <div class="detail-row">
+            <strong>Mã đơn hàng:</strong>
+            <span th:text="${orderCode}"></span>
+        </div>
+        <div class="detail-row">
+            <strong>Loại thanh toán:</strong>
+            <span th:text="${paymentType}"></span>
+        </div>
+        <div class="detail-row">
+            <strong>Mô tả:</strong>
+            <span th:text="${description}"></span>
+        </div>
+        <div class="detail-row">
+            <strong>Trạng thái:</strong>
+            <span class="status" th:text="${status}"></span>
+        </div>
+    </div>
+
+    <div class="email-box">
+        <div class="email-box-icon">✉️</div>
+        <p><strong>Email xác nhận đã được gửi</strong><br>
+            Chúng tôi đã gửi email xác nhận và hóa đơn đến địa chỉ email của bạn. Vui lòng kiểm tra hộp thư của bạn.</p>
+    </div>
+
+    <div class="actions">
+        <a href="/" class="btn btn-home">Trở về ứng dụng</a>
+    </div>
+</div>
+</body>
+</html>

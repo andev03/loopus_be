@@ -4,16 +4,14 @@ import com.loopus.loopus_be.dto.WalletDto;
 import com.loopus.loopus_be.dto.WalletTransactionDto;
 import com.loopus.loopus_be.dto.request.CreateNotificationRequest;
 import com.loopus.loopus_be.dto.request.TransferRequest;
+import com.loopus.loopus_be.enums.TransactionStatus;
 import com.loopus.loopus_be.enums.TransactionType;
 import com.loopus.loopus_be.exception.ExpenseException;
 import com.loopus.loopus_be.exception.WalletException;
 import com.loopus.loopus_be.mapper.WalletMapper;
 import com.loopus.loopus_be.mapper.WalletTransactionMapper;
 import com.loopus.loopus_be.model.*;
-import com.loopus.loopus_be.repository.ExpenseRepository;
-import com.loopus.loopus_be.repository.UserRepository;
-import com.loopus.loopus_be.repository.WalletRepository;
-import com.loopus.loopus_be.repository.WalletTransactionRepository;
+import com.loopus.loopus_be.repository.*;
 import com.loopus.loopus_be.service.IService.INotificationService;
 import com.loopus.loopus_be.service.IService.IWalletService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,7 @@ public class WalletService implements IWalletService {
     private final WalletMapper walletMapper;
     private final WalletTransactionMapper walletTransactionMapper;
     private final ExpenseRepository expenseRepository;
+    private final TransactionRepository transactionRepository;
 
     @Override
     public WalletDto getWalletByUserId(UUID userId) {
@@ -144,7 +143,52 @@ public class WalletService implements IWalletService {
 
     @Override
     public WalletDto deposit(UUID userId, Double amount) {
-        return null;
+
+        Users user = userRepository.getReferenceById(userId);
+
+        Wallet wallet = walletRepository.findByUserUserId(userId).orElseThrow(
+                () -> new WalletException("Không tìm thấy ví!")
+        );
+
+
+        wallet.setBalance(user.getWallet().getBalance().add(BigDecimal.valueOf(amount)));
+
+        walletRepository.save(wallet);
+        walletTransactionRepository.save(
+                WalletTransaction.builder()
+                        .wallet(wallet)
+                        .amount(BigDecimal.valueOf(amount))
+                        .description("Bạn đã nạp " + amount + " vào ví.")
+                        .type(TransactionType.DEPOSIT)
+                        .relatedUser(null)
+                        .build()
+        );
+        walletDepositNotification(userId, amount);
+        transactionRepository.save(
+                Transaction.builder()
+                        .orderCode(System.currentTimeMillis() / 1000)
+                        .user(user)
+                        .amount(BigDecimal.valueOf(amount))
+                        .transactionType(TransactionType.DEPOSIT)
+                        .status(TransactionStatus.PAID)
+                        .description(user.getFullName() + "đã nạp " + amount + " vào ví.")
+                        .build()
+        );
+        return walletMapper.toDto(wallet);
+    }
+
+    private void walletDepositNotification(UUID receiveId, Double amount) {
+        iNotificationService.createNotification(
+                CreateNotificationRequest.builder()
+                        .senderId(null)
+                        .receiverId(receiveId)
+                        .groupId(null)
+                        .type("DEPOSIT")
+                        .title("Nạp tiền thành công")
+                        .message("Bạn đã nạp " + amount + " vào ví.")
+                        .amount(BigDecimal.valueOf(amount))
+                        .build()
+        );
     }
 
     private void notificationForSender(UUID senderId, UUID receiverId, BigDecimal amount, UUID groupId) {
