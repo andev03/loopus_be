@@ -303,7 +303,7 @@ CREATE TABLE notifications (
     sender_id         UUID REFERENCES users(user_id) ON DELETE SET NULL,          -- người gửi / người liên quan
     group_id          UUID REFERENCES groups(group_id) ON DELETE SET NULL,        -- nhóm liên quan (nếu có)
     type              VARCHAR(50) NOT NULL CHECK (
-                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER', 'DEPOSIT', "REACTION")
+                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER', 'DEPOSIT', 'REACTION')
                       ),
     title             VARCHAR(255),        -- tiêu đề ngắn (VD: "Lê Anh đã trả bạn 100.000đ")
     message           TEXT NOT NULL,       -- nội dung chi tiết
