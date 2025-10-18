@@ -57,8 +57,9 @@ jobs:
             --name loopus-be \
             --network loopus-net \
             -p 8080:8080 \
-            -e VAULT_TOKEN=${{ secrets.VAULT_TOKEN }} \
-            -e VAULT_ADDR=${{ secrets.VAULT_ADDR }} \
+            -e CLIENT_KEY=${{ secrets.CLIENT_KEY }} \
+            -e API_KEY=${{ secrets.API_KEY }} \
+            -e CHECKSUM_KEY=${{ secrets.CHECKSUM_KEY }} \
             -e BASE_URL=${{ secrets.BASE_URL }} \
             -v /var/www/uploads:/var/www/uploads \
             ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}

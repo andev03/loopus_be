@@ -1,13 +1,4 @@
 spring:
-  cloud:
-    vault:
-      uri: ${VAULT_ADDR}
-      token: ${VAULT_TOKEN}
-      kv:
-        enabled: true
-        backend: secret
-        application-name: loopus_be
-      fail-fast: true
 
   application:
     name: loopus_be
@@ -34,15 +25,15 @@ spring:
             enable: true
         transport:
           protocol: smtp
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        SQL: trace
-#        orm:
-#          jdbc:
-#            bind: trace
-#    root: warn
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: trace
+        orm:
+          jdbc:
+            bind: trace
+    root: warn
 
 springdoc:
   swagger-ui:
@@ -54,3 +45,7 @@ file:
   url-prefix: "https://loopus.nguyenhoangan.site/uploads/"
 
 base-url: ${BASE_URL}
+
+client-key: ${CLIENT_KEY}
+api-key: ${API_KEY}
+checksum-key: ${CHECKSUM_KEY}
