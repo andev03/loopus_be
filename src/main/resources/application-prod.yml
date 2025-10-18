@@ -1,7 +1,7 @@
 spring:
   cloud:
     vault:
-      uri: http://nguyenhoangan.site:8200
+      uri: ${VAULT_ADDR}
       token: ${VAULT_TOKEN}
       kv:
         enabled: true
