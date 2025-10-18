@@ -10,7 +10,6 @@ import com.loopus.loopus_be.repository.TransactionRepository;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.IEmailService;
 import com.loopus.loopus_be.service.OtpService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Enumeration;
 
 @Controller
 @RequiredArgsConstructor
@@ -46,15 +44,9 @@ public class CheckoutController {
     @RequestMapping("/cancel")
     public String handleCancel(
             @RequestParam String status,
-            @RequestParam("orderCode") String orderCode, HttpServletRequest request,
+            @RequestParam("orderCode") String orderCode,
             Model model) {
-        System.out.println("Method: " + request.getMethod());
-        System.out.println("Query: " + request.getQueryString());
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while(headerNames.hasMoreElements()) {
-            String name = headerNames.nextElement();
-            System.out.println(name + ": " + request.getHeader(name));
-        }
+
         return handleTransaction(status, orderCode, model, false);
     }
 
