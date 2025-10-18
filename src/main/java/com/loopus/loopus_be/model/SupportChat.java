@@ -32,5 +32,6 @@ public class SupportChat {
     private Instant createdAt = Instant.now();
 
     @Column(nullable = false, length = 20)
-    private String status = "open"; // open, closed
+    @Builder.Default
+    private String status = "NOT_YET"; // open, closed
 }

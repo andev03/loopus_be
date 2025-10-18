@@ -203,7 +203,7 @@ CREATE TABLE support_chats (
     user_id     UUID NOT NULL,
     admin_id    UUID,
     created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    status      VARCHAR(20) CHECK (status IN ('OPEN', 'CLOSED')) DEFAULT 'OPEN',
+    status      VARCHAR(20) CHECK (status IN ('RECEPTION', 'NOT_YET')) DEFAULT 'OPEN',
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (admin_id) REFERENCES users(user_id)
 );

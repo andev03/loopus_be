@@ -39,7 +39,7 @@ public class WalletService implements IWalletService {
     @Override
     public WalletDto getWalletByUserId(UUID userId) {
         return walletMapper.toDto(
-                walletRepository.findByUserUserId(userId)
+                walletRepository.findByUser_UserId(userId)
                         .orElseThrow(() -> new WalletException("Wallet not found for user " + userId))
         );
     }
@@ -47,9 +47,9 @@ public class WalletService implements IWalletService {
     @Override
     @Transactional
     public void transfer(TransferRequest request) {
-        Wallet senderWallet = walletRepository.findByUserUserId(request.getSenderId())
+        Wallet senderWallet = walletRepository.findByUser_UserId(request.getSenderId())
                 .orElseThrow(() -> new WalletException("Wallet not found for user " + request.getSenderId()));
-        Wallet receiverWallet = walletRepository.findByUserUserId(request.getReceiverId())
+        Wallet receiverWallet = walletRepository.findByUser_UserId(request.getReceiverId())
                 .orElseThrow(() -> new WalletException("Không tìm thấy ví user " + request.getReceiverId()));
 
         if (senderWallet.getBalance().compareTo(request.getAmount()) < 0) {
@@ -123,7 +123,7 @@ public class WalletService implements IWalletService {
     @Override
     public List<WalletTransactionDto> getTransactions(UUID walletId) {
         return walletTransactionMapper.toDtoList(
-                walletTransactionRepository.findByWalletWalletIdOrderByCreatedAtDesc(walletId)
+                walletTransactionRepository.findAllByWallet_WalletIdOrderByCreatedAtDesc(walletId)
         );
     }
 
@@ -138,7 +138,7 @@ public class WalletService implements IWalletService {
     @Override
     @Transactional
     public void createWallet(Users user) {
-        walletMapper.toDto(walletRepository.save(Wallet.builder().user(user).balance(new BigDecimal("500000.00")).build()));
+        walletMapper.toDto(walletRepository.save(Wallet.builder().user(user).balance(new BigDecimal(0)).build()));
     }
 
     @Override
@@ -146,14 +146,14 @@ public class WalletService implements IWalletService {
 
         Users user = userRepository.getReferenceById(userId);
 
-        Wallet wallet = walletRepository.findByUserUserId(userId).orElseThrow(
+        Wallet wallet = walletRepository.findByUser_UserId(userId).orElseThrow(
                 () -> new WalletException("Không tìm thấy ví!")
         );
-
 
         wallet.setBalance(user.getWallet().getBalance().add(BigDecimal.valueOf(amount)));
 
         walletRepository.save(wallet);
+
         walletTransactionRepository.save(
                 WalletTransaction.builder()
                         .wallet(wallet)

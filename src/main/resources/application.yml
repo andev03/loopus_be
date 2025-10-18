@@ -1,5 +1,8 @@
 spring:
-
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   application:
     name: loopus_be
 
@@ -11,9 +14,9 @@ spring:
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
 
   mail:
     host: smtp.gmail.com
@@ -49,3 +52,7 @@ file:
   url-prefix: "file:///S:/uploads/"
 
 base-url: http://localhost:8080
+
+client-key:
+api-key:
+checksum-key:
