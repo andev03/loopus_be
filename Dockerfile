@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Copy file JAR từ stage build
 COPY --from=build /app/target/*.jar app.jar
+
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV SPRING_CONFIG_IMPORT=optional:vault://
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

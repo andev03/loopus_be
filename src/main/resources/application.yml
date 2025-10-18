@@ -9,7 +9,7 @@ spring:
         application-name: loopus_be
       fail-fast: true
   config:
-    import: vault://
+    import: optional:vault://
 
   application:
     name: loopus_be

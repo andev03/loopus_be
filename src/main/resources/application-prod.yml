@@ -8,6 +8,8 @@ spring:
         backend: secret
         application-name: loopus_be
       fail-fast: true
+  config:
+    import: vault://
 
   application:
     name: loopus_be
