@@ -1,15 +1,4 @@
 spring:
-  cloud:
-    vault:
-      uri: http://localhost:8200
-      token: myroot
-      kv:
-        enabled: true
-        backend: secret
-        application-name: loopus_be
-      fail-fast: true
-  config:
-    import: optional:vault://
 
   application:
     name: loopus_be

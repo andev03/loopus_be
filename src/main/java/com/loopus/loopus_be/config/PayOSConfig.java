@@ -8,7 +8,7 @@ import vn.payos.PayOS;
 @Configuration
 public class PayOSConfig {
 
-    @Value("${client-id}")
+    @Value("${client-key}")
     private String clientId;
 
     @Value("${api-key}")
