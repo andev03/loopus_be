@@ -33,5 +33,5 @@ public class SupportChat {
 
     @Column(nullable = false, length = 20)
     @Builder.Default
-    private String status = "NOT_YET"; // open, closed
+    private String status = "NOT_YET";
 }

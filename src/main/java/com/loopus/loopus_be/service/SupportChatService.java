@@ -23,10 +23,6 @@ public class SupportChatService implements ISupportChatService {
 
     @Override
     public List<SupportChatDto> getNotYetSupportChat(String status) {
-        status = status.replaceAll("[\\[\\]\"]", "");
-
-        System.out.println(status);
-
         List<SupportChat> supportChats = supportChatRepository.findAllByStatus(status);
 
         return supportChatMapper.toDtoList(supportChats);

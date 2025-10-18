@@ -43,6 +43,17 @@ public class AlbumController {
                 .build();
     }
 
+    @GetMapping("/{groupId}")
+    @Operation(summary = "Xem tất cả album của 1 nhóm!")
+    public ResponseDto<Object> getAllGroupId(@PathVariable UUID groupId) {
+
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(iAlbumService.getAllGroupId(groupId))
+                .message("Xem album thành công!")
+                .build();
+    }
+
     @PutMapping("/{albumId}")
     @Operation(summary = "Cập nhật album")
     public ResponseDto<Object> updateStoryByAlbumId(

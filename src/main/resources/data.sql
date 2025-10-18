@@ -15,10 +15,10 @@ VALUES
 -- =====================
 -- GROUPS
 -- =====================
---INSERT INTO groups (group_id, name, description, avatar_url, created_by) VALUES
---    ('aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Enthusiasts', 'Group for sharing tech news and projects', NULL, '11111111-1111-1111-1111-111111111111'),
---    ('aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', 'Book Lovers', 'Discuss and share your favorite books', NULL, '22222222-2222-2222-2222-222222222222');
---
+INSERT INTO groups (group_id, name, description, avatar_url, created_by) VALUES
+    ('aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Enthusiasts', 'Group for sharing tech news and projects', NULL, '633d1f00-4675-4337-b2cb-70deed2f3d14'),
+    ('aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', 'Book Lovers', 'Discuss and share your favorite books', NULL, '633d1f00-4675-4337-b2cb-70deed2f3d14');
+
 ---- =====================
 ---- GROUP MEMBERS
 ---- =====================
@@ -311,13 +311,12 @@ VALUES
 ---- =====================
 ---- GROUP ALBUMS
 ---- =====================
----- Mỗi album thuộc về một group cụ thể và do 1 user tạo ra.
---INSERT INTO group_albums (album_id, group_id, name, created_by)
---VALUES
---  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'AI Projects Showcase', '11111111-1111-1111-1111-111111111111'),
---  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Memes Collection', '33333333-3333-3333-3333-333333333333'),
---  ('33333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2', 'Book Review Highlights', '22222222-2222-2222-2222-222222222222');
---
+-- Mỗi album thuộc về một group cụ thể và do 1 user tạo ra.
+INSERT INTO group_albums (album_id, group_id, name, created_by)
+VALUES
+  ('11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'AI Projects Showcase', '633d1f00-4675-4337-b2cb-70deed2f3d14'),
+  ('22222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1', 'Tech Memes Collection', '633d1f00-4675-4337-b2cb-70deed2f3d14');
+
 --
 ---- =====================
 ---- STORIES
@@ -416,17 +415,3 @@ VALUES
 
     -- User vothanhlong0987 mới mở chat, chưa có admin tiếp nhận
     ('10000000-0000-0000-0000-000000000003', '633d1f00-4675-4337-b2cb-70deed2f3d15', NULL, 'NOT_YET');
-
-INSERT INTO support_messages (message_id, chat_id, sender_id, message)
-VALUES
-    -- Chat 1 (user: 235 ↔ admin1)
-    ('20000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '633d1f00-4675-4337-b2cb-70deed2f3d13', 'Hi admin, I need help with my payment.'),
-    ('20000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001', '133e4567-e89b-12d3-a456-426614174000', 'Hello, could you please provide your order code?'),
-    ('20000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000001', '633d1f00-4675-4337-b2cb-70deed2f3d13', 'Sure, it is ORD123456.'),
-
-    -- Chat 2 (user: 231 ↔ admin2)
-    ('20000000-0000-0000-0000-000000000004', '10000000-0000-0000-0000-000000000002', '633d1f00-4675-4337-b2cb-70deed2f3d14', 'Hi admin, I forgot my password.'),
-    ('20000000-0000-0000-0000-000000000005', '10000000-0000-0000-0000-000000000002', '233e4567-e89b-12d3-a456-426614174001', 'No problem, I can help you reset it.'),
-
-    -- Chat 3 (user: 0987 ↔ chưa có admin)
-    ('20000000-0000-0000-0000-000000000006', '10000000-0000-0000-0000-000000000003', '633d1f00-4675-4337-b2cb-70deed2f3d15', 'Hi, is anyone here? I need help!');
