@@ -415,3 +415,20 @@ VALUES
 
     -- User vothanhlong0987 mới mở chat, chưa có admin tiếp nhận
     ('10000000-0000-0000-0000-000000000003', '633d1f00-4675-4337-b2cb-70deed2f3d15', NULL, 'NOT_YET');
+
+INSERT INTO support_messages (chat_id, sender_id, message, created_at)
+VALUES
+    -- Cuộc chat 1: user vothanhlong235 nói chuyện với admin1
+    ('10000000-0000-0000-0000-000000000001', '633d1f00-4675-4337-b2cb-70deed2f3d13', 'Hi admin, I need help with my order.', NOW() - INTERVAL '10 minutes'),
+    ('10000000-0000-0000-0000-000000000001', '133e4567-e89b-12d3-a456-426614174000', 'Sure! What seems to be the issue?', NOW() - INTERVAL '9 minutes'),
+    ('10000000-0000-0000-0000-000000000001', '633d1f00-4675-4337-b2cb-70deed2f3d13', 'I haven’t received my confirmation email.', NOW() - INTERVAL '8 minutes'),
+    ('10000000-0000-0000-0000-000000000001', '133e4567-e89b-12d3-a456-426614174000', 'Got it. I will check your transaction and get back shortly.', NOW() - INTERVAL '7 minutes'),
+
+    -- Cuộc chat 2: user vothanhlong231 nói chuyện với admin2
+    ('10000000-0000-0000-0000-000000000002', '633d1f00-4675-4337-b2cb-70deed2f3d14', 'Hello, I’m facing a payment issue.', NOW() - INTERVAL '6 minutes'),
+    ('10000000-0000-0000-0000-000000000002', '233e4567-e89b-12d3-a456-426614174001', 'Hi! Can you tell me what payment method you used?', NOW() - INTERVAL '5 minutes'),
+    ('10000000-0000-0000-0000-000000000002', '633d1f00-4675-4337-b2cb-70deed2f3d14', 'I used VNPay but it failed after redirect.', NOW() - INTERVAL '4 minutes'),
+    ('10000000-0000-0000-0000-000000000002', '233e4567-e89b-12d3-a456-426614174001', 'Thanks. We’ll investigate and refund if necessary.', NOW() - INTERVAL '3 minutes'),
+
+    -- Cuộc chat 3: user vothanhlong0987 mới mở chat, chưa có admin tiếp nhận
+    ('10000000-0000-0000-0000-000000000003', '633d1f00-4675-4337-b2cb-70deed2f3d15', 'Hello, is anyone available?', NOW() - INTERVAL '2 minutes');

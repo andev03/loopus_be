@@ -28,4 +28,45 @@ public class SupportChatController {
                 .message("Xem tin nhắn thành công!")
                 .build();
     }
+
+    @GetMapping("/{chatId}/messages")
+    @Operation(summary = "Lấy tất cả tin nhắn trong 1 box chat!")
+    public ResponseDto<Object> getAllMessageByChatId(@PathVariable UUID chatId) {
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(iSupportChatService.getAllMessageByChatId(chatId))
+                .message("Xem tin nhắn thành công!")
+                .build();
+    }
+
+
+    @PutMapping("/{chatId}/reception")
+    @Operation(summary = "Admin tiếp nhận chat")
+    public ResponseDto<Object> reception(@PathVariable UUID chatId, @RequestParam UUID adminId) {
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(iSupportChatService.reception(chatId, adminId))
+                .message("Tiếp nhận thành công!")
+                .build();
+    }
+
+    @PostMapping("/{userId}/chat")
+    @Operation(summary = "User chat")
+    public ResponseDto<Object> userChat(@PathVariable UUID userId, @RequestParam String message) {
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(iSupportChatService.userChat(userId, message))
+                .message("Nhắn tin thành công!")
+                .build();
+    }
+
+    @PostMapping("/{adminId}/{chatId}")
+    @Operation(summary = "User chat")
+    public ResponseDto<Object> adminChat(@PathVariable UUID adminId, @PathVariable UUID chatId, @RequestParam String message) {
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(iSupportChatService.adminChat(adminId, chatId, message))
+                .message("Nhắn tin thành công!")
+                .build();
+    }
 }
