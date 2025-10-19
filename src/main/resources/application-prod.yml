@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   application:
     name: loopus_be
   main:
@@ -42,3 +46,9 @@ springdoc:
 file:
   upload-dir: "/var/www/uploads/"
   url-prefix: "https://loopus.nguyenhoangan.site/uploads/"
+
+base-url: ${BASE_URL}
+
+client-key: ${CLIENT_KEY}
+api-key: ${API_KEY}
+checksum-key: ${CHECKSUM_KEY}

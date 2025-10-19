@@ -2,6 +2,7 @@ package com.loopus.loopus_be.service.IService;
 
 import com.loopus.loopus_be.dto.WalletDto;
 import com.loopus.loopus_be.dto.WalletTransactionDto;
+import com.loopus.loopus_be.dto.request.TransferRequest;
 import com.loopus.loopus_be.model.Users;
 
 import java.util.List;
@@ -12,11 +13,13 @@ public interface IWalletService {
 
 //    Wallet deposit(UUID userId, Double amount);
 
-    void transfer(UUID senderId, UUID receiverId, Double amount, UUID groupId);
+    void transfer(TransferRequest request);
 
     List<WalletTransactionDto> getTransactions(UUID walletId);
 
     WalletTransactionDto getTransactionDetail(UUID walletTransactionId);
 
     void createWallet(Users user);
+
+    WalletDto deposit(UUID userId, Double amount);
 }

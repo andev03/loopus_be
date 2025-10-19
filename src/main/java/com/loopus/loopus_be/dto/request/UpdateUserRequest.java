@@ -25,4 +25,7 @@ public class UpdateUserRequest {
 
     @NotBlank(message = "Vui lòng nhập bio!")
     private String bio;
+
+    @NotBlank(message = "Vui lòng nhập email!")
+    private String email;
 }

@@ -223,7 +223,7 @@ public class ExpenseService implements IExpenseService {
 
         for (Expense expense : expenses) {
             for (ExpenseParticipant participant : expense.getParticipants()) {
-                if (participant.getUser().getUserId().equals(userId)) continue;
+                if (participant.getUser().getUserId().equals(userId) || participant.isPaid()) continue;
 
                 UUID debtorId = participant.getUser().getUserId();
                 BigDecimal owed = participant.getShareAmount();
@@ -299,7 +299,7 @@ public class ExpenseService implements IExpenseService {
 
         boolean isPaid = false;
         for (CreateExpenseParticipantRequest createExpenseParticipantRequest : request.getExpenseParticipant()) {
-            if (expense.getPaidBy().getUserId().equals(userId)) {
+            if (createExpenseParticipantRequest.getUserId().equals(userId)) {
                 isPaid = true;
             }
             expenseParticipants.add(
@@ -312,6 +312,7 @@ public class ExpenseService implements IExpenseService {
                                     .build()
                     )
             );
+            isPaid = false;
         }
 
         return expenseParticipants;
@@ -326,7 +327,7 @@ public class ExpenseService implements IExpenseService {
         boolean isPaid = false;
 
         for (CreateExpenseParticipantRequest createExpenseParticipantRequest : request.getExpenseParticipant()) {
-            if (expense.getPaidBy().getUserId().equals(userId)) {
+            if (createExpenseParticipantRequest.getUserId().equals(userId)) {
                 isPaid = true;
             }
             expenseParticipants.add(
@@ -339,6 +340,8 @@ public class ExpenseService implements IExpenseService {
                                     .build()
                     )
             );
+
+            isPaid = false;
         }
 
         return expenseParticipants;

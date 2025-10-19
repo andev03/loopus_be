@@ -8,17 +8,35 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ErrorResponseDto handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.PAYLOAD_TOO_LARGE.value())
+                .message("File quá lớn! Vui lòng upload file nhỏ hơn.")
+                .build();
+    }
+
     @ExceptionHandler(LoginException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponseDto handleLoginException(LoginException ex) {
         return ErrorResponseDto.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
+                .message(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponseDto handleALlException(Exception ex) {
+        return ErrorResponseDto.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(ex.getMessage())
                 .build();
     }

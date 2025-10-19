@@ -32,5 +32,6 @@ public class SupportMessage {
     private String message;
 
     @Column(name = "created_at", updatable = false)
+    @Builder.Default
     private Instant createdAt = Instant.now();
 }

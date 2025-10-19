@@ -27,4 +27,6 @@ public interface IStoryService {
     StoryCommentDto addComment(UUID storyId, UUID userId, String content);
 
     StoryCommentDto updateComment(UUID commentId, String content);
+
+    StoryDto getStoryDetail(UUID storyId);
 }

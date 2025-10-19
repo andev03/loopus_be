@@ -48,6 +48,16 @@ public class StoryController {
                 .build();
     }
 
+    @GetMapping("/{storyId}/detail")
+    @Operation(summary = "Lấy chi tiết story")
+    public ResponseDto<Object> getStoryDetail(@PathVariable UUID storyId) {
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(iStoryService.getStoryDetail(storyId))
+                .message("Lấy tất cả story thành công!")
+                .build();
+    }
+
     @GetMapping("/{albumId}")
     @Operation(summary = "Lấy danh sách tất cả story của 1 album")
     public ResponseDto<Object> getStoryByAlbumId(@PathVariable UUID albumId) {

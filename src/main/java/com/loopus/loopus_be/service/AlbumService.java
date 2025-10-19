@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -69,5 +70,13 @@ public class AlbumService implements IAlbumService {
         );
 
         groupAlbumRepository.delete(groupAlbum);
+    }
+
+    @Override
+    public List<GroupAlbumDto> getAllGroupId(UUID groupId) {
+
+        List<GroupAlbum> groupAlbums = groupAlbumRepository.findAllByGroup_GroupId(groupId);
+
+        return groupAlbumMapper.toDtoList(groupAlbums);
     }
 }

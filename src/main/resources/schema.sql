@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS notifications CASCADE;
 DROP TABLE IF EXISTS wallets CASCADE;
 DROP TABLE IF EXISTS wallet_transactions CASCADE;
 DROP TABLE IF EXISTS story_reactions CASCADE;
+DROP TABLE IF EXISTS transactions CASCADE;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
@@ -33,7 +34,7 @@ create table users (
     avatar_url text,
     bio text,
     date_of_birth date,
-    role varchar(20) check (role in ('USER','STAFF','ADMIN', 'MEMBER')) default 'USER',
+    role varchar(20) check (role in ('USER','ADMIN', 'MEMBER')) default 'USER',
     status varchar(20) check (status in ('ACTIVE','INACTIVE','BANNED','PENDING')) default 'PENDING',
     created_at timestamp default now()
 );
@@ -202,7 +203,7 @@ CREATE TABLE support_chats (
     user_id     UUID NOT NULL,
     admin_id    UUID,
     created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    status      VARCHAR(20) CHECK (status IN ('OPEN', 'CLOSED')) DEFAULT 'OPEN',
+    status      VARCHAR(20) CHECK (status IN ('RECEPTION', 'NOT_YET')) DEFAULT 'OPEN',
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (admin_id) REFERENCES users(user_id)
 );
@@ -302,7 +303,7 @@ CREATE TABLE notifications (
     sender_id         UUID REFERENCES users(user_id) ON DELETE SET NULL,          -- người gửi / người liên quan
     group_id          UUID REFERENCES groups(group_id) ON DELETE SET NULL,        -- nhóm liên quan (nếu có)
     type              VARCHAR(50) NOT NULL CHECK (
-                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER')
+                         type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMINDER', 'COMMENT', 'INVITE', 'TRANSFER', 'DEPOSIT', 'REACTION')
                       ),
     title             VARCHAR(255),        -- tiêu đề ngắn (VD: "Lê Anh đã trả bạn 100.000đ")
     message           TEXT NOT NULL,       -- nội dung chi tiết
@@ -333,4 +334,18 @@ CREATE TABLE wallet_transactions (
     related_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,  -- người liên quan (người nhận hoặc người gửi)
     description     TEXT,
     created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =====================
+-- Transactions Table (Basic)
+-- =====================
+CREATE TABLE transactions (
+    transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_code      BIGINT NOT NULL UNIQUE,
+    user_id        UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    amount         NUMERIC(12,2) NOT NULL CHECK (amount >= 0),
+    transaction_type VARCHAR(30) NOT NULL CHECK (transaction_type IN ('DEPOSIT', 'MEMBERSHIP')),
+    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'PAID', 'CANCELLED')),
+    description    TEXT,
+    created_at     TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

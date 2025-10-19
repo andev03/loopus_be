@@ -104,6 +104,7 @@ public class UserService implements IUserService {
         user.setFullName(request.getFirstName() + " " + request.getLastName());
         user.setDateOfBirth(request.getDob());
         user.setBio(request.getBio());
+        user.setUsername(request.getEmail());
 
         return userMapper.toDto(userRepository.save(user));
     }

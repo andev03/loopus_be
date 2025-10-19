@@ -3,6 +3,7 @@ package com.loopus.loopus_be.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Wallet {
     private Users user;
 
     @Column(nullable = false)
-    private Double balance = 0.0;
+    private BigDecimal balance;
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Instant updatedAt;
