@@ -37,4 +37,21 @@ public class FileService implements IFileService {
 
         return prefixUrl + filename;
     }
+
+    @Override
+    public String uploadFileApkUrl(MultipartFile file) {
+        String filename = ".apk";
+        Path path = Paths.get(uploadDir, filename);
+
+        try {
+            Files.createDirectories(path.getParent());
+
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return prefixUrl + filename;
+    }
 }

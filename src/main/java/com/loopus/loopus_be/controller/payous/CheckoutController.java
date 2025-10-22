@@ -60,7 +60,7 @@ public class CheckoutController {
         updateTransactionStatus(transaction, status);
         setTransactionModel(model, transaction);
 
-        Users user = updateUserRoleIfMembershipSuccess(transaction);
+        Users user = updateUserRoleIfMembershipSuccess(transaction, TransactionStatus.valueOf(status));
         sendTransactionEmail(transaction, user, isSuccess);
 
         return isSuccess ? "success" : "cancel";
@@ -85,8 +85,13 @@ public class CheckoutController {
         model.addAttribute("status", dto.getStatus());
     }
 
-    private Users updateUserRoleIfMembershipSuccess(Transaction transaction) {
+    private Users updateUserRoleIfMembershipSuccess(Transaction transaction, TransactionStatus status) {
         Users user = userRepository.getReferenceById(transaction.getUser().getUserId());
+
+        if (status.equals(TransactionStatus.CANCELLED)) {
+            return user;
+        }
+
         user.setRole(RoleEnum.MEMBER);
         return userRepository.save(user);
     }
