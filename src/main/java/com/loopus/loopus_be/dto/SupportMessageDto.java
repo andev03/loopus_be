@@ -9,6 +9,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SupportMessageDto {
+    private UUID chatId;
+
     private UUID messageId;
 
     private UsersDto sender;

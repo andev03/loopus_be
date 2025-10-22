@@ -249,7 +249,7 @@ public class WalletService implements IWalletService {
         );
 
         senderWallet.setBalance(senderWallet.getBalance().subtract(request.getAmount()));
-        receiverWallet.setBalance(senderWallet.getBalance().add(request.getAmount()));
+        receiverWallet.setBalance(receiverWallet.getBalance().add(request.getAmount()));
 
         walletTransactionRepository.saveAll(List.of(txOut, txIn));
         walletRepository.saveAll(List.of(senderWallet, receiverWallet));

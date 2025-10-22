@@ -32,9 +32,6 @@ public class Feedback {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "image_url", columnDefinition = "TEXT")
-    private String imageUrl;
-
     @Column(name = "created_at", updatable = false)
     private Instant createdAt = Instant.now();
 }

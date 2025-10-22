@@ -81,4 +81,14 @@ public class UsersController {
                 .message("Cập nhật thông tin thành công")
                 .build();
     }
+
+    @PostMapping("/reset-password")
+    public ResponseDto<Object> resetPassword(@RequestParam String email, @RequestParam String newPassword) {
+
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(userService.resetPassword(email, newPassword))
+                .message("Gửi yêu cầu thành công")
+                .build();
+    }
 }

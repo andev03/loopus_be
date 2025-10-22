@@ -229,7 +229,6 @@ CREATE TABLE feedbacks (
     user_id      UUID NOT NULL,
     type         VARCHAR(20) NOT NULL CHECK (type IN ('BUG', 'SUGGESTION', 'OTHER')),
     content      TEXT NOT NULL,
-    image_url    TEXT,
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

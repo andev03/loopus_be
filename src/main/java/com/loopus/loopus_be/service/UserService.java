@@ -108,4 +108,13 @@ public class UserService implements IUserService {
 
         return userMapper.toDto(userRepository.save(user));
     }
+
+    @Override
+    public UsersDto resetPassword(String email, String newPassword) {
+        Users user = userRepository.findByUsername(email);
+
+        user.setPasswordHash(newPassword);
+
+        return userMapper.toDto(userRepository.save(user));
+    }
 }

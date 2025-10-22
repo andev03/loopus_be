@@ -60,11 +60,10 @@ public class FeedbackController {
     @Operation(summary = "Tạo feedback", description = "Có 2 type: bug (dành cho báo lỗi ứng dũng), suggestion (dành cho góp ý cải thiện)")
     public ResponseDto<Object> createFeedbacks(
             @Parameter(description = "Request JSON", content = @Content(mediaType = "application/json"))
-            @RequestPart("request") @Valid CreateFeedbackRequest request,
-            @RequestPart("file") MultipartFile file
+            @RequestPart("request") @Valid CreateFeedbackRequest request
     ) {
         return ResponseDto.builder()
-                .data(iFeedbackService.createFeedback(request, file))
+                .data(iFeedbackService.createFeedback(request))
                 .message("Lấy thành công feedback theo ID")
                 .build();
     }

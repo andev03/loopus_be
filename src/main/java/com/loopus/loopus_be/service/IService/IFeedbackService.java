@@ -15,5 +15,5 @@ public interface IFeedbackService {
 
     FeedbackDto getFeedbackById(UUID feedbackId);
 
-    FeedbackDto createFeedback(CreateFeedbackRequest request, MultipartFile file);
+    FeedbackDto createFeedback(CreateFeedbackRequest request);
 }

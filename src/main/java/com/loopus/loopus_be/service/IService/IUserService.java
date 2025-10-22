@@ -19,4 +19,6 @@ public interface IUserService {
     UsersDto updateAvatar(UUID userId, MultipartFile file);
 
     UsersDto updateInformation(UpdateUserRequest request);
+
+    UsersDto resetPassword(String email,String newPassword);
 }
