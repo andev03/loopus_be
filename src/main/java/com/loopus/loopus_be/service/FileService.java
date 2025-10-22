@@ -40,7 +40,7 @@ public class FileService implements IFileService {
 
     @Override
     public String uploadFileApkUrl(MultipartFile file) {
-        String filename = ".apk";
+        String filename = "loopus.apk";
         Path path = Paths.get(uploadDir, filename);
 
         try {
