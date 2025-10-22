@@ -18,20 +18,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/files")
-@RequiredArgsConstructor
+//@RestController
+//@RequestMapping("/api/files")
+//@RequiredArgsConstructor
 public class FileController {
-
-    private final IFileService iFileService;
-
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseDto<Object> uploadFile(@RequestPart("file") MultipartFile file) {
-
-        return ResponseDto.builder()
-                .data(iFileService.uploadFileApkUrl(file))
-                .status(HttpStatus.OK.value())
-                .message("Cập nhật avatar thành công")
-                .build();
-    }
+//
+//    private final IFileService iFileService;
+//
+//    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseDto<Object> uploadFile(@RequestPart("file") MultipartFile file) {
+//
+//        return ResponseDto.builder()
+//                .data(iFileService.uploadFileApkUrl(file))
+//                .status(HttpStatus.OK.value())
+//                .message("Cập nhật avatar thành công")
+//                .build();
+//    }
 }
