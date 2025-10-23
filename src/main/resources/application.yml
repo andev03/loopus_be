@@ -14,7 +14,6 @@ spring:
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
-
   sql:
     init:
       mode: always
@@ -60,6 +59,6 @@ payos:
     api-key:
     checksum-key:
   payout:
-    client-id: 205538fa-fd27-4d84-8a06-295ee634c92f
+    client-id:
     api-key:
     checksum-key:

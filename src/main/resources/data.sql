@@ -26,8 +26,8 @@ VALUES
         (SELECT bank_id FROM banks WHERE bank_name = 'Vietcombank')),
     ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong0987@gmail.com', '123123', 'Vo Thanh Long 0987', NULL, NULL, 'MEMBER', '1989-12-31', 'ACTIVE', '970418003',
         (SELECT bank_id FROM banks WHERE bank_name = 'BIDV')),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d16', 'vothanhlong233@gmail.com', '123123', 'Vo Thanh Long 233', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '970422004',
-        (SELECT bank_id FROM banks WHERE bank_name = 'VPBank')),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d16', 'vothanhlong233@gmail.com', '123123', 'Vo Thanh Long 233', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '107873306270',
+        (SELECT bank_id FROM banks WHERE bank_name = 'VietinBank')),
     ('633d1f00-4675-4337-b2cb-70deed2f3d17', 'nguyenhoangan060703@gmail.com', '123123', 'Nguyen Hoang An', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '0000148289372',
         (SELECT bank_id FROM banks WHERE bank_name = 'MBBank'));
 
@@ -309,7 +309,7 @@ VALUES
 ('11111111-1111-1111-1111-111111111111', '633d1f00-4675-4337-b2cb-70deed2f3d13', 0),
 ('22222222-2222-2222-2222-222222222222', '633d1f00-4675-4337-b2cb-70deed2f3d14', 0),
 ('33333333-3333-3333-3333-333333333333', '633d1f00-4675-4337-b2cb-70deed2f3d15', 0),
-('44444444-4444-4444-4444-444444444444', '633d1f00-4675-4337-b2cb-70deed2f3d16', 0),
+('44444444-4444-4444-4444-444444444444', '633d1f00-4675-4337-b2cb-70deed2f3d16', 150000),
 ('66666666-6666-6666-6666-666666666666', '633d1f00-4675-4337-b2cb-70deed2f3d17', 0);
 
 -- =====================
