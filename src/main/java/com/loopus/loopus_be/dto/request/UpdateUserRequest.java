@@ -28,4 +28,10 @@ public class UpdateUserRequest {
 
     @NotBlank(message = "Vui lòng nhập email!")
     private String email;
+
+    @NotBlank(message = "Vui lòng nhập bankNumber!")
+    private String bankNumber;
+
+    @NotBlank(message = "Vui lòng nhập bankId!")
+    private String bankId;
 }

@@ -9,6 +9,7 @@ import com.loopus.loopus_be.repository.TransactionRepository;
 import com.loopus.loopus_be.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,12 +28,17 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/order")
-@RequiredArgsConstructor
 public class OrderController {
 
     private final PayOS payOS;
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+
+    public OrderController(UserRepository userRepository, TransactionRepository transactionRepository, @Qualifier("payOSCheckout") PayOS payOS) {
+        this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
+        this.payOS = payOS;
+    }
 
     @Value("${base-url}")
     private String baseUrl;
@@ -66,7 +72,6 @@ public class OrderController {
         createTransactionRecord(orderCode, RequestBody.getUserId(), price);
 
         return ApiResponse.success(data);
-
     }
 
     public ApiResponse<PaymentLink> getOrderById(long orderId) {

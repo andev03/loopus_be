@@ -1,16 +1,35 @@
 -- =====================
 -- USERS
 -- =====================
-
-INSERT INTO users (user_id, username, password_hash, full_name, avatar_url, bio, role, date_of_birth, status)
+INSERT INTO banks (bank_name, bin_code)
 VALUES
-    ('133e4567-e89b-12d3-a456-426614174000', 'admin1@gmail.com', 'admin1', 'admin1', NULL, NULL, 'ADMIN', NOW(), 'ACTIVE'),
-    ('233e4567-e89b-12d3-a456-426614174001', 'admin2@gmail.com', 'admin2', 'admin2', NULL, NULL, 'ADMIN', NOW(), 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d13', 'vothanhlong235@gmail.com', '123123', 'Vo Thanh Long 235', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d14', 'vothanhlong231@gmail.com', '123123', 'Vo Thanh Long 231', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong0987@gmail.com', '123123', 'Vo Thanh Long 0987', NULL, NULL, 'MEMBER', '1989-12-31', 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d16', 'vothanhlong233@gmail.com', '123123', 'Vo Thanh Long 233', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE'),
-    ('633d1f00-4675-4337-b2cb-70deed2f3d17', 'nguyenhoangan060703@gmail.com', '123123', 'Vo Thanh Long 233', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE');
+    ('Vietcombank', '970436'),
+    ('VietinBank', '970415'),
+    ('Techcombank', '970407'),
+    ('BIDV', '970418'),
+    ('MBBank', '970422'),
+    ('VPBank', '970432'),
+    ('SHB', '970443');
+
+INSERT INTO users (user_id, username, password_hash, full_name, avatar_url, bio, role, date_of_birth, status, bank_number, bank_id)
+VALUES
+    -- ADMIN accounts
+    ('133e4567-e89b-12d3-a456-426614174000', 'admin1@gmail.com', 'admin1', 'Admin One', NULL, 'System administrator', 'ADMIN', '1990-01-01', 'ACTIVE', '0011223344',
+        (SELECT bank_id FROM banks WHERE bank_name = 'Vietcombank')),
+    ('233e4567-e89b-12d3-a456-426614174001', 'admin2@gmail.com', 'admin2', 'Admin Two', NULL, 'System administrator', 'ADMIN', '1990-01-01', 'ACTIVE', '0055667788',
+        (SELECT bank_id FROM banks WHERE bank_name = 'Techcombank')),
+
+    -- USER accounts
+    ('633d1f00-4675-4337-b2cb-70deed2f3d13', 'vothanhlong235@gmail.com', '123123', 'Vo Thanh Long 235', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '970415001',
+        (SELECT bank_id FROM banks WHERE bank_name = 'VietinBank')),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d14', 'vothanhlong231@gmail.com', '123123', 'Vo Thanh Long 231', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '970436002',
+        (SELECT bank_id FROM banks WHERE bank_name = 'Vietcombank')),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d15', 'vothanhlong0987@gmail.com', '123123', 'Vo Thanh Long 0987', NULL, NULL, 'MEMBER', '1989-12-31', 'ACTIVE', '970418003',
+        (SELECT bank_id FROM banks WHERE bank_name = 'BIDV')),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d16', 'vothanhlong233@gmail.com', '123123', 'Vo Thanh Long 233', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '970422004',
+        (SELECT bank_id FROM banks WHERE bank_name = 'VPBank')),
+    ('633d1f00-4675-4337-b2cb-70deed2f3d17', 'nguyenhoangan060703@gmail.com', '123123', 'Nguyen Hoang An', NULL, NULL, 'USER', '1989-12-31', 'ACTIVE', '0000148289372',
+        (SELECT bank_id FROM banks WHERE bank_name = 'MBBank'));
 
 -- =====================
 -- GROUPS

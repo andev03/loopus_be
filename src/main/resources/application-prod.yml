@@ -49,6 +49,12 @@ file:
 
 base-url: ${BASE_URL}
 
-client-key: ${CLIENT_KEY}
-api-key: ${API_KEY}
-checksum-key: ${CHECKSUM_KEY}
+payos:
+  checkout:
+    client-id: ${CLIENT_KEY}
+    api-key: ${API_KEY}
+    checksum-key: ${CHECKSUM_KEY}
+  payout:
+    client-id: ${PAYOUT_CLIENT_KEY}
+    api-key: ${PAYOUT_API_KEY}
+    checksum-key: ${PAYOUT_CHECKSUM_KEY}

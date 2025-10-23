@@ -163,6 +163,7 @@ public class WalletService implements IWalletService {
                         .relatedUser(null)
                         .build()
         );
+
         walletDepositNotification(userId, amount);
         transactionRepository.save(
                 Transaction.builder()
@@ -177,6 +178,42 @@ public class WalletService implements IWalletService {
         return walletMapper.toDto(wallet);
     }
 
+    @Override
+    public void payout(UUID userId, Double amount) {
+
+        Users user = userRepository.getReferenceById(userId);
+
+        Wallet wallet = walletRepository.findByUser_UserId(userId).orElseThrow(
+                () -> new WalletException("Không tìm thấy ví!")
+        );
+
+        wallet.setBalance(user.getWallet().getBalance().subtract(BigDecimal.valueOf(amount)));
+
+        walletRepository.save(wallet);
+
+        walletTransactionRepository.save(
+                WalletTransaction.builder()
+                        .wallet(wallet)
+                        .amount(BigDecimal.valueOf(amount))
+                        .description("Bạn đã rút " + amount + " từ ví.")
+                        .type(TransactionType.DEPOSIT)
+                        .relatedUser(null)
+                        .build()
+        );
+
+        walletPayoutNotification(userId, amount);
+        transactionRepository.save(
+                Transaction.builder()
+                        .orderCode(System.currentTimeMillis() / 1000)
+                        .user(user)
+                        .amount(BigDecimal.valueOf(amount))
+                        .transactionType(TransactionType.DEPOSIT)
+                        .status(TransactionStatus.PAID)
+                        .description(user.getFullName() + "đã rút" + amount + " từ ví.")
+                        .build()
+        );
+    }
+
     private void walletDepositNotification(UUID receiveId, Double amount) {
         iNotificationService.createNotification(
                 CreateNotificationRequest.builder()
@@ -186,6 +223,20 @@ public class WalletService implements IWalletService {
                         .type("DEPOSIT")
                         .title("Nạp tiền thành công")
                         .message("Bạn đã nạp " + amount + " vào ví.")
+                        .amount(BigDecimal.valueOf(amount))
+                        .build()
+        );
+    }
+
+    private void walletPayoutNotification(UUID receiveId, Double amount) {
+        iNotificationService.createNotification(
+                CreateNotificationRequest.builder()
+                        .senderId(null)
+                        .receiverId(receiveId)
+                        .groupId(null)
+                        .type("DEPOSIT")
+                        .title("Rút tiền thành công")
+                        .message("Bạn đã rút " + amount + " từ ví.")
                         .amount(BigDecimal.valueOf(amount))
                         .build()
         );

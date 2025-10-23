@@ -29,4 +29,8 @@ public class UsersDto {
     private LocalDate dateOfBirth;
 
     private LocalDateTime createdAt;
+
+    private String bankNumber;
+
+    private UUID bankId;
 }

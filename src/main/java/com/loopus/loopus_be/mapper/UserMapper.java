@@ -3,6 +3,7 @@ package com.loopus.loopus_be.mapper;
 import com.loopus.loopus_be.dto.UsersDto;
 import com.loopus.loopus_be.model.Users;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -11,5 +12,6 @@ import java.util.List;
 public interface UserMapper {
     List<UsersDto> toDtoList(List<Users> models);
 
+    @Mapping(source = "bank.bankId", target = "bankId")
     UsersDto toDto(Users model);
 }

@@ -60,6 +60,15 @@ public class UsersController {
                 .build();
     }
 
+    @GetMapping
+    public ResponseDto<Object> getAll() {
+        return ResponseDto.builder()
+                .data(userService.getAll())
+                .status(HttpStatus.OK.value())
+                .message("Lấy thành công!")
+                .build();
+    }
+
     @PutMapping(value = "/update-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseDto<Object> updateAvatar(
             @Parameter(description = "File to update", required = true)

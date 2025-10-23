@@ -60,6 +60,9 @@ jobs:
             -e CLIENT_KEY=${{ secrets.CLIENT_KEY }} \
             -e API_KEY=${{ secrets.API_KEY }} \
             -e CHECKSUM_KEY=${{ secrets.CHECKSUM_KEY }} \
+            -e PAYOUT_CHECKSUM_KEY=${{ secrets.PAYOUT_CHECKSUM_KEY }} \
+            -e PAYOUT_CLIENT_KEY=${{ secrets.PAYOUT_CLIENT_KEY }} \
+            -e PAYOUT_API_KEY=${{ secrets.PAYOUT_API_KEY }} \
             -e BASE_URL=${{ secrets.BASE_URL }} \
             -v /var/www/uploads:/var/www/uploads \
             ${{ secrets.DOCKER_USERNAME }}/loopus-be:${{ env.TAG }}

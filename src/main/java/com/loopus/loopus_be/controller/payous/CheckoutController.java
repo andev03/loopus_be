@@ -41,8 +41,27 @@ public class CheckoutController {
         return handleTransaction(status, orderCode, model, true);
     }
 
+    @RequestMapping("/success_deposit")
+    public String handleSuccessDeposit(
+            @RequestParam String status,
+            @RequestParam("orderCode") String orderCode,
+            Model model) {
+
+        return handleTransaction(status, orderCode, model, true);
+    }
+
+
     @RequestMapping("/cancel")
     public String handleCancel(
+            @RequestParam String status,
+            @RequestParam("orderCode") String orderCode,
+            Model model) {
+
+        return handleTransaction(status, orderCode, model, false);
+    }
+
+    @RequestMapping("/cancel_deposit")
+    public String handleCancelDeposit(
             @RequestParam String status,
             @RequestParam("orderCode") String orderCode,
             Model model) {

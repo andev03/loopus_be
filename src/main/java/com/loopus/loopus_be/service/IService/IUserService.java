@@ -5,6 +5,7 @@ import com.loopus.loopus_be.dto.request.RegisterRequest;
 import com.loopus.loopus_be.dto.request.UpdateUserRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface IUserService {
@@ -21,4 +22,6 @@ public interface IUserService {
     UsersDto updateInformation(UpdateUserRequest request);
 
     UsersDto resetPassword(String email,String newPassword);
+
+    List<UsersDto> getAll();
 }
