@@ -47,7 +47,7 @@ public class CheckoutController {
             @RequestParam("orderCode") String orderCode,
             Model model) {
 
-        return handleTransaction(status, orderCode, model, true);
+        return handleTransactionForDeposit(status, orderCode, model, true);
     }
 
 
@@ -66,7 +66,7 @@ public class CheckoutController {
             @RequestParam("orderCode") String orderCode,
             Model model) {
 
-        return handleTransaction(status, orderCode, model, false);
+        return handleTransactionForDeposit(status, orderCode, model, false);
     }
 
     private String handleTransaction(String status, String orderCode, Model model, boolean isSuccess) {
@@ -83,6 +83,23 @@ public class CheckoutController {
         sendTransactionEmail(transaction, user, isSuccess);
 
         return isSuccess ? "success" : "cancel";
+    }
+
+    private String handleTransactionForDeposit(String status, String orderCode, Model model, boolean isSuccess) {
+        Transaction transaction = transactionRepository.findByOrderCode(Long.parseLong(orderCode));
+
+        if (transaction == null) {
+            return "400BadRequest";
+        }
+
+        updateTransactionStatus(transaction, status);
+        setTransactionModel(model, transaction);
+
+        Users user = transaction.getUser();
+
+        sendTransactionEmail(transaction, user, isSuccess);
+
+        return isSuccess ? "success_deposit" : "cancel_deposit";
     }
 
     private void updateTransactionStatus(Transaction transaction, String status) {
