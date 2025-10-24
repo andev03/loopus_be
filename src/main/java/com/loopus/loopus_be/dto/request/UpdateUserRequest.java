@@ -32,6 +32,6 @@ public class UpdateUserRequest {
     @NotBlank(message = "Vui lòng nhập bankNumber!")
     private String bankNumber;
 
-    @NotBlank(message = "Vui lòng nhập bankId!")
+    @NotNull(message = "Vui lòng nhập bankId!")
     private UUID bankId;
 }
