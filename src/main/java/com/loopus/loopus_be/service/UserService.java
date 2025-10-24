@@ -7,6 +7,7 @@ import com.loopus.loopus_be.enums.UserStatusEnum;
 import com.loopus.loopus_be.exception.LoginException;
 import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Users;
+import com.loopus.loopus_be.repository.BankRepository;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.*;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class UserService implements IUserService {
     private final IOtpService otpService;
     private final IFileService fileService;
     private final ISettingService settingService;
+    private final BankRepository bankRepository;
 
     @Override
     public UsersDto login(String username, String password) {
@@ -106,6 +108,8 @@ public class UserService implements IUserService {
         user.setDateOfBirth(request.getDob());
         user.setBio(request.getBio());
         user.setUsername(request.getEmail());
+        user.setBankNumber(request.getBankNumber());
+        user.setBank(bankRepository.getReferenceById(request.getBankId()));
 
         return userMapper.toDto(userRepository.save(user));
     }
