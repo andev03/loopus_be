@@ -82,8 +82,6 @@ public class WalletController {
 
         createTransactionRecordForDeposit(orderCode, requestBody.getUserId(), price);
 
-        iWalletService.deposit(requestBody.getUserId(), (double) requestBody.getPrice());
-
         return ApiResponse.success(data);
     }
 

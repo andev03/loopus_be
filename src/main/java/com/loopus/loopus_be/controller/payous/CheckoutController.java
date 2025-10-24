@@ -8,7 +8,9 @@ import com.loopus.loopus_be.model.Transaction;
 import com.loopus.loopus_be.model.Users;
 import com.loopus.loopus_be.repository.TransactionRepository;
 import com.loopus.loopus_be.repository.UserRepository;
+import com.loopus.loopus_be.repository.WalletRepository;
 import com.loopus.loopus_be.service.IService.IEmailService;
+import com.loopus.loopus_be.service.IService.IWalletService;
 import com.loopus.loopus_be.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
@@ -28,6 +31,7 @@ public class CheckoutController {
     private final UserRepository userRepository;
     private final IEmailService emailService;
     private final OtpService otpService;
+    private final IWalletService iWalletService;
 
     private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,###");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -46,6 +50,12 @@ public class CheckoutController {
             @RequestParam String status,
             @RequestParam("orderCode") String orderCode,
             Model model) {
+
+        Transaction transaction = transactionRepository.findByOrderCode(Long.parseLong(orderCode));
+
+        iWalletService.deposit(
+                transaction.getUser().getUserId(), Double.valueOf(transaction.getAmount().toString())
+        );
 
         return handleTransactionForDeposit(status, orderCode, model, true);
     }
@@ -93,6 +103,7 @@ public class CheckoutController {
         }
 
         updateTransactionStatus(transaction, status);
+
         setTransactionModel(model, transaction);
 
         Users user = transaction.getUser();
