@@ -22,22 +22,34 @@ DROP TABLE IF EXISTS wallets CASCADE;
 DROP TABLE IF EXISTS wallet_transactions CASCADE;
 DROP TABLE IF EXISTS story_reactions CASCADE;
 DROP TABLE IF EXISTS transactions CASCADE;
+DROP TABLE IF EXISTS banks CASCADE;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-create table users (
-    user_id uuid primary key default gen_random_uuid(),
-    username varchar(50) unique not null,
-    password_hash text not null,
-    full_name varchar(100),
-    avatar_url text,
-    bio text,
-    date_of_birth date,
-    role varchar(20) check (role in ('USER','ADMIN', 'MEMBER')) default 'USER',
-    status varchar(20) check (status in ('ACTIVE','INACTIVE','BANNED','PENDING')) default 'PENDING',
-    created_at timestamp default now()
+CREATE TABLE banks (
+    bank_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    bank_name VARCHAR(100) NOT NULL,
+    bin_code VARCHAR(20) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE users (
+    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    full_name VARCHAR(100),
+    avatar_url TEXT,
+    bio TEXT,
+    date_of_birth DATE,
+    role VARCHAR(20) CHECK (role IN ('USER', 'ADMIN', 'MEMBER')) DEFAULT 'USER',
+    status VARCHAR(20) CHECK (status IN ('ACTIVE', 'INACTIVE', 'BANNED', 'PENDING')) DEFAULT 'PENDING',
+    bank_number VARCHAR(30),
+    bank_id UUID,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (bank_id) REFERENCES banks(bank_id)
+);
+
 -- =====================
 -- Groups Table
 -- =====================
@@ -229,7 +241,6 @@ CREATE TABLE feedbacks (
     user_id      UUID NOT NULL,
     type         VARCHAR(20) NOT NULL CHECK (type IN ('BUG', 'SUGGESTION', 'OTHER')),
     content      TEXT NOT NULL,
-    image_url    TEXT,
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

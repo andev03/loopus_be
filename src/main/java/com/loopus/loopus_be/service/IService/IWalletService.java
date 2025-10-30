@@ -11,8 +11,6 @@ import java.util.UUID;
 public interface IWalletService {
     WalletDto getWalletByUserId(UUID userId);
 
-//    Wallet deposit(UUID userId, Double amount);
-
     void transfer(TransferRequest request);
 
     List<WalletTransactionDto> getTransactions(UUID walletId);
@@ -22,4 +20,6 @@ public interface IWalletService {
     void createWallet(Users user);
 
     WalletDto deposit(UUID userId, Double amount);
+
+    void payout(UUID userId, Double amount);
 }

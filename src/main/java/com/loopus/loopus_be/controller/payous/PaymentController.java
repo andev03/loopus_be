@@ -3,6 +3,7 @@ package com.loopus.loopus_be.controller.payous;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.loopus.loopus_be.dto.payos.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ import vn.payos.model.webhooks.WebhookData;
 public class PaymentController {
     private final PayOS payOS;
 
-    public PaymentController(PayOS payOS) {
+    public PaymentController(@Qualifier("payOSCheckout")PayOS payOS) {
         super();
         this.payOS = payOS;
     }

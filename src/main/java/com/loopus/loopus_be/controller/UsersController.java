@@ -60,6 +60,15 @@ public class UsersController {
                 .build();
     }
 
+    @GetMapping
+    public ResponseDto<Object> getAll() {
+        return ResponseDto.builder()
+                .data(userService.getAll())
+                .status(HttpStatus.OK.value())
+                .message("Lấy thành công!")
+                .build();
+    }
+
     @PutMapping(value = "/update-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseDto<Object> updateAvatar(
             @Parameter(description = "File to update", required = true)
@@ -79,6 +88,16 @@ public class UsersController {
                 .data(userService.updateInformation(request))
                 .status(HttpStatus.OK.value())
                 .message("Cập nhật thông tin thành công")
+                .build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseDto<Object> resetPassword(@RequestParam String email, @RequestParam String newPassword) {
+
+        return ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .data(userService.resetPassword(email, newPassword))
+                .message("Gửi yêu cầu thành công")
                 .build();
     }
 }

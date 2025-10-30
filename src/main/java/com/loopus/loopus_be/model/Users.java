@@ -53,6 +53,14 @@ public class Users {
     @Builder.Default
     private UserStatusEnum status = UserStatusEnum.PENDING;
 
+    @Column(name = "bank_number", length = 30)
+    private String bankNumber;
+
+    // Khóa ngoại đến bảng banks
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id", referencedColumnName = "bank_id")
+    private Bank bank;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

@@ -7,6 +7,7 @@ import com.loopus.loopus_be.enums.UserStatusEnum;
 import com.loopus.loopus_be.exception.LoginException;
 import com.loopus.loopus_be.mapper.UserMapper;
 import com.loopus.loopus_be.model.Users;
+import com.loopus.loopus_be.repository.BankRepository;
 import com.loopus.loopus_be.repository.UserRepository;
 import com.loopus.loopus_be.service.IService.*;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class UserService implements IUserService {
     private final IOtpService otpService;
     private final IFileService fileService;
     private final ISettingService settingService;
+    private final BankRepository bankRepository;
 
     @Override
     public UsersDto login(String username, String password) {
@@ -105,7 +108,23 @@ public class UserService implements IUserService {
         user.setDateOfBirth(request.getDob());
         user.setBio(request.getBio());
         user.setUsername(request.getEmail());
+        user.setBankNumber(request.getBankNumber());
+        user.setBank(bankRepository.getReferenceById(request.getBankId()));
 
         return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public UsersDto resetPassword(String email, String newPassword) {
+        Users user = userRepository.findByUsername(email);
+
+        user.setPasswordHash(newPassword);
+
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public List<UsersDto> getAll() {
+        return userMapper.toDtoList(userRepository.findAll());
     }
 }

@@ -49,16 +49,13 @@ public class FeedbackService implements IFeedbackService {
 
     @Override
     @Transactional
-    public FeedbackDto createFeedback(CreateFeedbackRequest request, MultipartFile file) {
-
-        String imageUrl = iFileService.uploadFileUrl(file);
+    public FeedbackDto createFeedback(CreateFeedbackRequest request) {
 
         Feedback feedback = feedbackRepository.save(
                 Feedback.builder()
                         .user(userRepository.getReferenceById(request.getUserId()))
                         .content(request.getContent())
                         .type(FeedbackType.valueOf(request.getType().toUpperCase()))
-                        .imageUrl(imageUrl)
                         .build()
         );
 

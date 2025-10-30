@@ -8,21 +8,33 @@ import vn.payos.PayOS;
 @Configuration
 public class PayOSConfig {
 
-    @Value("${client-key}")
-    private String clientId;
+    // ===== Checkout Config =====
+    @Value("${payos.checkout.client-id}")
+    private String checkoutClientId;
 
-    @Value("${api-key}")
-    private String apiKey;
+    @Value("${payos.checkout.api-key}")
+    private String checkoutApiKey;
 
-    @Value("${checksum-key}")
-    private String checksumKey;
+    @Value("${payos.checkout.checksum-key}")
+    private String checkoutChecksumKey;
 
-    @Bean
-    public PayOS payOS() {
-        // Khởi tạo PayOS với các thông tin cần thiết
-        String clientId = this.clientId;
-        String apiKey = this.apiKey;
-        String checksumKey = this.checksumKey;
-        return new PayOS(clientId, apiKey, checksumKey);
+    // ===== Payout Config =====
+    @Value("${payos.payout.client-id}")
+    private String payoutClientId;
+
+    @Value("${payos.payout.api-key}")
+    private String payoutApiKey;
+
+    @Value("${payos.payout.checksum-key}")
+    private String payoutChecksumKey;
+
+    @Bean("payOSCheckout")
+    public PayOS payOSCheckout() {
+        return new PayOS(checkoutClientId, checkoutApiKey, checkoutChecksumKey);
+    }
+
+    @Bean("payOSPayout")
+    public PayOS payOSPayout() {
+        return new PayOS(payoutClientId, payoutApiKey, payoutChecksumKey);
     }
 }
